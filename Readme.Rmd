@@ -1,0 +1,25 @@
+---
+title: "Align Shoe Images"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+bibliography: Refs.bib
+output: 
+  html_document: 
+    keep_md: yes
+    self_contained: no
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, echo=FALSE}
+biblio <- bibtex::read.bib("Refs.bib")
+```
+
+# Align Shoe Images
+
+References:
+
+`r capture.output(print(biblio["gwoShoeprintRetrievalCore2016"]))`
