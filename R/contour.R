@@ -17,26 +17,28 @@ outer_contour <- function(img, thr = mean(img), as_cimg = TRUE) {
   # Contour point detection
   ypoints <- img %>%
     imager::imsplit(axis = "y") %>%
-    purrr::map_df(function(x)
-      dplyr::data_frame(x = c(min(which(as.numeric(x) < thr)),
-                              max(which(as.numeric(x) < thr))),
-                        type = c("min", "max")),
-      .id = "yidx") %>%
+    purrr::map_df(function(x) {
+      idx <- which(as.numeric(x) < thr)
+      if (length(idx) > 0) {
+        return(dplyr::data_frame(x = c(min(idx), max(idx)),
+                                 type = c("min", "max")))
+      }
+    }, .id = "yidx") %>%
     dplyr::mutate(y = str_replace(yidx, "y = ", "") %>% as.numeric(),
                   coord = "y") %>%
-    dplyr::filter(is.finite(x)) %>%
     dplyr::select(x, y, type, coord)
 
   xpoints <- img %>%
     imager::imsplit(axis = "x") %>%
-    purrr::map_df(function(x)
-      dplyr::data_frame(y = c(min(which(as.numeric(x) < thr)),
-                              max(which(as.numeric(x) < thr))),
-                        type = c("min", "max")),
-      .id = "xidx") %>%
+    purrr::map_df(function(x) {
+      idx <- which(as.numeric(x) < thr)
+      if (length(idx) > 0) {
+        return(dplyr::data_frame(y = c(min(idx), max(idx)),
+                                 type = c("min", "max")))
+      }
+    }, .id = "xidx") %>%
     dplyr::mutate(x = str_replace(xidx, "x = ", "") %>% as.numeric(),
                   coord = "x") %>%
-    dplyr::filter(is.finite(y)) %>%
     dplyr::select(x, y, type, coord)
 
   contour_points <- dplyr::bind_rows(xpoints, ypoints) %>%
@@ -79,6 +81,11 @@ thin_contour <- function(contour, img = NULL, centroid = NULL, n_angles = 1800, 
 
   stopifnot(length(centroid) == 2)
   stopifnot(is.numeric(centroid))
+
+  if (is.cimg(contour)) {
+    contour <- as.data.frame(contour) %>%
+      dplyr::filter(value > 0)
+  }
 
   stopifnot("x" %in% names(contour))
   stopifnot("y" %in% names(contour))

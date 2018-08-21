@@ -5,7 +5,7 @@
 #' @return ellipse object - a list consisting of coefficients, center, major
 #'           and minor axes, and angle
 #' @export
-fit_ellipse <- function (x, y) {
+fit_ellipse <- function (x, y = NULL) {
   # This set of functions from: https://www.r-bloggers.com/fitting-an-ellipse-to-point-data/
   # from:
   # http://r.789695.n4.nabble.com/Fitting-a-half-ellipse-curve-tp2719037p2720560.html

@@ -37,11 +37,11 @@ halfimg_unsplit <- function(imlist, axis = "y") {
 #' @export
 map_halfimg <- function(img, fun, axes = "xy") {
   workimg <- img
-  axeslist <- strsplit(axes, "")
+  axeslist <- strsplit(axes, "") %>% unlist()
 
   for (i in axeslist) {
     if (i %in% c("x", "y")) {
-      if (!"axes" %in% formals(fun)) {
+      if (!"axes" %in% formalArgs(fun)) {
         workimg <- halfimg_split(workimg, i) %>%
           map_il(fun) %>%
           halfimg_unsplit(axis = i)
