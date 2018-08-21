@@ -4,7 +4,7 @@
 #' @param y numeric vector of the same length as x
 #' @return ellipse object - a list consisting of coefficients, center, major
 #'           and minor axes, and angle
-#'
+#' @export
 fit_ellipse <- function (x, y) {
   # This set of functions from: https://www.r-bloggers.com/fitting-an-ellipse-to-point-data/
   # from:
@@ -105,7 +105,8 @@ fit_ellipse <- function (x, y) {
 #' @param fit fit object from fit_ellipse
 #' @param n number of points
 #' @return a two-column matrix with x and y points of the boundary of the
-#' ellipse
+#'           ellipse
+#' @export
 ellipse_boundary <- function(fit, n = 360)
 {
   # Calculate points on an ellipse described by
@@ -113,7 +114,7 @@ ellipse_boundary <- function(fit, n = 360)
   #
   # n is the number of points to render
 
-  tt <- seq(0, 2*pi, length=n)
+  tt <- seq(0, 2*pi, length = n)
   sa <- sin(fit$angle)
   ca <- cos(fit$angle)
   ct <- cos(tt)
@@ -122,5 +123,5 @@ ellipse_boundary <- function(fit, n = 360)
   x <- fit$center[1] + fit$maj * ct * ca - fit$min * st * sa
   y <- fit$center[2] + fit$maj * ct * sa + fit$min * st * ca
 
-  cbind(x=x, y=y)
+  data.frame(x = x, y = y)
 }

@@ -18,6 +18,9 @@ knitr::opts_chunk$set(echo = TRUE)
 biblio <- bibtex::read.bib("Refs.bib")
 ```
 
+[![Travis build status](https://travis-ci.org/srvanderplas/ShoeAlignR.svg?branch=master)](https://travis-ci.org/srvanderplas/ShoeAlignR)
+[![Coverage status](https://codecov.io/gh/srvanderplas/ShoeAlignR/branch/master/graph/badge.svg)](https://codecov.io/github/srvanderplas/ShoeAlignR?branch=master)
+
 # Align Shoe Images
 
 References:

@@ -5,6 +5,7 @@
 #' @param axis "x" or "y"
 #' @return an imlist
 #' @importFrom imager mirror imsplit
+#' @export
 halfimg_split <- function(img, axis = "y") {
   stopifnot(axis %in% c("x", "y"))
   workimg <- imsplit(img, axis = axis, nb = 2)
@@ -18,6 +19,7 @@ halfimg_split <- function(img, axis = "y") {
 #' @param axis "x" or "y"
 #' @return an imlist
 #' @importFrom imager mirror imappend
+#' @export
 halfimg_unsplit <- function(imlist, axis = "y") {
   stopifnot(axis %in% c("x", "y"))
   stopifnot(length(imlist) == 2)
@@ -32,6 +34,7 @@ halfimg_unsplit <- function(imlist, axis = "y") {
 #' @param fun a function that operates on a cimg
 #' @return an imlist
 #' @importFrom imager map_il
+#' @export
 map_halfimg <- function(img, fun, axes = "xy") {
   workimg <- img
   axeslist <- strsplit(axes, "")
