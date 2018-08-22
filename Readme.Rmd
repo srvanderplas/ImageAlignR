@@ -2,11 +2,7 @@
 title: "Align Shoe Images"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 bibliography: Refs.bib
-output: 
-  html_document: 
-    keep_md: yes
-    self_contained: no
-    toc: yes
+output: md_document
 ---
 
 ```{r setup, include=FALSE}
@@ -17,7 +13,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r, echo=FALSE}
 biblio <- bibtex::read.bib("Refs.bib")
 ```
-
+[![CRAN status](https://www.r-pkg.org/badges/version/ShoeAlignR)](https://cran.r-project.org/package=ShoeAlignR)
+[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![Travis build status](https://travis-ci.org/srvanderplas/ShoeAlignR.svg?branch=master)](https://travis-ci.org/srvanderplas/ShoeAlignR)
 [![Coverage status](https://codecov.io/gh/srvanderplas/ShoeAlignR/branch/master/graph/badge.svg)](https://codecov.io/github/srvanderplas/ShoeAlignR?branch=master)
 
