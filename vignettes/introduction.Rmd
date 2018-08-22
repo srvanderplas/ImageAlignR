@@ -1,0 +1,93 @@
+---
+title: "Introduction"
+author: "Susan VanderPlas"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+```{r}
+library(imager)
+library(dplyr)
+library(ShoeAlignR)
+imlinks <- system.file(package = "ShoeAlignR", "extdata/ShoeSamples/") %>% 
+  list.files(full.names = T) %>% sort()
+
+img <- load.image(imlinks[1])
+plot(img)
+```
+
+First, we must remove the border region. Noting that most of the border region is yellow or red, we can take the ratio of the red and green color channel values to the blue color channel value (I derived this via experimentation - there may be a better way). Once we have the bounding box of the "real" portion of the image, we can switch to grayscale, clean the image up a bit, and autocrop it.
+
+```{r get-bbox-and-crop}
+
+img_bbox <- img %>%
+  imsplit(axis = "c") %>%
+  (function(x) is.finite((x[[1]] + x[[2]])/x[[3]])) %>%
+  as.cimg() %>%
+  (function(x) x == 1)
+
+img_bw <- crop.bbox(img, img_bbox) %>%
+  grayscale() %>%
+  map_halfimg(fun = autocrop) %>%
+  crop.borders(nx = 5, ny = 5) %>%
+  autocrop() %>%
+  threshold() %>%
+  shrink(3) %>%
+  grow(3) %>%
+  autocrop()
+
+
+plot(img_bw)
+```
+
+Next, we identify the contour points as described in Gwo & Wei (2016). 
+
+```{r}
+contour_points <- outer_contour(img_bw)
+
+plot(img_bw)
+contour_points %>%
+  highlight(col = "orange")
+```
+
+These points are then thinned by eliminating any points whose radii from the image centroid overlap, leaving only the most distant points.
+
+```{r}
+reliable_contour_points <- contour_points %>%
+  thin_contour(img = img_bw, n_angles = 200)
+
+plot(img_bw)
+contour_points %>%
+  highlight(col = "orange")
+reliable_contour_points %>%
+  highlight(col = "darkorchid1")
+```
+
+Once the contour of the shoe has been identified, it is possible to fit an ellipse to these points, creating a major and minor axis for the shoe. 
+
+```{r}
+ellipse <- reliable_contour_points %>% 
+  contour_ellipse_fit()
+
+ellipse
+```
+
+```{r}
+plot(img_bw)
+reliable_contour_points %>%
+  highlight(col = "darkorchid1")
+points(ellipse$CenterX, ellipse$CenterY, col = "orange", cex = 1.5, pch = 16)
+ellipse_points(ellipse, col = "orange")
+```
