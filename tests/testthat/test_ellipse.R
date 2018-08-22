@@ -50,4 +50,7 @@ test_that("ellipse_points works as expected", {
   tmp <- ellipse_points(edf, n = 50, plot_lines = F)
   expect_lte(max(tmp$y), 5)
   expect_gte(max(tmp$y), -5)
+  expect_lte(max(tmp$x), 10)
+  expect_gte(max(tmp$x), -10)
+  expect_length(tmp$x, 50)
 })
