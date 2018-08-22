@@ -1,127 +1,110 @@
-#' Fit an ellipse to xy data
+#' Fit an ellipse to the boundary contour points
 #'
-#' @param x numeric vector
-#' @param y numeric vector of the same length as x
-#' @return ellipse object - a list consisting of coefficients, center, major
-#'           and minor axes, and angle
+#' @param contour_points a cimg or data frame of contour points.
+#'          If a cimg, must be a pixset (0s and 1s). If a data frame, must have
+#'          columns x and y
+#' @param chull use the convex hull of the points?
+#' @return a data frame of ellipse parameters: X, Y for the center, A, B for the
+#'           major and minor axes, and angle for the rotation angle.
 #' @export
-fit_ellipse <- function (x, y = NULL) {
-  # This set of functions from: https://www.r-bloggers.com/fitting-an-ellipse-to-point-data/
-  # from:
-  # http://r.789695.n4.nabble.com/Fitting-a-half-ellipse-curve-tp2719037p2720560.html
-  #
-  # Least squares fitting of an ellipse to point data
-  # using the algorithm described in:
-  #   Radim Halir & Jan Flusser. 1998.
-  #   Numerically stable direct least squares fitting of ellipses.
-  #   Proceedings of the 6th International Conference in Central Europe
-  #   on Computer Graphics and Visualization. WSCG '98, p. 125-132
-  #
-  # Adapted from the original Matlab code by Michael Bedward (2010)
-  # michael.bedward@gmail.com
-  #
-  # Subsequently improved by John Minter (2012)
-  #
-  # Arguments:
-  # x, y - x and y coordinates of the data points.
-  #        If a single arg is provided it is assumed to be a
-  #        two column matrix.
-  #
-  # Returns a list with the following elements:
-  #
-  # coef - coefficients of the ellipse as described by the general
-  #        quadratic:  ax^2 + bxy + cy^2 + dx + ey + f = 0
-  #
-  # center - center x and y
-  #
-  # major - major semi-axis length
-  #
-  # minor - minor semi-axis length
-  #
-  EPS <- 1.0e-8
-  dat <- xy.coords(x, y)
+#' @importFrom conicfit AtoG EllipseDirectFit
+#' @importFrom dplyr '%>%'
+#' @importFrom grDevices chull
+#' @import assertthat
+contour_ellipse_fit <- function(contour_points, chull = F) {
+  if ("cimg" %in% class(contour_points)) {
+    cp <- contour_points %>%
+      as.data.frame
 
-  D1 <- cbind(dat$x * dat$x, dat$x * dat$y, dat$y * dat$y)
-  D2 <- cbind(dat$x, dat$y, 1)
-  S1 <- t(D1) %*% D1
-  S2 <- t(D1) %*% D2
-  S3 <- t(D2) %*% D2
-  T <- -solve(S3) %*% t(S2)
-  M <- S1 + S2 %*% T
-  M <- rbind(M[3,] / 2, -M[2,], M[1,] / 2)
-  evec <- eigen(M)$vec
-  cond <- 4 * evec[1,] * evec[3,] - evec[2,]^2
-  a1 <- evec[, which(cond > 0)]
-  f <- c(a1, T %*% a1)
-  names(f) <- letters[1:6]
+    assertthat::assert_that(
+      assertthat::has_name(cp, "value")
+    )
 
-  # calculate the center and lengths of the semi-axes
-  #
-  # see http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2288654/
-  # J. R. Minter
-  # for the center, linear algebra to the rescue
-  # center is the solution to the pair of equations
-  # 2ax +  by + d = 0
-  # bx  + 2cy + e = 0
-  # or
-  # | 2a   b |   |x|   |-d|
-  # |  b  2c | * |y| = |-e|
-  # or
-  # A x = b
-  # or
-  # x = Ainv b
-  # or
-  # x = solve(A) %*% b
-  A <- matrix(c(2*f[1], f[2], f[2], 2*f[3]), nrow=2, ncol=2, byrow=T )
-  b <- matrix(c(-f[4], -f[5]), nrow=2, ncol=1, byrow=T)
-  soln <- solve(A) %*% b
+    cp <- cp[cp$value > 0,]
+  } else {
+    cp <- contour_points
+  }
 
-  b2 <- f[2]^2 / 4
+  if (is.data.frame(cp)) {
+    cp <- data.frame(x = cp$x, y = cp$y)
+  } else if (dim(cp)[2] == 2) {
+    cp <- data.frame(x = cp[,1], y = cp[,2])
+  } else {
+    tmp <- grDevices::xy.coords(cp)
+    cp <- data.frame(x = tmp$x, y = tmp$y)
+  }
 
-  center <- c(soln[1], soln[2])
-  names(center) <- c("x", "y")
+  assertthat::assert_that(
+    is.data.frame(cp),
+    assertthat::has_name(cp, "x"),
+    assertthat::has_name(cp, "y")
+  )
 
-  num  <- 2 * (f[1] * f[5]^2 / 4 +
-                 f[3] * f[4]^2 / 4 +
-                 f[6] * b2 - f[2]*f[4]*f[5]/4 -
-                 f[1]*f[3]*f[6])
-  den1 <- (b2 - f[1]*f[3])
-  den2 <- sqrt((f[1] - f[3])^2 + 4*b2)
-  den3 <- f[1] + f[3]
+  if (chull) {
+    ch_cp <- chull(cp)
+    cp <- cp[ch_cp,]
+  } else {
+    cp <- cp
+  }
 
-  semi.axes <- sqrt(c( num / (den1 * (den2 - den3)),
-                       num / (den1 * (-den2 - den3)) ))
+  efit <- conicfit::EllipseDirectFit(cp)
 
-  # calculate the angle of rotation
-  term <- (f[1] - f[3]) / f[2]
-  angle <- atan(1 / term) / 2
+  # if (!quiet) {
+  #   switch(efitG$exitCode,
+  #          "-1" = "degenerate",
+  #          "0" = "imaginary ellipse",
+  #          "4" = "imaginary parallel lines",
+  #          "1" = "ellipse",
+  #          "2" = "hyperbola",
+  #          "3" = "parabola"
+  # }
 
-  list(coef = f, center = center, major = max(semi.axes),
-       minor = min(semi.axes), angle = unname(angle))
+  efitG <- conicfit::AtoG(efit)
+
+  tmp <- efitG$ParG %>%
+    t() %>%
+    as.data.frame()
+
+  names(tmp) <- c("CenterX", "CenterY", "AxisA", "AxisB", "Angle")
+  tmp$Angle <- tmp$Angle * 180/pi
+
+  return(tmp)
 }
 
-#' Boundary points for a fitted ellipse object
+#' Return the boundary points of an ellipse
 #'
-#' @param fit fit object from fit_ellipse
+#' @param ellipse output from contour_ellipse_fit, or a data frame with the
+#'          following columns: CenterX, CenterY, AxisA, AxisB, Angle
 #' @param n number of points
-#' @return a two-column matrix with x and y points of the boundary of the
-#'           ellipse
+#' @param plot_lines return call to lines?
+#' @param ... additional parameters for lines call
+#' @return two-column data frame of x and y points
 #' @export
-ellipse_boundary <- function(fit, n = 360)
-{
-  # Calculate points on an ellipse described by
-  # the fit argument as returned by fit.ellipse
-  #
-  # n is the number of points to render
+#' @importFrom conicfit calculateEllipse
+#' @import assertthat
+ellipse_points <- function(ellipse, n = 300, plot_lines = T, ...) {
+  assertthat::assert_that(
+    assertthat::has_name(ellipse, "CenterX"),
+    assertthat::has_name(ellipse, "CenterY"),
+    assertthat::has_name(ellipse, "AxisA"),
+    assertthat::has_name(ellipse, "AxisB"),
+    assertthat::has_name(ellipse, "Angle"),
+    is.numeric(ellipse$CenterX),
+    is.numeric(ellipse$CenterY),
+    is.numeric(ellipse$AxisA),
+    is.numeric(ellipse$AxisB),
+    is.numeric(ellipse$Angle)
+  )
 
-  tt <- seq(0, 2*pi, length = n)
-  sa <- sin(fit$angle)
-  ca <- cos(fit$angle)
-  ct <- cos(tt)
-  st <- sin(tt)
+  tmp <- conicfit::calculateEllipse(x = ellipse$CenterX, y = ellipse$CenterY,
+                                    a = ellipse$AxisA, b = ellipse$AxisB,
+                                    angle = ellipse$Angle, steps = n) %>%
+    as.data.frame()
+  names(tmp) <- c("x", "y")
 
-  x <- fit$center[1] + fit$maj * ct * ca - fit$min * st * sa
-  y <- fit$center[2] + fit$maj * ct * sa + fit$min * st * ca
-
-  data.frame(x = x, y = y)
+  if (plot_lines) {
+    graphics::lines(tmp, ...)
+    return(invisible(tmp))
+  }
+  return(tmp)
 }

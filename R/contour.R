@@ -7,51 +7,57 @@
 #' @param thr threshold to use for the image
 #' @param as_cimg return the points as a cimg object?
 #' @return either a cimg of points or a data frame of points indicating the boundary
-#' @importFrom purrr map_df
 #' @importFrom dplyr data_frame mutate filter select bind_rows group_by arrange summarize '%>%' ungroup
-#' @importFrom imager imsplit as.cimg
-#' @importFrom stringr str_replace
 #' @export
 outer_contour <- function(img, thr = mean(img), as_cimg = TRUE) {
+  x <- y <- yidx <- type <- coord <- xidx <- value <- NULL
 
   # Contour point detection
   ypoints <- img %>%
-    imager::imsplit(axis = "y") %>%
-    purrr::map_df(function(x) {
-      idx <- which(as.numeric(x) < thr)
-      if (length(idx) > 0) {
-        return(dplyr::data_frame(x = c(min(idx), max(idx)),
-                                 type = c("min", "max")))
-      }
-    }, .id = "yidx") %>%
-    dplyr::mutate(y = str_replace(yidx, "y = ", "") %>% as.numeric(),
-                  coord = "y") %>%
-    dplyr::select(x, y, type, coord)
+    imager::imsplit(axis = "y")
+  ypointdf <- lapply(1:length(ypoints), function(x) {
+    idx <- which(as.numeric(ypoints[[x]]) < thr)
+    if (length(idx) > 0) {
+      data_frame(x = c(min(idx), max(idx)),
+                 type = c("min", "max"),
+                 yidx = names(ypoints)[x])
+    }
+  }) %>%
+    bind_rows()
+  ypointdf <- ypointdf %>%
+    mutate(y = gsub(x = yidx, pattern = "y = ", replacement = "") %>%
+             as.numeric(),
+           coord = "y") %>%
+    select(x, y, type, coord)
 
   xpoints <- img %>%
-    imager::imsplit(axis = "x") %>%
-    purrr::map_df(function(x) {
-      idx <- which(as.numeric(x) < thr)
-      if (length(idx) > 0) {
-        return(dplyr::data_frame(y = c(min(idx), max(idx)),
-                                 type = c("min", "max")))
-      }
-    }, .id = "xidx") %>%
-    dplyr::mutate(x = str_replace(xidx, "x = ", "") %>% as.numeric(),
-                  coord = "x") %>%
-    dplyr::select(x, y, type, coord)
+    imager::imsplit(axis = "x")
+  xpointdf <- lapply(1:length(xpoints), function(x) {
+    idx <- which(as.numeric(xpoints[[x]]) < thr)
+    if (length(idx) > 0) {
+      return(data_frame(y = c(min(idx), max(idx)),
+                        type = c("min", "max"),
+                        xidx = names(xpoints)[x]))
+    }
+  }) %>%
+    bind_rows()
+  xpointdf <- xpointdf %>%
+    mutate(x = gsub(x = xidx, pattern = "x = ", replacement = "") %>%
+             as.numeric(),
+           coord = "x") %>%
+    select(x, y, type, coord)
 
-  contour_points <- dplyr::bind_rows(xpoints, ypoints) %>%
-    dplyr::group_by(x, y) %>%
-    dplyr::arrange(coord, type) %>%
-    dplyr::summarize(type = paste(unique(type), collapse = ","),
-                     coord = paste(unique(coord), collapse = ",")) %>%
-    dplyr::ungroup()
+  contour_points <- bind_rows(xpointdf, ypointdf) %>%
+    group_by(x, y) %>%
+    arrange(coord, type) %>%
+    summarize(type = paste(unique(type), collapse = ","),
+              coord = paste(unique(coord), collapse = ",")) %>%
+    ungroup()
 
   if (as_cimg) {
     contour_points <- contour_points  %>%
-      dplyr::mutate(value = 1) %>%
-      dplyr::select(x, y, value) %>%
+      mutate(value = 1) %>%
+      select(x, y, value) %>%
       imager::as.cimg(dim = dim(img))
   }
 
@@ -65,46 +71,56 @@ outer_contour <- function(img, thr = mean(img), as_cimg = TRUE) {
 #' @param n_angles number of unique angles to use
 #' @param as_cimg return the points as a cimg object?
 #' @return either a cimg of points or a data frame of points indicating the boundary
-#' @importFrom dplyr mutate filter group_by arrange '%>%' ungroup desc row_number
-#' @importFrom magrittr multiply_by divide_by
-#' @importFrom IM calcCentroid
+#' @importFrom dplyr mutate filter group_by arrange '%>%' ungroup desc row_number select
 #' @export
 thin_contour <- function(contour, img = NULL, centroid = NULL, n_angles = 1800, as_cimg = TRUE) {
+  value <- y <- y1 <- x <- x1 <- angle <- radius <- ard <- NULL
+  calcCentroid <- function(mat) {
+    # From the IM:::calcCentroid method:
+    # selectMethod(IM:::calcCentroid, "matrix")
+    m <- mat.or.vec(3, 1)
+    NY <- dim(mat)[1]
+    NX <- dim(mat)[2]
+    m[1] <- sum(mat)
+    m[2] <- sum(t(mat) %*% (1:NY))
+    m[3] <- sum(mat %*% (1:NX))
+    c(m[2]/m[1], m[3]/m[1])
+  }
+
   stopifnot(!(is.null(img) & is.null(centroid)))
 
   if (is.null(centroid)) {
     centroid <- img %>%
       as.matrix %>%
-      IM::calcCentroid() %>%
+      calcCentroid() %>%
       round()
   }
 
   stopifnot(length(centroid) == 2)
   stopifnot(is.numeric(centroid))
 
-  if (is.cimg(contour)) {
+  if (imager::is.cimg(contour)) {
     contour <- as.data.frame(contour) %>%
-      dplyr::filter(value > 0)
+      filter(value > 0)
   }
 
   stopifnot("x" %in% names(contour))
   stopifnot("y" %in% names(contour))
 
   contour_points <- contour %>%
-    dplyr::mutate(y1 = centroid[1], x1 = centroid[2],
+    mutate(y1 = centroid[1], x1 = centroid[2],
            angle = atan2(y - y1, x - x1),
            radius = sqrt((y - y1)^2 + (x - x1)^2)) %>%
-    dplyr::mutate(ard = angle %>% magrittr::multiply_by(n_angles) %>%
-             round() %>% magrittr::divide_by(n_angles)) %>%
-    dplyr::arrange(dplyr::desc(radius)) %>%
-    dplyr::group_by(ard) %>%
-    dplyr::filter(dplyr::row_number() == 1) %>%
-    dplyr::ungroup()
+    mutate(ard = round(angle * n_angles) / n_angles) %>%
+    arrange(desc(radius)) %>%
+    group_by(ard) %>%
+    filter(row_number() == 1) %>%
+    ungroup()
 
   if (as_cimg) {
     contour_points <- contour_points  %>%
-      dplyr::mutate(value = 1) %>%
-      dplyr::select(x, y, value) %>%
+      mutate(value = 1) %>%
+      select(x, y, value) %>%
       imager::as.cimg(dim = dim(img))
   }
   contour_points
