@@ -82,7 +82,8 @@ outer_contour <- function(img, thr = mean(img), as_cimg = TRUE) {
 #' @param centroid centroid of the image
 #' @param n_angles number of unique angles to use
 #' @param as_cimg return the points as a cimg object?
-#' @return either a cimg of points or a data frame of points indicating the boundary
+#' @return either a cimg of points or a data frame of points indicating the 
+#'   boundary
 #' @importFrom dplyr mutate filter group_by arrange '%>%' ungroup desc row_number select
 #' @export
 thin_contour <- function(contour, img = NULL, centroid = NULL, n_angles = 1800, as_cimg = TRUE) {
@@ -99,7 +100,8 @@ thin_contour <- function(contour, img = NULL, centroid = NULL, n_angles = 1800, 
     c(m[2]/m[1], m[3]/m[1])
   }
 
-  stopifnot(!(is.null(img) & is.null(centroid)))
+  assertthat::assert_that(!(is.null(img) & is.null(centroid)),
+                          msg = "Either img or centroid must not be null")
 
   if (!is.null(img)) {
     if (!"cimg" %in% class(img)) {
@@ -110,26 +112,29 @@ thin_contour <- function(contour, img = NULL, centroid = NULL, n_angles = 1800, 
   }
 
   if (is.null(centroid)) {
-    if (dim(img)[4] > 3) {
+    if (dim(img)[4] == 4) {
       img <- imager::rm.alpha(img)
     }
-    imgmat <- imager::grayscale(img)[,]
+    if (dim(img)[4] > 1) {
+      img <- imager::grayscale(img)
+    }
+    imgmat <- img[,]
 
     centroid <- imgmat %>%
       calcCentroid() %>%
       round()
   }
 
-  stopifnot(length(centroid) == 2)
-  stopifnot(is.numeric(centroid))
+  assertthat::assert_that(length(centroid) == 2)
+  assertthat::assert_that(is.numeric(centroid))
 
   if (imager::is.cimg(contour)) {
     contour <- as.data.frame(contour) %>%
       filter(value > 0)
   }
 
-  stopifnot("x" %in% names(contour))
-  stopifnot("y" %in% names(contour))
+  assertthat::assert_that(assertthat::has_name(contour, "x"))
+  assertthat::assert_that(assertthat::has_name(contour, "y"))
 
   contour_points <- contour %>%
     mutate(y1 = centroid[1], x1 = centroid[2],

@@ -31,13 +31,18 @@ test_that("outer_contour works as expected", {
   expect_message(poo_oc <- outer_contour(img), "converting image to grayscale")
   expect_s3_class(poo_oc, "cimg")
   expect_equivalent(as.numeric(poo_oc) %>% unique, c(0, 1))
-  expect_message(poo_oc2 <- outer_contour(img, as_cimg = F), "converting image to grayscale")
+  expect_message(poo_oc2 <- outer_contour(img, as_cimg = F), 
+                 "converting image to grayscale")
   expect_equal(names(poo_oc2), c("x", "y", "type", "coord"))
   expect_equal(sort(unique(poo_oc2$type)), c("max", "max,min", "min"))
   expect_equal(sort(unique(poo_oc2$coord)), c("x", "y"))
 })
 
 test_that("thin_contour works as expected", {
-
-
+  poo_oc <- outer_contour(imager::grayscale(img))
+  expect_error(thin_contour(poo_oc), 
+               "Either img or centroid must be not be null")
+  expect_message(thin_contour(poo_oc, img = imgmat), 
+                 "img is not a cimg object. Attempting to convert")
+  thin_contour(poo_oc, img = img, n_angles = 36)
 })
