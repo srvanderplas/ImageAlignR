@@ -27,8 +27,6 @@ contour_ellipse_fit <- function(contour_points, chull = F) {
 
   if (is.data.frame(cp)) {
     cp <- data.frame(x = cp$x, y = cp$y)
-  } else if (dim(cp)[2] == 2) {
-    cp <- data.frame(x = cp[,1], y = cp[,2])
   } else {
     tmp <- grDevices::xy.coords(cp)
     cp <- data.frame(x = tmp$x, y = tmp$y)
