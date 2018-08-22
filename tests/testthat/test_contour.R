@@ -41,8 +41,10 @@ test_that("outer_contour works as expected", {
 test_that("thin_contour works as expected", {
   poo_oc <- outer_contour(imager::grayscale(img))
   expect_error(thin_contour(poo_oc), 
-               "Either img or centroid must be not be null")
+               "Either img or centroid must not be null")
   expect_message(thin_contour(poo_oc, img = imgmat), 
                  "img is not a cimg object. Attempting to convert")
-  thin_contour(poo_oc, img = img, n_angles = 36)
+  expect_s3_class(thin_contour(poo_oc, img = img, n_angles = 36), "cimg")
+  expect_s3_class(poo_tc_df <- thin_contour(poo_oc, img = img, n_angles = 12, as_cimg = F), "data.frame")
+  expect_equal(length(unique(poo_tc_df$ard)), nrow(poo_tc_df))
 })
