@@ -71,7 +71,8 @@ outer_contour <- function(img, thr = mean(img), as_cimg = TRUE) {
       select(x, y, value) %>%
       imager::as.cimg(dim = dim(img))
   }
-
+  
+  contour_points
 }
 
 #' Thin outer contour by removing points overlappling radially from the centroid

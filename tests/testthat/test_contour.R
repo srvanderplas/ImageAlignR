@@ -5,9 +5,11 @@ testthat::setup({
 
   if (!file.exists("poo.rds")) {
     poopath <- "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Emojione_1F4A9.svg/240px-Emojione_1F4A9.svg.png"
-    poo <- imager::load.image(poopath) %>%
+    temp_poo <- tempfile(fileext = ".png")
+    download.file(poopath, destfile = temp_poo, quiet = T)
+    poo <- suppressMessages(imager::load.image(temp_poo)) %>%
       imager::rm.alpha() %>%
-      bucketfill(x = 1, y = 1, color = c(1,1,1), sigma = 0)
+      imager::bucketfill(x = 1, y = 1, color = c(1,1,1), sigma = 0)
 
     saveRDS(poo, "poo.rds")
   }
@@ -21,15 +23,18 @@ testthat::teardown({
 
 
 img <- readRDS("poo.rds")
-imgmat <- img[, , 1, ]
+imgmat <- imager::grayscale(img)[, , 1, ]
 
 test_that("outer_contour works as expected", {
-  expect_warning(
-    expect_message(outer_contour(imgmat),
-                   "img is not a cimg object. Attempting to convert"),
-    "Assuming third dimension corresponds to colour")
+  expect_message(outer_contour(imgmat),
+                 "img is not a cimg object. Attempting to convert")
   expect_message(poo_oc <- outer_contour(img), "converting image to grayscale")
-
+  expect_s3_class(poo_oc, "cimg")
+  expect_equivalent(as.numeric(poo_oc) %>% unique, c(0, 1))
+  expect_message(poo_oc2 <- outer_contour(img, as_cimg = F), "converting image to grayscale")
+  expect_equal(names(poo_oc2), c("x", "y", "type", "coord"))
+  expect_equal(sort(unique(poo_oc2$type)), c("max", "max,min", "min"))
+  expect_equal(sort(unique(poo_oc2$coord)), c("x", "y"))
 })
 
 test_that("thin_contour works as expected", {
