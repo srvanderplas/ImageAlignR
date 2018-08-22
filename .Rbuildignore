@@ -2,3 +2,8 @@
 ^\.Rproj\.user$
 ^\.travis\.yml$
 ^codecov\.yml$
+^Refs\.bib$
+^Readme\..*$
+^Readme_files$
+^Readme_files/.*$
+^LICENSE\.md$
