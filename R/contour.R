@@ -12,6 +12,17 @@
 outer_contour <- function(img, thr = mean(img), as_cimg = TRUE) {
   x <- y <- yidx <- type <- coord <- xidx <- value <- NULL
 
+  if (!"cimg" %in% class(img)) {
+    message("img is not a cimg object. Attempting to convert")
+    img <- imager::as.cimg(img)
+  }
+  assertthat::assert_that("cimg" %in% class(img))
+
+  if (length(imager::color.at(img, 1, 1)) > 1) {
+    message("converting image to grayscale")
+    img <- imager::grayscale(img)
+  }
+
   # Contour point detection
   ypoints <- img %>%
     imager::imsplit(axis = "y")
@@ -89,9 +100,21 @@ thin_contour <- function(contour, img = NULL, centroid = NULL, n_angles = 1800, 
 
   stopifnot(!(is.null(img) & is.null(centroid)))
 
+  if (!is.null(img)) {
+    if (!"cimg" %in% class(img)) {
+      message("img is not a cimg object. Attempting to convert")
+      img <- imager::as.cimg(img)
+    }
+    assertthat::assert_that("cimg" %in% class(img))
+  }
+
   if (is.null(centroid)) {
-    centroid <- img %>%
-      as.matrix %>%
+    if (dim(img)[4] > 3) {
+      img <- imager::rm.alpha(img)
+    }
+    imgmat <- imager::grayscale(img)[,]
+
+    centroid <- imgmat %>%
       calcCentroid() %>%
       round()
   }
