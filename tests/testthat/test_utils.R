@@ -50,6 +50,7 @@ test_that("map_halfimg works as expected", {
   expect_error(map_halfimg(img, axes = "c"), "axes must be 'x', 'y', or 'xy'")
   expect_error(map_halfimg(img, "c"), "fun must be a function")
   expect_equivalent(img, map_halfimg(img))
+  expect_equivalent(img, map_halfimg(img, fun = function(x, axes = "xy") x))
 
 })
 
