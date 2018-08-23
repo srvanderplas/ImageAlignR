@@ -101,7 +101,7 @@ ellipse_points <- function(ellipse, n = 300, plot_lines = T, ...) {
   names(tmp) <- c("x", "y")
 
   if (plot_lines) {
-    graphics::lines(tmp, ...)
+    graphics::lines(tmp$x, tmp$y, ...)
     return(invisible(tmp))
   }
   return(tmp)

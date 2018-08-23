@@ -19,6 +19,12 @@ testthat::teardown({
   if (file.exists("poo.rds")) {
     file.remove("poo.rds")
   }
+  if (file.exists("test0.png")) {
+    file.remove("test0.png")
+  }
+  if (file.exists("test1.png")) {
+    file.remove("test1.png")
+  }
 })
 
 img <- readRDS("poo.rds") %>% imager::grayscale()
@@ -44,13 +50,27 @@ test_that("contour_ellipse_fit works as expected", {
   expect_equivalent(ellipsefit, ellipsefitmat)
 })
 
+edf <- data.frame(CenterX = 0, CenterY = 0, AxisA = 10, AxisB = 5, Angle = 0)
+tmp <- ellipse_points(edf, n = 50, plot_lines = F)
+png("test0.png")
+plot(x = 0, y = 0, type = "p", xlim = c(-15, 15), ylim = c(-15, 15))
+dev.off()
+
+png("test1.png")
+plot(x = 0, y = 0, type = "p", xlim = c(-15, 15), ylim = c(-15, 15))
+tmp <- ellipse_points(edf, n = 50, plot_lines = T)
+dev.off()
 
 test_that("ellipse_points works as expected", {
-  edf <- data.frame(CenterX = 0, CenterY = 0, AxisA = 10, AxisB = 5, Angle = 0)
-  tmp <- ellipse_points(edf, n = 50, plot_lines = F)
   expect_lte(max(tmp$y), 5)
   expect_gte(max(tmp$y), -5)
   expect_lte(max(tmp$x), 10)
   expect_gte(max(tmp$x), -10)
   expect_length(tmp$x, 50)
+  expect_false(
+    visualTest::isSimilar(
+      file = "test1.png",
+      fingerprint = visualTest::getFingerprint(file = "test0.png"),
+      threshold = 0.1)
+  )
 })
