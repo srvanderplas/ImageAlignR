@@ -60,5 +60,7 @@ test_that("quantize_colors works as expected", {
                    "img is not a cimg object. Attempting to convert"),
     "Assuming third dimension corresponds to colour")
   qimg <- quantize_colors(img, n = 4) %>% as.data.frame(wide = 'c')
+  
+  expect_lte(quantize_colors(imager::grayscale(img)*25565, n = 4)[1,1,,], 255)
   expect_equal(nrow(unique(qimg[,3:5])), 4)
 })
