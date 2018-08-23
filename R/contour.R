@@ -1,3 +1,45 @@
+#' Check image to ensure it has the right type
+#'
+#' @param img an object to check to see if it is a cimg with the right channels
+#' @param keep_alpha should the image keep an alpha channel?
+#' @param keep_color should the image be in color?
+#' @return a cimg of the correct specifications (if possible), otherwise, will
+#'           error out
+img_check <- function(img, keep_alpha = F, keep_color = F) {
+
+  if (!"cimg" %in% class(img)) {
+    message("img is not a cimg object. Attempting to convert")
+    img <- imager::as.cimg(img)
+  }
+  assertthat::assert_that("cimg" %in% class(img))
+
+  if (keep_alpha & !keep_color) {
+    warning("Cannot keep alpha channel and remove color channels. Alpha channel will be removed")
+    keep_alpha <- F
+  }
+
+  if (!keep_alpha) {
+    if (length(imager::color.at(img, 1, 1)) == 4) {
+      message("removing alpha channel")
+      img <- imager::rm.alpha(img)
+    }
+    assertthat::assert_that(length(imager::color.at(img, 1, 1)) < 4,
+                            msg = "removal of alpha channel failed")
+  }
+
+  if (!keep_color) {
+    if (length(imager::color.at(img, 1, 1)) > 1) {
+      message("converting image to grayscale")
+      img <- img %>%
+        imager::grayscale()
+    }
+    assertthat::assert_that(length(imager::color.at(img, 1, 1)) == 1,
+                            msg = "grayscale conversion failed")
+  }
+
+  return(img)
+}
+
 #' Get outer contour of the object
 #'
 #' This function scans each row and column of the image and finds the minimum
@@ -12,20 +54,7 @@
 outer_contour <- function(img, thr = mean(img), as_cimg = TRUE) {
   x <- y <- yidx <- type <- coord <- xidx <- value <- NULL
 
-  if (!"cimg" %in% class(img)) {
-    message("img is not a cimg object. Attempting to convert")
-    img <- imager::as.cimg(img)
-  }
-  assertthat::assert_that("cimg" %in% class(img))
-  if (length(imager::color.at(img, 1, 1)) == 4) {
-    message("removing alpha channel and converting to grayscale")
-    img <- imager::rm.alpha(img) %>%
-      imager::grayscale()
-  }
-  if (length(imager::color.at(img, 1, 1)) > 1) {
-    message("converting image to grayscale")
-    img <- imager::grayscale(img)
-  }
+  img <- img_check(img, keep_alpha = F, keep_color = F)
 
   # Contour point detection
   ypoints <- img %>%
@@ -75,7 +104,7 @@ outer_contour <- function(img, thr = mean(img), as_cimg = TRUE) {
       select(x, y, value) %>%
       imager::as.cimg(dim = dim(img))
   }
-  
+
   contour_points
 }
 
@@ -86,7 +115,7 @@ outer_contour <- function(img, thr = mean(img), as_cimg = TRUE) {
 #' @param centroid centroid of the image
 #' @param n_angles number of unique angles to use
 #' @param as_cimg return the points as a cimg object?
-#' @return either a cimg of points or a data frame of points indicating the 
+#' @return either a cimg of points or a data frame of points indicating the
 #'   boundary
 #' @importFrom dplyr mutate filter group_by arrange '%>%' ungroup desc row_number select
 #' @export
@@ -108,25 +137,11 @@ thin_contour <- function(contour, img = NULL, centroid = NULL, n_angles = 1800, 
                           msg = "Either img or centroid must not be null")
 
   if (!is.null(img)) {
-    if (!"cimg" %in% class(img)) {
-      message("img is not a cimg object. Attempting to convert")
-      img <- imager::as.cimg(img)
-    }
-    assertthat::assert_that("cimg" %in% class(img))
+    img <- img_check(img)
   }
 
   if (is.null(centroid)) {
-    if (length(imager::color.at(img, 1, 1)) == 4) {
-      message("removing alpha channel and converting to grayscale")
-      img <- imager::rm.alpha(img) %>%
-        imager::grayscale()
-    }
-    if (length(imager::color.at(img, 1, 1)) > 1) {
-      message("converting image to grayscale")
-      img <- imager::grayscale(img)
-    }
     imgmat <- img[,]
-
     centroid <- imgmat %>%
       calcCentroid() %>%
       round()

@@ -19,7 +19,7 @@ thin_contour(contour, img = NULL, centroid = NULL, n_angles = 1800,
 \item{as_cimg}{return the points as a cimg object?}
 }
 \value{
-either a cimg of points or a data frame of points indicating the 
+either a cimg of points or a data frame of points indicating the
   boundary
 }
 \description{

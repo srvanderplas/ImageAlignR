@@ -69,18 +69,12 @@ contour_ellipse_fit <- function(contour_points, chull = F) {
   return(tmp)
 }
 
-#' Return the boundary points of an ellipse
+#' Assertions to check that an ellipse object has the correct form
 #'
-#' @param ellipse output from contour_ellipse_fit, or a data frame with the
-#'          following columns: CenterX, CenterY, AxisA, AxisB, Angle
-#' @param n number of points
-#' @param plot_lines return call to lines?
-#' @param ... additional parameters for lines call
-#' @return two-column data frame of x and y points
-#' @export
-#' @importFrom conicfit calculateEllipse
-#' @import assertthat
-ellipse_points <- function(ellipse, n = 300, plot_lines = T, ...) {
+#' @param ellipse object from contour_ellipse_fit, or a data frame with columns
+#'          CenterX, CenterY, AxisA, AxisB, and Angle
+#' @return TRUE if all are met, error messages otherwise
+ellipse_check <- function(ellipse) {
   assertthat::assert_that(
     assertthat::has_name(ellipse, "CenterX"),
     assertthat::has_name(ellipse, "CenterY"),
@@ -93,6 +87,20 @@ ellipse_points <- function(ellipse, n = 300, plot_lines = T, ...) {
     is.numeric(ellipse$AxisB),
     is.numeric(ellipse$Angle)
   )
+}
+
+#' Return the boundary points of an ellipse
+#'
+#' @param ellipse output from contour_ellipse_fit, or a data frame with the
+#'          following columns: CenterX, CenterY, AxisA, AxisB, Angle
+#' @param n number of points
+#' @param plot_lines return call to lines?
+#' @param ... additional parameters for lines call
+#' @return two-column data frame of x and y points
+#' @export
+#' @importFrom conicfit calculateEllipse
+ellipse_points <- function(ellipse, n = 300, plot_lines = T, ...) {
+  ellipse_check(ellipse)
 
   tmp <- conicfit::calculateEllipse(x = ellipse$CenterX, y = ellipse$CenterY,
                                     a = ellipse$AxisA, b = ellipse$AxisB,
