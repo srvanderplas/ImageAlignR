@@ -17,7 +17,11 @@ outer_contour <- function(img, thr = mean(img), as_cimg = TRUE) {
     img <- imager::as.cimg(img)
   }
   assertthat::assert_that("cimg" %in% class(img))
-
+  if (length(imager::color.at(img, 1, 1)) == 4) {
+    message("removing alpha channel and converting to grayscale")
+    img <- imager::rm.alpha(img) %>%
+      imager::grayscale()
+  }
   if (length(imager::color.at(img, 1, 1)) > 1) {
     message("converting image to grayscale")
     img <- imager::grayscale(img)
@@ -112,10 +116,13 @@ thin_contour <- function(contour, img = NULL, centroid = NULL, n_angles = 1800, 
   }
 
   if (is.null(centroid)) {
-    if (dim(img)[4] == 4) {
-      img <- imager::rm.alpha(img)
+    if (length(imager::color.at(img, 1, 1)) == 4) {
+      message("removing alpha channel and converting to grayscale")
+      img <- imager::rm.alpha(img) %>%
+        imager::grayscale()
     }
-    if (dim(img)[4] > 1) {
+    if (length(imager::color.at(img, 1, 1)) > 1) {
+      message("converting image to grayscale")
       img <- imager::grayscale(img)
     }
     imgmat <- img[,]

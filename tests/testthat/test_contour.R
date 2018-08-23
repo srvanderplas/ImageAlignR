@@ -7,9 +7,7 @@ testthat::setup({
     poopath <- "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Emojione_1F4A9.svg/240px-Emojione_1F4A9.svg.png"
     temp_poo <- tempfile(fileext = ".png")
     download.file(poopath, destfile = temp_poo, quiet = T)
-    poo <- suppressMessages(imager::load.image(temp_poo)) %>%
-      imager::rm.alpha() %>%
-      imager::bucketfill(x = 1, y = 1, color = c(1,1,1), sigma = 0)
+    poo <- suppressMessages(imager::load.image(temp_poo))
 
     saveRDS(poo, "poo.rds")
   }
@@ -22,12 +20,17 @@ testthat::teardown({
 })
 
 
-img <- readRDS("poo.rds")
+imgorig <- readRDS("poo.rds")
+img <- imgorig  %>%
+  imager::rm.alpha() %>%
+  imager::bucketfill(x = 1, y = 1, color = c(1,1,1), sigma = 0)
 imgmat <- imager::grayscale(img)[, , 1, ]
 
 test_that("outer_contour works as expected", {
   expect_message(outer_contour(imgmat),
                  "img is not a cimg object. Attempting to convert")
+  expect_message(outer_contour(imgorig), 
+                 "removing alpha channel and converting to grayscale")
   expect_message(poo_oc <- outer_contour(img), "converting image to grayscale")
   expect_s3_class(poo_oc, "cimg")
   expect_equivalent(as.numeric(poo_oc) %>% unique, c(0, 1))
@@ -40,6 +43,10 @@ test_that("outer_contour works as expected", {
 
 test_that("thin_contour works as expected", {
   poo_oc <- outer_contour(imager::grayscale(img))
+  expect_message(thin_contour(poo_oc, img = imgorig), 
+                 "removing alpha channel and converting to grayscale")
+  expect_message(thin_contour(poo_oc, img = img), "converting image to grayscale")
+  
   expect_error(thin_contour(poo_oc), 
                "Either img or centroid must not be null")
   expect_message(thin_contour(poo_oc, img = imgmat), 
