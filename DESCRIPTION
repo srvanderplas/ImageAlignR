@@ -26,3 +26,4 @@ Imports:
     tidyr,
     assertthat,
     methods
+Remotes: github::MangoTheCat/visualTest
