@@ -12,7 +12,8 @@ vignette: >
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.width = 4, fig.height = 9
 )
 ```
 
@@ -46,6 +47,8 @@ img_bw <- crop.bbox(img, img_bbox) %>%
   threshold() %>%
   shrink(3) %>%
   grow(3) %>%
+  autocrop() %>%
+  colorise(., Yc(.) > 3500, 1) %>%
   autocrop()
 
 
@@ -54,28 +57,53 @@ plot(img_bw)
 
 Next, we identify the contour points as described in Gwo & Wei (2016). 
 
-```{r}
+```{r, echo = 1:2}
 contour_points <- outer_contour(img_bw)
+contour_points_df <- outer_contour(img_bw, as_cimg = F)
 
 plot(img_bw)
 contour_points %>%
   highlight(col = "orange")
 ```
 
-These points are then thinned by eliminating any points whose radii from the image centroid overlap, leaving only the most distant points.
-
-```{r}
+```{r, echo = F}
+reliable_contour_points_df <- contour_points %>%
+  thin_contour(img = img_bw, n_angles = 50, as_cimg = F)
 reliable_contour_points <- contour_points %>%
-  thin_contour(img = img_bw, n_angles = 200)
+  thin_contour(img = img_bw, n_angles = 50, as_cimg = T)
+```
+
+```{r, echo = F}  
+centroid <- reliable_contour_points_df %>%
+  select(x1, y1) %>% unique()
 
 plot(img_bw)
-contour_points %>%
-  highlight(col = "orange")
-reliable_contour_points %>%
-  highlight(col = "darkorchid1")
+highlight(contour_points, col = "orange")
+segments(contour_points_df$x, contour_points_df$y, centroid$x1, centroid$y1, col = "orange", lwd = .1)
+
+```
+
+These points are then thinned by eliminating any points whose radii from the image centroid overlap, leaving only the most distant points. (The plot below shows a more sparse set of points than those actually chosen, for visualization ease.)
+
+
+```{r, echo = T, eval = F}
+reliable_contour_points <- contour_points %>%
+  thin_contour(img = img_bw, n_angles = 100, as_cimg = T)
+```
+
+```{r}
+plot(img_bw)
+highlight(contour_points, col = "orange")
+segments(reliable_contour_points_df$x, reliable_contour_points_df$y, centroid$x1, centroid$y1, col = "darkorchid1", lwd = .2)
 ```
 
 Once the contour of the shoe has been identified, it is possible to fit an ellipse to these points, creating a major and minor axis for the shoe. 
+
+
+```{r, echo = F, eval = T}
+reliable_contour_points <- contour_points %>%
+  thin_contour(img = img_bw, n_angles = 100, as_cimg = T)
+```
 
 ```{r}
 ellipse <- reliable_contour_points %>% 
@@ -90,4 +118,23 @@ reliable_contour_points %>%
   highlight(col = "darkorchid1")
 points(ellipse$CenterX, ellipse$CenterY, col = "orange", cex = 1.5, pch = 16)
 ellipse_points(ellipse, col = "orange")
+```
+
+Using the fitted ellipse, we can take the following steps:
+
+1. Rotate the shoe about the center point in order to ensure that the major axis is vertical
+2. Re-fit the ellipse to the rotated shoe
+3. Use the minor axis of the re-fitted ellipse to split the shoe into two regions - physically, into toe and heel.
+
+```{r}
+img_rot <- rotate_xy(img_bw, 180 - ellipse$Angle, cx = ellipse$CenterX, cy = ellipse$CenterY, boundary = 1) %>%
+  pad(50, axes = "xy", val = 1)
+
+rot_ellipse <- img_rot %>% 
+  outer_contour %>% 
+  thin_contour(img = img_rot) %>%
+  contour_ellipse_fit()
+
+plot(img_rot)
+ellipse_points(rot_ellipse, col = "orange")
 ```

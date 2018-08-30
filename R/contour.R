@@ -59,12 +59,12 @@ outer_contour <- function(img, thr = mean(img), as_cimg = TRUE) {
   # Contour point detection
   ypoints <- img %>%
     imager::imsplit(axis = "y")
-  ypointdf <- lapply(1:length(ypoints), function(x) {
-    idx <- which(as.numeric(ypoints[[x]]) < thr)
+  ypointdf <- lapply(1:length(ypoints), function(z) {
+    idx <- which(as.numeric(ypoints[[z]]) < thr)
     if (length(idx) > 0) {
       data_frame(x = c(min(idx), max(idx)),
                  type = c("min", "max"),
-                 yidx = names(ypoints)[x])
+                 yidx = names(ypoints)[z])
     }
   }) %>%
     bind_rows()
@@ -76,12 +76,12 @@ outer_contour <- function(img, thr = mean(img), as_cimg = TRUE) {
 
   xpoints <- img %>%
     imager::imsplit(axis = "x")
-  xpointdf <- lapply(1:length(xpoints), function(x) {
-    idx <- which(as.numeric(xpoints[[x]]) < thr)
+  xpointdf <- lapply(1:length(xpoints), function(z) {
+    idx <- which(as.numeric(xpoints[[z]]) < thr)
     if (length(idx) > 0) {
       return(data_frame(y = c(min(idx), max(idx)),
                         type = c("min", "max"),
-                        xidx = names(xpoints)[x]))
+                        xidx = names(xpoints)[z]))
     }
   }) %>%
     bind_rows()
@@ -159,7 +159,7 @@ thin_contour <- function(contour, img = NULL, centroid = NULL, n_angles = 1800, 
   assertthat::assert_that(assertthat::has_name(contour, "y"))
 
   contour_points <- contour %>%
-    mutate(y1 = centroid[1], x1 = centroid[2],
+    mutate(x1 = centroid[1], y1 = centroid[2],
            angle = atan2(y - y1, x - x1),
            radius = sqrt((y - y1)^2 + (x - x1)^2)) %>%
     mutate(ard = round(angle * n_angles) / n_angles) %>%
