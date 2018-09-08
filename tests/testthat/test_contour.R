@@ -33,8 +33,8 @@ test_that("outer_contour works as expected", {
   expect_s3_class(poo_oc, "cimg")
   expect_equivalent(as.numeric(poo_oc) %>% unique, c(0, 1))
   expect_equal(names(poo_oc2), c("x", "y", "type", "coord"))
-  expect_equal(sort(unique(poo_oc2$type)), c("max", "max,min", "min"))
-  expect_equal(sort(unique(poo_oc2$coord)), c("x", "y"))
+  expect_equal(sort(unique(poo_oc2$type)), c("max", "max,min", "min", "min,max"))
+  expect_equal(sort(unique(poo_oc2$coord)), c("x", "x,y", "y"))
 })
 
 # ------------------------------------------------------------------------------
