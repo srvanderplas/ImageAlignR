@@ -12,7 +12,7 @@ img_rotate_refit <- function(img, ellipse, ...) {
   img <- img_check(img, keep_alpha = T, keep_color = T)
   ellipse_check(ellipse)
 
-  n <- 300
+  n <- 250
   imgrot <-
     img %>%
     imager::pad(n, "xy", pos = 1, val = rep(1, spectrum(.))) %>%

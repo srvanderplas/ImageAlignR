@@ -108,6 +108,19 @@ outer_contour <- function(img, thr = mean(img), as_cimg = TRUE) {
   contour_points
 }
 
+
+calcCentroid <- function(mat) {
+  # From the IM:::calcCentroid method:
+  # selectMethod(IM:::calcCentroid, "matrix")
+  m <- mat.or.vec(3, 1)
+  NY <- dim(mat)[1]
+  NX <- dim(mat)[2]
+  m[1] <- sum(mat)
+  m[2] <- sum(t(mat) %*% (1:NY))
+  m[3] <- sum(mat %*% (1:NX))
+  c(m[2]/m[1], m[3]/m[1])
+}
+
 #' Thin outer contour by removing points overlappling radially from the centroid
 #'
 #' @param contour results from outer_contour
@@ -121,17 +134,7 @@ outer_contour <- function(img, thr = mean(img), as_cimg = TRUE) {
 #' @export
 thin_contour <- function(contour, img = NULL, centroid = NULL, n_angles = 1800, as_cimg = TRUE) {
   value <- y <- y1 <- x <- x1 <- angle <- radius <- ard <- NULL
-  calcCentroid <- function(mat) {
-    # From the IM:::calcCentroid method:
-    # selectMethod(IM:::calcCentroid, "matrix")
-    m <- mat.or.vec(3, 1)
-    NY <- dim(mat)[1]
-    NX <- dim(mat)[2]
-    m[1] <- sum(mat)
-    m[2] <- sum(t(mat) %*% (1:NY))
-    m[3] <- sum(mat %*% (1:NX))
-    c(m[2]/m[1], m[3]/m[1])
-  }
+
 
   assertthat::assert_that(!(is.null(img) & is.null(centroid)),
                           msg = "Either img or centroid must not be null")
