@@ -18,14 +18,14 @@ knitr::opts_chunk$set(
 ```
 
 
-```{r}
+```{r, message = F, warning = F}
 library(imager)
 library(dplyr)
 library(ShoeAlignR)
 imlinks <- system.file(package = "ShoeAlignR", "extdata/ShoeSamples/") %>% 
   list.files(full.names = T) %>% sort()
 
-img <- load.image(imlinks[1])
+img <- load.image(imlinks[2])
 plot(img)
 ```
 
@@ -73,7 +73,7 @@ reliable_contour_points <- contour_points %>%
   thin_contour(img = img_bw, n_angles = 50, as_cimg = T)
 ```
 
-```{r, echo = F}  
+```{r, echo = F}
 centroid <- reliable_contour_points_df %>%
   select(x1, y1) %>% unique()
 
@@ -94,7 +94,8 @@ reliable_contour_points <- contour_points %>%
 ```{r}
 plot(img_bw)
 highlight(contour_points, col = "orange")
-segments(reliable_contour_points_df$x, reliable_contour_points_df$y, centroid$x1, centroid$y1, col = "darkorchid1", lwd = .2)
+segments(reliable_contour_points_df$x, reliable_contour_points_df$y, 
+         centroid$x1, centroid$y1, col = "darkorchid1", lwd = .2)
 ```
 
 Once the contour of the shoe has been identified, it is possible to fit an ellipse to these points, creating a major and minor axis for the shoe. 
@@ -127,8 +128,10 @@ Using the fitted ellipse, we can take the following steps:
 3. Use the minor axis of the re-fitted ellipse to split the shoe into two regions - physically, into toe and heel.
 
 ```{r}
-img_rot <- rotate_xy(img_bw, 180 - ellipse$Angle, cx = ellipse$CenterX, cy = ellipse$CenterY, boundary = 1) %>%
-  pad(50, axes = "xy", val = 1)
+img_rot <- img_bw %>%
+  pad(250, axes = "xy", val = 1) %>%
+  rotate_xy(angle = -ellipse$Angle, cx = ellipse$CenterX + 250, 
+            cy = ellipse$CenterY + 250, boundary = 1)
 
 rot_ellipse <- img_rot %>% 
   outer_contour %>% 
@@ -137,4 +140,8 @@ rot_ellipse <- img_rot %>%
 
 plot(img_rot)
 ellipse_points(rot_ellipse, col = "orange")
+```
+```{r}
+img_rot <- img_bw %>%
+  img_rotate_refit(ellipse = ellipse)
 ```

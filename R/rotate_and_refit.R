@@ -5,6 +5,7 @@
 #' @param ellipse the original (potentially tilted) ellipse
 #' @param ... additional parameters to pass to imrotate
 #' @importFrom assertthat assert_that
+#' @export
 img_rotate_refit <- function(img, ellipse, ...) {
 
   # Clean up inputs and check
@@ -16,15 +17,19 @@ img_rotate_refit <- function(img, ellipse, ...) {
     img %>%
     imager::pad(n, "xy", pos = 1, val = rep(1, spectrum(.))) %>%
     imager::pad(n, "xy", pos = -1, val = rep(1, spectrum(.))) %>%
-    imager::bucketfill(1, 1, color = c(1, 1, 1), sigma = .1) %>% plot
-    imager::imrotate(ellipse$Angle, ellipse$CenterX + n, ellipse$CenterY + n,
-                     interpolation = 1, boundary = 2)
+    imager::bucketfill(1, 1, color = c(1, 1, 1), sigma = .1) %>% 
+    imager::rotate_xy(angle = -ellipse$Angle, cx = ellipse$CenterX + n,
+                      cy = ellipse$CenterY + n,
+                      interpolation = 1, boundary = 2) %>%
+    autocrop
 
   refit <- imgrot %>%
     outer_contour() %>%
-    thin_contour() %>%
+    thin_contour(img = imgrot) %>%
     contour_ellipse_fit()
-
+  
   plot(imgrot)
+  ellipse_points(rot_ellipse, col = "orange")
+  
   list(img = imgrot, ellipse = refit)
 }
