@@ -22,6 +22,7 @@ harris_corners <- function(im, sigma = 2, eps = 1e-10) {
 
 #' Get centers of a set of labeled regions within an image
 #'
+#' @param im image returned from harris_corners()
 #' @param bord border size
 #' @return a data frame of coordinates
 #' @export

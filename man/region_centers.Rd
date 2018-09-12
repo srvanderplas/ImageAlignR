@@ -7,6 +7,8 @@
 region_centers(im, bord = 10)
 }
 \arguments{
+\item{im}{image returned from harris_corners()}
+
 \item{bord}{border size}
 }
 \value{
