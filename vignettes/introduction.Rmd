@@ -145,7 +145,7 @@ ellipse_points(rot_ellipse, col = "orange")
 Alternately, we can use a convenience function which completes these steps in a single command: 
 ```{r}
 img_rot <- img_bw %>%
-  img_rotate_refit(ellipse = rot_ellipse)
+  img_rotate_refit()
 ```
 
 With our new, nicely aligned ellipse, we also have a natural coordinate system, with the major axis running vertically through the centroid of the image. 
@@ -154,5 +154,4 @@ With our new, nicely aligned ellipse, we also have a natural coordinate system, 
 plot(img_rot$img)
 abline(v = img_rot$ellipse$CenterX, col = "purple")
 abline(h = img_rot$ellipse$CenterY, col = "purple")
-
 ```

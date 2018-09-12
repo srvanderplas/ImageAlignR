@@ -4,12 +4,10 @@
 \alias{img_rotate_refit}
 \title{Rotate the image and re-fit the bounding ellipse}
 \usage{
-img_rotate_refit(img, ellipse, ...)
+img_rotate_refit(img, ...)
 }
 \arguments{
 \item{img}{a cimg of the object to be rotated}
-
-\item{ellipse}{the original (potentially tilted) ellipse}
 
 \item{...}{additional parameters to pass to imrotate}
 }
