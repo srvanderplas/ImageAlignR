@@ -130,7 +130,7 @@ Using the fitted ellipse, we can take the following steps:
 ```{r}
 img_rot <- img_bw %>%
   pad(250, axes = "xy", val = 1) %>%
-  rotate_xy(angle = (ellipse$Angle) %% 180, cx = ellipse$CenterX + 250, 
+  rotate_xy(angle = -(ellipse$Angle) %% 180, cx = ellipse$CenterX + 250, 
             cy = ellipse$CenterY + 250, boundary = 1)
 
 rot_ellipse <- img_rot %>% 
