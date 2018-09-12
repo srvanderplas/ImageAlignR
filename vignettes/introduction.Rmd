@@ -128,9 +128,13 @@ Using the fitted ellipse, we can take the following steps:
 3. Use the minor axis of the re-fitted ellipse to split the shoe into two regions - physically, into toe and heel.
 
 ```{r}
+angle <- ellipse$Angle
+if (angle > 45) angle <- angle - 90
+if (angle < -45) angle <- angle + 90
+
 img_rot <- img_bw %>%
   pad(250, axes = "xy", val = 1) %>%
-  rotate_xy(angle = (ellipse$Angle) %% 180, cx = ellipse$CenterX + 250, 
+  rotate_xy(angle = -angle, cx = ellipse$CenterX + 250, 
             cy = ellipse$CenterY + 250, boundary = 1)
 
 rot_ellipse <- img_rot %>% 
@@ -145,7 +149,7 @@ ellipse_points(rot_ellipse, col = "orange")
 Alternately, we can use a convenience function which completes these steps in a single command: 
 ```{r}
 img_rot <- img_bw %>%
-  img_rotate_refit(ellipse = rot_ellipse)
+  img_rotate_refit()
 ```
 
 With our new, nicely aligned ellipse, we also have a natural coordinate system, with the major axis running vertically through the centroid of the image. 
@@ -154,5 +158,4 @@ With our new, nicely aligned ellipse, we also have a natural coordinate system, 
 plot(img_rot$img)
 abline(v = img_rot$ellipse$CenterX, col = "purple")
 abline(h = img_rot$ellipse$CenterY, col = "purple")
-
 ```
