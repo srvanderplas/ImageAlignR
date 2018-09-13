@@ -25,5 +25,7 @@ Imports:
     dplyr,
     tidyr,
     assertthat,
-    methods
+    methods,
+    FNN,
+    purrr
 Remotes: github::MangoTheCat/visualTest

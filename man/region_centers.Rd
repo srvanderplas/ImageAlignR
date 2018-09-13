@@ -4,7 +4,7 @@
 \alias{region_centers}
 \title{Get centers of a set of labeled regions within an image}
 \usage{
-region_centers(im, bord = 10)
+region_centers(im, bord = 30)
 }
 \arguments{
 \item{im}{image returned from harris_corners()}
@@ -15,5 +15,5 @@ region_centers(im, bord = 10)
 a data frame of coordinates
 }
 \description{
-Get centers of a set of labeled regions within an image
+Source: https://www.kaggle.com/vicensgaitan/image-registration-the-r-way/notebook
 }

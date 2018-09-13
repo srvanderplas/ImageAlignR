@@ -4,7 +4,7 @@
 \alias{harris_keypoints}
 \title{Detect keypoints using Harris corner detector, and find centers of associated regions}
 \usage{
-harris_keypoints(im, thr = "99\%", sigma = 3, bord = 10)
+harris_keypoints(im, thr = "99\%", sigma = 3, bord = 30)
 }
 \arguments{
 \item{im}{image}
@@ -21,4 +21,7 @@ a list, with an image labeled by region and a data frame of the region's centers
 \description{
 Runs the harris_corners function, then selects as keypoints the center of
 connected regions with Harris over a certain threshod.
+}
+\details{
+Source: https://www.kaggle.com/vicensgaitan/image-registration-the-r-way/notebook
 }
