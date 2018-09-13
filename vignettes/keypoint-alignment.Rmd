@@ -13,6 +13,9 @@ vignette: >
 library(imager)
 library(dplyr)
 library(ImageAlignR)
+if (!"ShoeSampleData" %in% installed.packages()) {
+  devtools::install_github("srvanderplas/ShoeData")
+}
 
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -22,22 +25,23 @@ knitr::opts_chunk$set(
 )
 ```
 
-The functions in this vignette were borrowed with permission from Vinces Gaitan's blog post: https://www.kaggle.com/vicensgaitan/image-registration-the-r-way/notebook
+The R code underlying the functions in this vignette were borrowed with permission from Vinces Gaitan's blog post: https://www.kaggle.com/vicensgaitan/image-registration-the-r-way/notebook
 
-I have modified them where necessary in order to make them more pipeline-friendly and function oriented.
+I have modified the code where necessary in order to make it more pipeline-friendly and function oriented.
 
 ```{r img-setup, message = F, warning = F, fig.cap = "Image which will be used throughout this tutorial"}
-imlinks <- system.file(package = "ImageAlignR", "extdata/ShoeSamples/") %>% 
-  list.files(full.names = T) %>% sort()
+imlinks <- system.file(package = "ShoeSampleData", "extdata/") %>%
+  list.files(pattern = "036285L", full.names = T) %>%
+  sort()
 
 clean_shoe_img <- function(im) {
   suppressMessages({
     im_bbox <- im %>%
       imsplit(axis = "c") %>%
-      (function(x) is.finite((x[[1]] + x[[2]])/x[[3]])) %>%
+      (function(x) is.finite((x[[1]] + x[[2]]) / x[[3]])) %>%
       as.cimg() %>%
       (function(x) x == 1)
-    
+
     crop.bbox(im, im_bbox) %>%
       grayscale() %>%
       map_halfimg(fun = autocrop) %>%
@@ -49,9 +53,8 @@ clean_shoe_img <- function(im) {
       autocrop() %>%
       # img_rotate_refit() %>%
       # magrittr::extract2("img") %>%
-      grayscale() 
+      grayscale()
   })
-  
 }
 
 img_a <- load.image(imlinks[1]) %>% clean_shoe_img()
@@ -63,7 +66,7 @@ We need to pad image a so that it is the same size as image b:
 dim(img_a)
 dim(img_b)
 pad_size <- dim(img_b) - dim(img_a)
-img_a <- pad(img_a, nPix = pad_size[1], axes = "x", pos = 1, val = max(img_a)) %>% 
+img_a <- pad(img_a, nPix = pad_size[1], axes = "x", pos = 1, val = max(img_a)) %>%
   pad(nPix = pad_size[2], axes = "y", pos = 1, val = max(img_a))
 ```
 
@@ -87,16 +90,16 @@ The detector seems to be working fairly well, outlining major features of the sh
 
 Thresholding the image from the previous step at 99% produces the best 1% of keypoints:
 ```{r}
-hkp_threshold <- hkp %>% threshold("99%") 
+hkp_threshold <- hkp %>% threshold("99%")
 hkp_threshold %>% plot()
 ```
 
 The regions are labeled, and region centers are computed for each separately labeled region
 ```{r}
-keypoints <- hkp_threshold %>% label() %>% region_centers(bord=30)
+keypoints <- hkp_threshold %>% label() %>% region_centers(bord = 30)
 
 plot(img_a)
-points(keypoints$mx, keypoints$my, col="red")
+points(keypoints$mx, keypoints$my, col = "red")
 ```
 
 
@@ -142,7 +145,6 @@ get_kpf <- function(angles, hkp, im) {
 
 kpf_a <- get_kpf(angles_a, hkp_a, img_a)
 kpf_b <- get_kpf(angles_b, hkp_b, img_b)
-
 ```
 
 ## Step 4: Match points
@@ -161,14 +163,14 @@ ransac_points <- ransac(match_points$points_a, match_points$points_b)
 ```
 
 ```{r ransac-plot}
-par(mfrow=c(1,2))
+par(mfrow = c(1, 2))
 
 plot(img_a)
-hkp_a$centers %$% points(mx,my,col="orange")
-points(match_points$points_a[ransac_points$inliers,],col="purple", pch = 16)
+hkp_a$centers %$% points(mx, my, col = "orange")
+points(match_points$points_a[ransac_points$inliers, ], col = "purple", pch = 16)
 plot(img_b)
-hkp_b$centers %$% points(mx,my,col="orange")
-points(match_points$points_b[ransac_points$inliers,],col="purple", pch = 16)
+hkp_b$centers %$% points(mx, my, col = "orange")
+points(match_points$points_b[ransac_points$inliers, ], col = "purple", pch = 16)
 ```
 
 
@@ -187,8 +189,9 @@ We can then overlay the two images:
 
 ```{r img-overlay-after}
 blank_channel <- as.cimg(img_b > 0 & img_a_warp > 0)
-overlaid_images <- imappend(imlist(img_a_warp, blank_channel, img_b), axis = 'c')
+overlaid_images <- imappend(imlist(img_a_warp, blank_channel, img_b), axis = "c")
 plot(overlaid_images)
 ```
 
 Areas that are in the first image only are shown in red; areas in the second image only are shown in blue. Areas in both images are shown in black.
+

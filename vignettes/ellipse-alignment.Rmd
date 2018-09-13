@@ -23,7 +23,11 @@ knitr::opts_chunk$set(
 library(imager)
 library(dplyr)
 library(ImageAlignR)
-imlinks <- system.file(package = "ImageAlignR", "extdata/ShoeSamples/") %>% 
+if (!"ShoeSampleData" %in% installed.packages()) {
+  devtools::install_github("srvanderplas/ShoeData")
+}
+
+imlinks <- system.file(package = "ShoeSampleData", "extdata/") %>% 
   list.files(full.names = T) %>% sort()
 
 img <- load.image(imlinks[1])

@@ -58,12 +58,22 @@
       <a href="../articles/ellipse-alignment.html">Ellipse Alignment</a>
     </li>
     <li>
+      <a href="../articles/keypoint-alignment-in-color.html">Keypoint Alignment in Color</a>
+    </li>
+    <li>
       <a href="../articles/keypoint-alignment.html">Keypoint Alignment</a>
     </li>
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/srvanderplas/ImageAlignR">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 <form class="navbar-form navbar-right" role="search">
         <div class="form-group">
           <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
@@ -86,7 +96,7 @@
             
             <h4 class="date">2018-09-13</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/srvanderplas/ImageAlignR/blob/master/vignettes/ellipse-alignment.Rmd"><code>vignettes/ellipse-alignment.Rmd</code></a></small>
       <div class="hidden name"><code>ellipse-alignment.Rmd</code></div>
 
     </div>
@@ -96,11 +106,15 @@
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(imager)</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(dplyr)</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">library</span>(ImageAlignR)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">imlinks &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="dt">package =</span> <span class="st">"ImageAlignR"</span>, <span class="st">"extdata/ShoeSamples/"</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="st">  </span><span class="kw">list.files</span>(<span class="dt">full.names =</span> T) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>()</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7">img &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/imager/topics/load.image">load.image</a></span>(imlinks[<span class="dv">1</span>])</a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="kw">plot</span>(img)</a></code></pre></div>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="cf">if</span> (<span class="op">!</span><span class="st">"ShoeSampleData"</span> <span class="op">%in%</span><span class="st"> </span><span class="kw">installed.packages</span>()) {</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">  devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"srvanderplas/ShoeData"</span>)</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">}</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">imlinks &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="dt">package =</span> <span class="st">"ShoeSampleData"</span>, <span class="st">"extdata/"</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="st">  </span><span class="kw">list.files</span>(<span class="dt">full.names =</span> T) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>()</a>
+<a class="sourceLine" id="cb1-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb1-11" data-line-number="11">img &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/imager/topics/load.image">load.image</a></span>(imlinks[<span class="dv">1</span>])</a>
+<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="kw">plot</span>(img)</a></code></pre></div>
 <p><img src="ellipse-alignment_files/figure-html/unnamed-chunk-1-1.png" width="384"></p>
 <p>First, we must remove the border region. Noting that most of the border region is yellow or red, we can take the ratio of the red and green color channel values to the blue color channel value (I derived this via experimentation - there may be a better way). Once we have the bounding box of the “real” portion of the image, we can switch to grayscale, clean the image up a bit, and autocrop it.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"></a>

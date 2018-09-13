@@ -15,7 +15,8 @@ Suggests:
     rmarkdown,
     covr,
     testthat,
-    visualTest
+    visualTest,
+    ShoeData
 VignetteBuilder: knitr
 Depends: 
     R (>= 3.1)
@@ -28,6 +29,6 @@ Imports:
     methods,
     FNN,
     purrr
-Remotes: github::MangoTheCat/visualTest
+Remotes: github::MangoTheCat/visualTest, github::srvanderplas/ShoeData
 URL: https://github.com/srvanderplas/ImageAlignR
 BugReports: https://github.com/srvanderplas/ImageAlignR/issues

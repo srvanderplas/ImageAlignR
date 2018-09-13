@@ -80,11 +80,14 @@ harris_keypoints <- function(im, thr = "99%", sigma = 3, bord = 30) {
 oriented_gradients <- function(im, sigma = 0, show_plot = T) {
   if (sigma > 0) {
     imblur <- imager::isoblur(im, sigma = sigma, gaussian = T)
+  } else {
+    imblur <- im
   }
+  n <- length(im)
   ix <- imager::imgradient(imblur, "x")
   iy <- imager::imgradient(imblur, "y")
   ita <- atan(iy / ix) * 180 / pi
-  iga <- table(sample(round(ita * 2) / 2, 200000))
+  iga <- table(sample(round(ita * 2) / 2, pmin(n, 200000)))
 
   if (show_plot) plot(iga)
 
@@ -121,24 +124,45 @@ oriented_gradients <- function(im, sigma = 0, show_plot = T) {
 #' @importFrom imager get.stencil as.cimg imrotate width grayscale
 #' @export
 descriptor_orientation <- function(im, stencil_ext = NULL, stencil = NULL, theta, v) {
+  imdims <- dim(im)
+  nx <- imdims[1]
+  ny <- imdims[2]
+
+  stencil_x <- pmin(floor(nx/8), 20)
+  stencil_y <- pmin(floor(ny/8), 20)
+  stencil_ext_x <- pmin(floor(nx/5), 30)
+  stencil_ext_y <- pmin(floor(ny/5), 30)
+
   if (is.null(stencil)) {
-    stencil <- expand.grid(dx = round(seq(-20, 20, 5)), dy = round(seq(-20, 20, 5)))
+    stencil <- expand.grid(
+      dx = round(seq(-stencil_x, stencil_x, length.out = 9)),
+      dy = round(seq(-stencil_y, stencil_y, length.out = 9)))
   }
   if (is.null(stencil_ext)) {
-    stencil_ext <- expand.grid(dx = round(seq(-30, 30, 1)), dy = round(seq(-30, 30, 1)))
-  }
-  if (dim(im)[4] != 1) {
-    message("Converting to grayscale")
-    im <- imager::grayscale(im)
+    stencil_ext <- expand.grid(dx = round(seq(-stencil_ext_x, stencil_ext_x, 1)),
+                               dy = round(seq(-stencil_ext_y, stencil_ext_y, 1)))
   }
 
+  # if (dim(im)[4] != 1) {
+  #   message("Converting to grayscale")
+  #   im <- imager::grayscale(im)
+  # }
+  ccs <- seq(1, pmin(3, imdims[4]), by = 1)
+
+  im_cc <- imager::imsplit(im, 'cc')
   v <- as.numeric(v)
-  pm <- imager::get.stencil(im, stencil_ext, x = v[1], y = v[2])
-  w <- sqrt(length(pm))
-  pm <- imager::as.cimg(pm, x = w, y = w)
-  imr <- imager::imrotate(pm, -theta)
-  ww <- round(imager::width(imr) / 2)
-  imager::get.stencil(imr, stencil, x = ww, y = ww)
+  pm <- map_il(im_cc, function(.) {
+    im.st <- imager::get.stencil(., stencil_ext, x = v[1], y = v[2])
+    w <- sqrt(length(im.st))
+    im.st <- imager::as.cimg(im.st, x = w, y = w)
+    imr <- imager::imrotate(im.st, -theta)
+    ww <- round(imager::width(imr) / 2)
+    ims <- imager::get.stencil(imr, stencil, x = ww, y = ww)
+    www <- sqrt(length(ims))
+    ims <- imager::as.cimg(ims, x = www, y = www)
+    ims
+  })
+  imager::imappend(pm, 'cc') %>% as.numeric()
 }
 
 #' Get KNN for feature point matches
@@ -251,6 +275,46 @@ map_affine_gen <- function(homography) {
   }
 }
 
+#' Function to make two images the same size by padding one image
+#'
+#' @param img1 image 1
+#' @param img2 image 2
+#' @export
+#' @importFrom imager pad imlist imresize
+images_resize <- function(img1, img2) {
+  img1dim <- dim(img1)
+  img2dim <- dim(img2)
+
+  scale_x <- img2dim[1]/img1dim[1]
+  scale_y <- img2dim[2]/img1dim[2]
+
+  img1 <- imager::imresize(img1, scale = pmin(scale_x, scale_y))
+  img1dim <- dim(img1)
+
+  xdim <- max(img1dim[1], img2dim[1])
+  ydim <- max(img1dim[2], img2dim[2])
+
+  img_a <- img1
+  img_b <- img2
+
+  img_a_max_val <- img_a %>% imsplit('c') %>% map_dbl(max)
+  img_b_max_val <- img_b %>% imsplit('c') %>% map_dbl(max)
+
+  if (xdim > img1dim[1]) {
+    img_a <- imager::pad(img_a, nPix = xdim - img1dim[1], axes = "x", pos = 1, val = img_a_max_val)
+  }
+  if (xdim > img2dim[1]) {
+    img_b <- imager::pad(img_b, nPix = xdim - img2dim[1], axes = "x", pos = 1, val = img_b_max_val)
+  }
+  if (ydim > img1dim[2]) {
+    img_a <- imager::pad(img_a, nPix = ydim - img1dim[2], axes = "y", pos = 1, val = img_a_max_val)
+  }
+  if (ydim > img2dim[2]) {
+    img_b <- imager::pad(img_b, nPix = ydim - img2dim[2], axes = "y", pos = 1, val = img_b_max_val)
+  }
+  return(imager::imlist(img_a, img_b))
+}
+
 #' Align two images
 #'
 #' @param img1 image 1
@@ -264,25 +328,9 @@ map_affine_gen <- function(homography) {
 align_images <- function(img1, img2) {
   theta <- idx <- . <- NULL
 
-  img1dim <- dim(img1)
-  img2dim <- dim(img2)
-  xdim <- max(img1dim[1], img2dim[1])
-  ydim <- max(img1dim[2], img2dim[2])
-
-  img_a <- img1
-  img_b <- img2
-  if (xdim > img1dim[1]) {
-    img_a <- pad(img_a, nPix = xdim - img1dim[1], pos = 1, val = max(img_a))
-  }
-  if (xdim > img2dim[1]) {
-    img_b <- pad(img_b, nPix = xdim - img2dim[1], pos = 1, val = max(img_b))
-  }
-  if (ydim > img1dim[2]) {
-    img_a <- pad(img_a, nPix = ydim - img1dim[2], pos = 1, val = max(img_a))
-  }
-  if (ydim > img2dim[2]) {
-    img_b <- pad(img_b, nPix = ydim - img2dim[2], pos = 1, val = max(img_b))
-  }
+  imgs <- images_resize(img1, img2)
+  img_a <- imgs[[1]]
+  img_b <- imgs[[2]]
 
   hkp_a <- harris_keypoints(img_a, sigma = 6)
   hkp_b <- harris_keypoints(img_b, sigma = 6)

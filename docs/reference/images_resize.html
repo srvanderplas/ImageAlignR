@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Thin outer contour by removing points overlappling radially from the centroid — thin_contour • ImageAlignR</title>
+<title>Function to make two images the same size by padding one image — images_resize • ImageAlignR</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -36,9 +36,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="Thin outer contour by removing points overlappling radially from the centroid — thin_contour" />
+<meta property="og:title" content="Function to make two images the same size by padding one image — images_resize" />
 
-<meta property="og:description" content="Thin outer contour by removing points overlappling radially from the centroid" />
+<meta property="og:description" content="Function to make two images the same size by padding one image" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -128,49 +128,31 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Thin outer contour by removing points overlappling radially from the centroid</h1>
-    <small class="dont-index">Source: <a href='https://github.com/srvanderplas/ImageAlignR/blob/master/R/contour.R'><code>R/contour.R</code></a></small>
-    <div class="hidden name"><code>thin_contour.Rd</code></div>
+    <h1>Function to make two images the same size by padding one image</h1>
+    <small class="dont-index">Source: <a href='https://github.com/srvanderplas/ImageAlignR/blob/master/R/harris.R'><code>R/harris.R</code></a></small>
+    <div class="hidden name"><code>images_resize.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Thin outer contour by removing points overlappling radially from the centroid</p>
+    <p>Function to make two images the same size by padding one image</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>thin_contour</span>(<span class='no'>contour</span>, <span class='kw'>img</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>centroid</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>n_angles</span> <span class='kw'>=</span> <span class='fl'>1800</span>,
-  <span class='kw'>as_cimg</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>images_resize</span>(<span class='no'>img1</span>, <span class='no'>img2</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>contour</th>
-      <td><p>results from outer_contour</p></td>
+      <th>img1</th>
+      <td><p>image 1</p></td>
     </tr>
     <tr>
-      <th>img</th>
-      <td><p>thresholded image (used to calculate the centroid)</p></td>
-    </tr>
-    <tr>
-      <th>centroid</th>
-      <td><p>centroid of the image</p></td>
-    </tr>
-    <tr>
-      <th>n_angles</th>
-      <td><p>number of unique angles to use</p></td>
-    </tr>
-    <tr>
-      <th>as_cimg</th>
-      <td><p>return the points as a cimg object?</p></td>
+      <th>img2</th>
+      <td><p>image 2</p></td>
     </tr>
     </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>either a cimg of points or a data frame of points indicating the
-  boundary</p>
     
 
   </div>
@@ -178,9 +160,7 @@
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-          </ul>
+                </ul>
 
   </div>
 </div>
