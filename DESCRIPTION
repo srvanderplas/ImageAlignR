@@ -1,9 +1,7 @@
-Package: ShoeAlignR
+Package: ImageAlignR
 Type: Package
-Title: Aligning images (shoeprints in particular)
+Title: ImageAlignR
 Version: 0.1.0
-Author: Susan VanderPlas
-Maintainer: Susan VanderPlas <srvander@iastate.edu>
 Description: RANSAC, ellipse-based alignment, and more.
 Authors@R: person("Susan", "Vanderplas", role = c("aut", "cre"), email = "srvander@iastate.edu")
 License: MIT + file LICENSE

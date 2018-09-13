@@ -1,5 +1,5 @@
 ---
-title: "Align Shoe Images"
+title: "ImageAlignR"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 bibliography: Refs.bib
 output: md_document
@@ -13,13 +13,22 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r, echo=FALSE}
 biblio <- bibtex::read.bib("Refs.bib")
 ```
-[![CRAN status](https://www.r-pkg.org/badges/version/ShoeAlignR)](https://cran.r-project.org/package=ShoeAlignR)
+[![CRAN status](https://www.r-pkg.org/badges/version/ImageAlignR)](https://cran.r-project.org/package=ImageAlignR)
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
-[![Travis build status](https://travis-ci.org/srvanderplas/ShoeAlignR.svg?branch=master)](https://travis-ci.org/srvanderplas/ShoeAlignR)
-[![Coverage status](https://codecov.io/gh/srvanderplas/ShoeAlignR/branch/master/graph/badge.svg)](https://codecov.io/github/srvanderplas/ShoeAlignR?branch=master)
+[![Travis build status](https://travis-ci.org/srvanderplas/ImageAlignR.svg?branch=master)](https://travis-ci.org/srvanderplas/ImageAlignR)
+[![Coverage status](https://codecov.io/gh/srvanderplas/ImageAlignR/branch/master/graph/badge.svg)](https://codecov.io/github/srvanderplas/ImageAlignR?branch=master)
 
-# Align Shoe Images
+# Image Alignment Methods:
 
-References:
+1. Single-Image Alignment
+    - Ellipse-based: Align an image so that its main axes are the y and x axis of the cartesian coordinate system. Rotates an image so that it is straight up-and-down.    
+    `r capture.output(print(biblio["gwoShoeprintRetrievalCore2016"]))`
+2. Dual-Image Alignment
+    - Keypoint Alignment: Keypoint detection using the following steps:
+        1. Harris corner detector
+        2. Calculate key image orientations
+        3. Feature detection
+        4. Point matching using KNN to find similar points
+        5. RANSAC to get a consistent homology
+        6. Image transformation
 
-`r capture.output(print(biblio["gwoShoeprintRetrievalCore2016"]))`

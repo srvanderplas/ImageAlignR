@@ -1,4 +1,4 @@
 library(testthat)
-library(ShoeAlignR)
+library(ImageAlignR)
 
-test_check("ShoeAlignR")
+test_check("ImageAlignR")
