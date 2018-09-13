@@ -1,6 +1,6 @@
 Package: ImageAlignR
 Type: Package
-Title: ImageAlignR
+Title: Image Alignment
 Version: 0.1.0
 Description: Contains methods for aligning a single image to the cartesian
     coordinate plane as well as methods for aligning multiple images using
@@ -16,7 +16,8 @@ Suggests:
     covr,
     testthat,
     visualTest,
-    ShoeData
+    ShoeData,
+    furrr
 VignetteBuilder: knitr
 Depends: 
     R (>= 3.1)

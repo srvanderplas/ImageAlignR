@@ -10,5 +10,6 @@ addons:
     update: true
 r_github_packages:
   - MangoTheCat/visualTest
+  - srvanderplas/ShoeData
 after_success:
   - Rscript -e 'covr::codecov()'

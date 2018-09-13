@@ -4,7 +4,7 @@
 \name{ImageAlignR-package}
 \alias{ImageAlignR}
 \alias{ImageAlignR-package}
-\title{ImageAlignR: ImageAlignR}
+\title{ImageAlignR: Image Alignment}
 \description{
 Contains methods for aligning a single image to the cartesian
     coordinate plane as well as methods for aligning multiple images using
