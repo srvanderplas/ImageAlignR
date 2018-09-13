@@ -2,7 +2,9 @@ Package: ImageAlignR
 Type: Package
 Title: ImageAlignR
 Version: 0.1.0
-Description: RANSAC, ellipse-based alignment, and more.
+Description: Contains methods for aligning a single image to the cartesian
+    coordinate plane as well as methods for aligning multiple images using
+    keypoints. 
 Authors@R: person("Susan", "Vanderplas", role = c("aut", "cre"), email = "srvander@iastate.edu")
 License: MIT + file LICENSE
 Encoding: UTF-8
