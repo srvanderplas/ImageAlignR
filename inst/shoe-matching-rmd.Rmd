@@ -1,0 +1,158 @@
+---
+title: "Shoe Matching"
+author: "Susan VanderPlas"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Shoe Matching}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+library(imager)
+library(dplyr)
+library(ImageAlignR)
+if (!"ShoeSampleData" %in% installed.packages()) {
+  devtools::install_github("srvanderplas/ShoeData")
+}
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#",
+  # prompt = "",
+  fig.width = 5, fig.height = 9
+)
+```
+
+```{r img-setup, message = F, warning = F, fig.cap = "Image which will be used throughout this tutorial"}
+imlinks <- system.file(package = "ShoeSampleData", "extdata/") %>%
+  list.files(full.names = T) %>%
+  sort()
+
+clean_shoe_img <- function(im) {
+  suppressMessages({
+    im_bbox <- im %>%
+      imsplit(axis = "c") %>%
+      (function(x) is.finite((x[[1]] + x[[2]]) / x[[3]])) %>%
+      as.cimg() %>%
+      (function(x) x == 1)
+
+    crop.bbox(im, im_bbox) %>%
+      grayscale() %>%
+      map_halfimg(fun = autocrop) %>%
+      crop.borders(nx = 5, ny = 5) %>%
+      autocrop() %>%
+      threshold() %>%
+      shrink(3) %>%
+      grow(3) %>%
+      autocrop() %>%
+      # img_rotate_refit() %>%
+      # magrittr::extract2("img") %>%
+      grayscale()
+  })
+}
+
+imgs <- lapply(imlinks[17:24], function(.) load.image(.) %>% clean_shoe_img()) %>% as.imlist()
+plot(imgs[1:2])
+```
+We need to resize the images so that they are the same size:
+```{r}
+lapply(imgs, dim)
+imgs2 <- lapply(imgs, function(.) images_resize(., imgs[[1]])[[1]])
+imgs <- as.imlist(imgs2)
+rm(imgs2)
+```
+
+We can then overlay the images to see how far apart they are:
+```{r img-overlay}
+plot(imgs[[1]] + imgs[[2]] + imgs[[3]] + imgs[[4]] + imgs[[5]] + imgs[[6]] + imgs[[7]] + imgs[[8]])
+```
+
+## Step 1: Keypoint Detection
+
+
+```{r, fig.width = 8, fig.height = 6}
+hkp <- purrr::map(imgs, harris_keypoints, sigma = 6)
+
+plots <- purrr::map(hkp, function(x) ggplot2::qplot(x$centers$mx, -x$centers$my, colour = I("red")))
+
+gridExtra::grid.arrange(grobs = plots, ncol = 4)
+```
+
+## Step 2: Image Orientation
+
+Calculating the dominant orientations for the whole image produces:
+```{r}
+angles <- purrr::map(imgs, oriented_gradients, sigma = 3, show_plot = F)
+angles
+```
+
+## Step 3: Feature Detection
+
+For each angle, we pull features from a 40x40 area around the keypoint. These features will be used to identify points of similarity across the two images.
+```{r harris-keypoint-features}
+get_kpf <- function(angles, hkp, im) {
+  kpa <- data_frame(angle = angles, v = list(hkp$centers)) %>%
+    tidyr::unnest(v) %>%
+    dplyr::rename(theta = angle, x = mx, y = my) %>%
+    mutate(idx = 1:n()) %>%
+    rowwise() %>%
+    tidyr::nest(-theta, -idx, .key = "v") %>%
+    select(-idx)
+  purrr::pmap(list(theta = kpa$theta, v = kpa$v), descriptor_orientation, im = grayscale(im)) %>%
+    do.call("rbind", .)
+}
+
+kpf <- purrr::pmap(list(angles = angles, hkp = hkp, im = imgs), get_kpf)
+```
+
+## Step 4: Match points
+
+Match points are calculated using the K nearest neighbors algorithm, combined with some thresholding by distance.
+```{r keypoint-knn}
+hkp_centers <- lapply(hkp, function(x) x$centers)
+match_points <- purrr::map2(kpf[2:8], hkp_centers[2:8], ~knn_points(kpf[[1]], .x, hkp_centers[[1]], .y, show_plot = T))
+```
+
+## Step 5: RANSAC
+
+RANSAC is then used to find points that have similar homography. 
+
+```{r ransac}
+ransac_points <- purrr::map(match_points, ~ransac(.$points_a, .$points_b))
+```
+
+```{r ransac-plot}
+par(mfrow = c(1, 2))
+
+plot(img_a)
+hkp_a$centers %$% points(mx, my, col = "orange")
+points(match_points$points_a[ransac_points$inliers, ], col = "purple", pch = 16)
+plot(img_b)
+hkp_b$centers %$% points(mx, my, col = "orange")
+points(match_points$points_b[ransac_points$inliers, ], col = "purple", pch = 16)
+```
+
+
+## Step 6: Image Warping
+
+The homography can be used to warp one image onto the other:
+```{r homography-solve}
+map_fcn <- map_affine_gen(ransac_points$homography)
+
+img_a_warp <- imwarp(img_a, map_fcn, direction = "backward", boundary = "neumann")
+
+plot(img_a_warp)
+```
+
+We can then overlay the two images:
+
+```{r img-overlay-after}
+blank_channel <- as.cimg(img_b > 0 & img_a_warp > 0)
+overlaid_images <- imappend(imlist(img_a_warp, blank_channel, img_b), axis = "c")
+plot(overlaid_images)
+```
+
+Areas that are in the first image only are shown in red; areas in the second image only are shown in blue. Areas in both images are shown in black.
+
