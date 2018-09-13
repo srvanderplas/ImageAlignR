@@ -3,7 +3,6 @@ pkgdown: 1.1.0.9000
 pkgdown_sha: aaa2d2840f679feb9badf0247480dfe2655f949e
 articles:
   ellipse-alignment: ellipse-alignment.html
-  keypoint-alignment-in-color: keypoint-alignment-in-color.html
   keypoint-alignment: keypoint-alignment.html
 urls:
   reference: https://srvanderplas.github.io/ImageAlignR/reference
