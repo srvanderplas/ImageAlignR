@@ -12,7 +12,8 @@ vignette: >
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
+  comment = "#",
+  # prompt = "",
   fig.width = 4, fig.height = 9
 )
 ```
@@ -25,7 +26,7 @@ library(ShoeAlignR)
 imlinks <- system.file(package = "ShoeAlignR", "extdata/ShoeSamples/") %>% 
   list.files(full.names = T) %>% sort()
 
-img <- load.image(imlinks[2])
+img <- load.image(imlinks[1])
 plot(img)
 ```
 
@@ -129,8 +130,17 @@ Using the fitted ellipse, we can take the following steps:
 
 ```{r}
 angle <- ellipse$Angle
-if (angle > 45) angle <- angle - 90
-if (angle < -45) angle <- angle + 90
+if (angle > 90) {
+  angle <- angle - 180
+} else if (angle > 45) {
+  angle <- angle - 90
+} else if (angle > -45) {
+  angle <- angle
+} else if (angle > -90) {
+  angle <- angle + 90
+} else {
+  angle <- angle + 180
+}
 
 img_rot <- img_bw %>%
   pad(250, axes = "xy", val = 1) %>%
@@ -149,7 +159,7 @@ ellipse_points(rot_ellipse, col = "orange")
 Alternately, we can use a convenience function which completes these steps in a single command: 
 ```{r}
 img_rot <- img_bw %>%
-  img_rotate_refit()
+  img_rotate_refit(show_plot = T)
 ```
 
 With our new, nicely aligned ellipse, we also have a natural coordinate system, with the major axis running vertically through the centroid of the image. 

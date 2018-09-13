@@ -2,13 +2,15 @@
 #'
 #' This should ensure that the major axis of the ellipse is vertical.
 #' @param img a cimg of the object to be rotated
+#' @param show_plot should plot of image and ellipse be displayed?
 #' @param ... additional parameters to pass to imrotate
 #' @importFrom assertthat assert_that
 #' @importFrom imager pad bucketfill rotate_xy autocrop
 #' @importFrom stats spectrum
 #' @export
-img_rotate_refit <- function(img, ...) {
-
+img_rotate_refit <- function(img, show_plot = F, ...) {
+  . <- idx <- theta <- width <- NULL
+  
   # Clean up inputs and check
   img <- img_check(img, keep_alpha = T, keep_color = T)
   
@@ -20,8 +22,17 @@ img_rotate_refit <- function(img, ...) {
   ellipse_check(ellipse)
 
   theta <- -ellipse$Angle
-  if (theta > 45) theta <- theta - 90
-  if (theta < (-45)) theta <- theta + 90
+  if (theta > 90) {
+    theta <- theta - 180
+  } else if (theta > 45) {
+    theta <- theta - 90
+  } else if (theta > -45) {
+    theta <- theta
+  } else if (theta > -90) {
+    theta <- theta + 90
+  } else {
+    theta <- theta + 180
+  }
   
   n <- 250
   imgrot <-
@@ -39,8 +50,10 @@ img_rotate_refit <- function(img, ...) {
     thin_contour(img = imgrot) %>%
     contour_ellipse_fit()
   
-  graphics::plot(imgrot)
-  ellipse_points(refit, col = "orange")
+  if (show_plot) {
+    graphics::plot(imgrot)
+    ellipse_points(refit, col = "orange")
+  }
   
   list(img = imgrot, ellipse = refit)
 }
