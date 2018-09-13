@@ -6,7 +6,9 @@
 \alias{ImageAlignR-package}
 \title{ImageAlignR: ImageAlignR}
 \description{
-RANSAC, ellipse-based alignment, and more.
+Contains methods for aligning a single image to the cartesian
+    coordinate plane as well as methods for aligning multiple images using
+    keypoints.
 }
 \author{
 \strong{Maintainer}: Susan Vanderplas \email{srvander@iastate.edu}
