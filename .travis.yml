@@ -5,12 +5,14 @@ sudo: false
 cache: packages
 before_install:
   - sudo apt-get install -y libxml2-dev libgit2-dev
+  - Rscript -e 'devtools::install_github("srvanderplas/ShoeData")'
 addons:
   apt:
     update: true
 env:
   global:
   - R_CHECK_FORCE_SUGGESTS=FALSE
+  - _R_CHECK_FORCE_SUGGESTS_=FALSE
 r_github_packages:
   - MangoTheCat/visualTest
   - srvanderplas/ShoeData
