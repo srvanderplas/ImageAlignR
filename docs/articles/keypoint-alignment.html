@@ -93,8 +93,8 @@
 
     
     
-<p>The functions in this vignette were borrowed from Vinces Gaitan’s blog post: <a href="https://www.kaggle.com/vicensgaitan/image-registration-the-r-way/notebook" class="uri">https://www.kaggle.com/vicensgaitan/image-registration-the-r-way/notebook</a></p>
-<p>I have included them in this package because the package is full of convenience functions.</p>
+<p>The functions in this vignette were borrowed with permission from Vinces Gaitan’s blog post: <a href="https://www.kaggle.com/vicensgaitan/image-registration-the-r-way/notebook" class="uri">https://www.kaggle.com/vicensgaitan/image-registration-the-r-way/notebook</a></p>
+<p>I have modified them where necessary in order to make them more pipeline-friendly and function oriented.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">imlinks &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="dt">package =</span> <span class="st">"ImageAlignR"</span>, <span class="st">"extdata/ShoeSamples/"</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="st">  </span><span class="kw">list.files</span>(<span class="dt">full.names =</span> T) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>()</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3"></a>
