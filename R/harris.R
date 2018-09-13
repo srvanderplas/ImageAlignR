@@ -280,7 +280,8 @@ map_affine_gen <- function(homography) {
 #' @param img1 image 1
 #' @param img2 image 2
 #' @export
-#' @importFrom imager pad imlist imresize
+#' @importFrom imager pad imlist imresize imsplit
+#' @importFrom purrr map_dbl
 images_resize <- function(img1, img2) {
   img1dim <- dim(img1)
   img2dim <- dim(img2)
@@ -297,8 +298,8 @@ images_resize <- function(img1, img2) {
   img_a <- img1
   img_b <- img2
 
-  img_a_max_val <- img_a %>% imsplit('c') %>% map_dbl(max)
-  img_b_max_val <- img_b %>% imsplit('c') %>% map_dbl(max)
+  img_a_max_val <- img_a %>% imager::imsplit('c') %>% purrr::map_dbl(max)
+  img_b_max_val <- img_b %>% imager::imsplit('c') %>% purrr::map_dbl(max)
 
   if (xdim > img1dim[1]) {
     img_a <- imager::pad(img_a, nPix = xdim - img1dim[1], axes = "x", pos = 1, val = img_a_max_val)

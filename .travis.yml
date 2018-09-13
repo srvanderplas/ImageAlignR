@@ -8,6 +8,9 @@ before_install:
 addons:
   apt:
     update: true
+env:
+  global:
+  - R_CHECK_FORCE_SUGGESTS=FALSE
 r_github_packages:
   - MangoTheCat/visualTest
   - srvanderplas/ShoeData
