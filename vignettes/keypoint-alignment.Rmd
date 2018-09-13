@@ -12,7 +12,7 @@ vignette: >
 ```{r setup, include = FALSE}
 library(imager)
 library(dplyr)
-library(ShoeAlignR)
+library(ImageAlignR)
 
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -27,7 +27,7 @@ The functions in this vignette were borrowed from Vinces Gaitan's blog post: htt
 I have included them in this package because the package is full of convenience functions. 
 
 ```{r img-setup, message = F, warning = F, fig.cap = "Image which will be used throughout this tutorial"}
-imlinks <- system.file(package = "ShoeAlignR", "extdata/ShoeSamples/") %>% 
+imlinks <- system.file(package = "ImageAlignR", "extdata/ShoeSamples/") %>% 
   list.files(full.names = T) %>% sort()
 
 clean_shoe_img <- function(im) {

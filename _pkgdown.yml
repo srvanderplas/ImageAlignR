@@ -1,0 +1,11 @@
+navbar:
+  structure:
+    left: [home, vignettes, reference, news]
+    right: [github]
+template:
+  params:
+    bootswatch: cerulean
+    docsearch:
+      api_key: API_KEY
+      index_name: INDEX_NAME
+url: https://srvanderplas.github.io/ImageAlignR

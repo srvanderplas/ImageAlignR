@@ -22,8 +22,8 @@ knitr::opts_chunk$set(
 ```{r, message = F, warning = F}
 library(imager)
 library(dplyr)
-library(ShoeAlignR)
-imlinks <- system.file(package = "ShoeAlignR", "extdata/ShoeSamples/") %>% 
+library(ImageAlignR)
+imlinks <- system.file(package = "ImageAlignR", "extdata/ShoeSamples/") %>% 
   list.files(full.names = T) %>% sort()
 
 img <- load.image(imlinks[1])
