@@ -114,7 +114,7 @@ points(hkp$centers$mx, hkp$centers$my, col = "red")
 
 Calculating the dominant orientations for the whole image produces:
 ```{r}
-angles <- img_a %>% hog(sigma = 3)
+angles <- img_a %>% oriented_gradients(sigma = 3)
 angles
 ```
 
@@ -125,8 +125,8 @@ For each angle, we pull features from a 40x40 area around the keypoint. These fe
 hkp_a <- harris_keypoints(img_a, sigma = 6)
 hkp_b <- harris_keypoints(img_b, sigma = 6)
 
-angles_a <- img_a %>% hog(sigma = 3)
-angles_b <- img_b %>% hog(sigma = 3)
+angles_a <- img_a %>% oriented_gradients(sigma = 3)
+angles_b <- img_b %>% oriented_gradients(sigma = 3)
 
 get_kpf <- function(angles, hkp, im) {
   kpa <- data_frame(angle = angles, v = list(hkp$centers)) %>%
