@@ -22,9 +22,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-The functions in this vignette were borrowed from Vinces Gaitan's blog post: https://www.kaggle.com/vicensgaitan/image-registration-the-r-way/notebook
+The functions in this vignette were borrowed with permission from Vinces Gaitan's blog post: https://www.kaggle.com/vicensgaitan/image-registration-the-r-way/notebook
 
-I have included them in this package because the package is full of convenience functions. 
+I have modified them where necessary in order to make them more pipeline-friendly and function oriented.
 
 ```{r img-setup, message = F, warning = F, fig.cap = "Image which will be used throughout this tutorial"}
 imlinks <- system.file(package = "ImageAlignR", "extdata/ShoeSamples/") %>% 
