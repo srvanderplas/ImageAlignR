@@ -30,5 +30,6 @@ Imports:
     FNN,
     purrr
 Remotes: github::MangoTheCat/visualTest, github::srvanderplas/ShoeData
+Additional_repositories: https://github.com/srvanderplas/ShoeData
 URL: https://github.com/srvanderplas/ImageAlignR
 BugReports: https://github.com/srvanderplas/ImageAlignR/issues
