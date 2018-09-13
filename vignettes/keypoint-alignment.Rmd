@@ -110,13 +110,15 @@ plot(img_a)
 points(hkp$centers$mx, hkp$centers$my, col = "red")
 ```
 
-## Image Orientation
+## Step 2: Image Orientation
 
 Calculating the dominant orientations for the whole image produces:
 ```{r}
 angles <- img_a %>% hog(sigma = 3)
 angles
 ```
+
+## Step 3: Feature Detection
 
 For each angle, we pull features from a 40x40 area around the keypoint. These features will be used to identify points of similarity across the two images.
 ```{r harris-keypoint-features}
@@ -143,10 +145,14 @@ kpf_b <- get_kpf(angles_b, hkp_b, img_b)
 
 ```
 
+## Step 4: Match points
+
 Match points are calculated using the K nearest neighbors algorithm, combined with some thresholding by distance.
 ```{r keypoint-knn}
 match_points <- knn_points(kpf_a, kpf_b, hkp_a$centers, hkp_b$centers, show_plot = T)
 ```
+
+## Step 5: RANSAC
 
 RANSAC is then used to find points that have similar homography. 
 
@@ -164,6 +170,9 @@ plot(img_b)
 hkp_b$centers %$% points(mx,my,col="orange")
 points(match_points$points_b[ransac_points$inliers,],col="purple", pch = 16)
 ```
+
+
+## Step 6: Image Warping
 
 The homography can be used to warp one image onto the other:
 ```{r homography-solve}

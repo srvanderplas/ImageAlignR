@@ -166,13 +166,17 @@ Harris corner detector values for the shoeprint image
 <p><img src="keypoint-alignment_files/figure-html/unnamed-chunk-5-1.png" width="480"></p>
 </div>
 </div>
-<div id="image-orientation" class="section level2">
+<div id="step-2-image-orientation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#image-orientation" class="anchor"></a>Image Orientation</h2>
+<a href="#step-2-image-orientation" class="anchor"></a>Step 2: Image Orientation</h2>
 <p>Calculating the dominant orientations for the whole image produces:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">angles &lt;-<span class="st"> </span>img_a <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/hog.html">hog</a></span>(<span class="dt">sigma =</span> <span class="dv">3</span>)</a>
 <a class="sourceLine" id="cb8-2" data-line-number="2">angles</a>
 <a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co"># [1]  0 45</span></a></code></pre></div>
+</div>
+<div id="step-3-feature-detection" class="section level2">
+<h2 class="hasAnchor">
+<a href="#step-3-feature-detection" class="anchor"></a>Step 3: Feature Detection</h2>
 <p>For each angle, we pull features from a 40x40 area around the keypoint. These features will be used to identify points of similarity across the two images.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">hkp_a &lt;-<span class="st"> </span><span class="kw"><a href="../reference/harris_keypoints.html">harris_keypoints</a></span>(img_a, <span class="dt">sigma =</span> <span class="dv">6</span>)</a>
 <a class="sourceLine" id="cb9-2" data-line-number="2">hkp_b &lt;-<span class="st"> </span><span class="kw"><a href="../reference/harris_keypoints.html">harris_keypoints</a></span>(img_b, <span class="dt">sigma =</span> <span class="dv">6</span>)</a>
@@ -196,9 +200,17 @@ Harris corner detector values for the shoeprint image
 <a class="sourceLine" id="cb9-20" data-line-number="20"><span class="co"># Warning in grayscale(im): Image appears to already be in grayscale mode</span></a>
 <a class="sourceLine" id="cb9-21" data-line-number="21">kpf_b &lt;-<span class="st"> </span><span class="kw">get_kpf</span>(angles_b, hkp_b, img_b)</a>
 <a class="sourceLine" id="cb9-22" data-line-number="22"><span class="co"># Warning in grayscale(im): Image appears to already be in grayscale mode</span></a></code></pre></div>
+</div>
+<div id="step-4-match-points" class="section level2">
+<h2 class="hasAnchor">
+<a href="#step-4-match-points" class="anchor"></a>Step 4: Match points</h2>
 <p>Match points are calculated using the K nearest neighbors algorithm, combined with some thresholding by distance.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">match_points &lt;-<span class="st"> </span><span class="kw"><a href="../reference/knn_points.html">knn_points</a></span>(kpf_a, kpf_b, hkp_a<span class="op">$</span>centers, hkp_b<span class="op">$</span>centers, <span class="dt">show_plot =</span> T)</a></code></pre></div>
 <p><img src="keypoint-alignment_files/figure-html/keypoint-knn-1.png" width="480"></p>
+</div>
+<div id="step-5-ransac" class="section level2">
+<h2 class="hasAnchor">
+<a href="#step-5-ransac" class="anchor"></a>Step 5: RANSAC</h2>
 <p>RANSAC is then used to find points that have similar homography.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">ransac_points &lt;-<span class="st"> </span><span class="kw"><a href="../reference/ransac.html">ransac</a></span>(match_points<span class="op">$</span>points_a, match_points<span class="op">$</span>points_b)</a></code></pre></div>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</a>
@@ -210,6 +222,10 @@ Harris corner detector values for the shoeprint image
 <a class="sourceLine" id="cb12-7" data-line-number="7">hkp_b<span class="op">$</span>centers <span class="op">%$%</span><span class="st"> </span><span class="kw">points</span>(mx,my,<span class="dt">col=</span><span class="st">"orange"</span>)</a>
 <a class="sourceLine" id="cb12-8" data-line-number="8"><span class="kw">points</span>(match_points<span class="op">$</span>points_b[ransac_points<span class="op">$</span>inliers,],<span class="dt">col=</span><span class="st">"purple"</span>, <span class="dt">pch =</span> <span class="dv">16</span>)</a></code></pre></div>
 <p><img src="keypoint-alignment_files/figure-html/ransac-plot-1.png" width="480"></p>
+</div>
+<div id="step-6-image-warping" class="section level2">
+<h2 class="hasAnchor">
+<a href="#step-6-image-warping" class="anchor"></a>Step 6: Image Warping</h2>
 <p>The homography can be used to warp one image onto the other:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">map_fcn &lt;-<span class="st"> </span><span class="kw"><a href="../reference/map_affine_gen.html">map_affine_gen</a></span>(ransac_points<span class="op">$</span>homography)</a>
 <a class="sourceLine" id="cb13-2" data-line-number="2"></a>
@@ -232,7 +248,11 @@ Harris corner detector values for the shoeprint image
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#step-1-keypoint-detection">Step 1: Keypoint Detection</a></li>
-      <li><a href="#image-orientation">Image Orientation</a></li>
+      <li><a href="#step-2-image-orientation">Step 2: Image Orientation</a></li>
+      <li><a href="#step-3-feature-detection">Step 3: Feature Detection</a></li>
+      <li><a href="#step-4-match-points">Step 4: Match points</a></li>
+      <li><a href="#step-5-ransac">Step 5: RANSAC</a></li>
+      <li><a href="#step-6-image-warping">Step 6: Image Warping</a></li>
       </ul>
 </div>
       </div>
