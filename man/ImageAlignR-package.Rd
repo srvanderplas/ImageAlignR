@@ -10,6 +10,14 @@ Contains methods for aligning a single image to the cartesian
     coordinate plane as well as methods for aligning multiple images using
     keypoints.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/srvanderplas/ImageAlignR}
+  \item Report bugs at \url{https://github.com/srvanderplas/ImageAlignR/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Susan Vanderplas \email{srvander@iastate.edu}
 

@@ -40,9 +40,6 @@
     <loc>https://srvanderplas.github.io/ImageAlignR/reference/harris_keypoints.html</loc>
   </url>
   <url>
-    <loc>https://srvanderplas.github.io/ImageAlignR/reference/hog.html</loc>
-  </url>
-  <url>
     <loc>https://srvanderplas.github.io/ImageAlignR/reference/img_check.html</loc>
   </url>
   <url>
@@ -56,6 +53,9 @@
   </url>
   <url>
     <loc>https://srvanderplas.github.io/ImageAlignR/reference/map_halfimg.html</loc>
+  </url>
+  <url>
+    <loc>https://srvanderplas.github.io/ImageAlignR/reference/oriented_gradients.html</loc>
   </url>
   <url>
     <loc>https://srvanderplas.github.io/ImageAlignR/reference/outer_contour.html</loc>
