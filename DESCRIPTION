@@ -29,3 +29,5 @@ Imports:
     FNN,
     purrr
 Remotes: github::MangoTheCat/visualTest
+URL: https://github.com/srvanderplas/ImageAlignR
+BugReports: https://github.com/srvanderplas/ImageAlignR/issues

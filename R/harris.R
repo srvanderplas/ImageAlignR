@@ -67,16 +67,17 @@ harris_keypoints <- function(im, thr = "99%", sigma = 3, bord = 30) {
   list(regions = kp, centers = region_centers(kp, bord)[, 2:3])
 }
 
-#' Histogram of oriented gradients
+#' Find most common gradients
 #'
 #' Source: https://www.kaggle.com/vicensgaitan/image-registration-the-r-way/notebook
 #'
 #' @param im image
 #' @param sigma blur to use for hog image
+#' @param show_plot show histogram of gradients?
 #' @return a list of one or two critical orientations
 #' @importFrom imager imgradient isoblur
 #' @export
-hog <- function(im, sigma = 0) {
+oriented_gradients <- function(im, sigma = 0, show_plot = T) {
   if (sigma > 0) {
     imblur <- imager::isoblur(im, sigma = sigma, gaussian = T)
   }
@@ -84,7 +85,9 @@ hog <- function(im, sigma = 0) {
   iy <- imager::imgradient(imblur, "y")
   ita <- atan(iy / ix) * 180 / pi
   iga <- table(sample(round(ita * 2) / 2, 200000))
-  # plot(iga)
+
+  if (show_plot) plot(iga)
+
   ma1 <- max(iga)[1]
   m1 <- which(iga == ma1)
   theta_1 <- (as.numeric(names(m1)))
@@ -157,7 +160,7 @@ knn_points <- function(kpf_a, kpf_b, centers_a, centers_b, n = 2, ratio = .8, sh
 
   mask <- kk$nn.dist[, 1] / kk$nn.dist[, 2] < ratio
   match <- data_frame(a = kk$nn.index[mask, 1], b = kpf_b_idx_vec[mask])
-  
+
   avec <- if (dim(kpf_a)[1]/dim(centers_a)[1] == 2) rbind(centers_a, centers_a) else centers_a
   bvec <- if (dim(kpf_b)[1]/dim(centers_b)[1] == 2) rbind(centers_b, centers_b) else centers_b
 
@@ -174,7 +177,7 @@ knn_points <- function(kpf_a, kpf_b, centers_a, centers_b, n = 2, ratio = .8, sh
 #' Estimate homography from points in P to points in p
 #'
 #' Source: https://www.kaggle.com/vicensgaitan/image-registration-the-r-way/notebook
-#' 
+#'
 #' @param P set of points
 #' @param p set of points in different space
 est_homograph <- function(P, p) {
@@ -193,7 +196,7 @@ est_homograph <- function(P, p) {
 #' Apply homography to points in p
 #'
 #' Source: https://www.kaggle.com/vicensgaitan/image-registration-the-r-way/notebook
-#' 
+#'
 #' @param h homography
 #' @param p points
 apply_homograph <- function(h, p) {
@@ -203,10 +206,10 @@ apply_homograph <- function(h, p) {
   q1[, 1:2]
 }
 
-#' Robust homography estimation from p1 to p2. 
+#' Robust homography estimation from p1 to p2.
 #'
 #' Source: https://www.kaggle.com/vicensgaitan/image-registration-the-r-way/notebook
-#' 
+#'
 #' Returns h and the list of inliers
 #' @param p1 point set
 #' @param p2 point set
@@ -215,7 +218,7 @@ apply_homograph <- function(h, p) {
 #' @export
 ransac <- function(p1, p2, thresh = 100, N = 1000) {
   n <- nrow(p1)
-  
+
   sn <- c(1:n)
   flag <- matrix(0, nrow = N, ncol = n)
   for (i in 1:N) {
@@ -236,7 +239,7 @@ ransac <- function(p1, p2, thresh = 100, N = 1000) {
 }
 
 #' Function to generate an affine transform
-#' 
+#'
 #' Returns a function taking arguments x and y, for use in imager::imwarp
 #' @param homography homograph matrix from ransac (unsolved)
 #' @export
@@ -249,7 +252,7 @@ map_affine_gen <- function(homography) {
 }
 
 #' Align two images
-#' 
+#'
 #' @param img1 image 1
 #' @param img2 image 2
 #' @return an image list with image 1 and image 2 on the same coordinate system
@@ -260,12 +263,12 @@ map_affine_gen <- function(homography) {
 #' @importFrom imager grayscale
 align_images <- function(img1, img2) {
   theta <- idx <- . <- NULL
-  
+
   img1dim <- dim(img1)
   img2dim <- dim(img2)
   xdim <- max(img1dim[1], img2dim[1])
   ydim <- max(img1dim[2], img2dim[2])
-  
+
   img_a <- img1
   img_b <- img2
   if (xdim > img1dim[1]) {
@@ -280,13 +283,13 @@ align_images <- function(img1, img2) {
   if (ydim > img2dim[2]) {
     img_b <- pad(img_b, nPix = ydim - img2dim[2], pos = 1, val = max(img_b))
   }
-  
+
   hkp_a <- harris_keypoints(img_a, sigma = 6)
   hkp_b <- harris_keypoints(img_b, sigma = 6)
-  
-  angles_a <- img_a %>% hog(sigma = 3)
-  angles_b <- img_b %>% hog(sigma = 3)
-  
+
+  angles_a <- img_a %>% oriented_gradients(sigma = 3)
+  angles_b <- img_b %>% oriented_gradients(sigma = 3)
+
   get_kpf <- function(angles, hkp, im) {
     v <- angle <- mx <- my <- n
     kpa <- dplyr::data_frame(angle = angles, v = list(hkp$centers)) %>%
@@ -296,20 +299,20 @@ align_images <- function(img1, img2) {
       dplyr::rowwise() %>%
       tidyr::nest(-theta, -idx, .key = "v") %>%
       dplyr::select(-idx)
-    purrr::pmap(list(theta = kpa$theta, v = kpa$v), descriptor_orientation, 
+    purrr::pmap(list(theta = kpa$theta, v = kpa$v), descriptor_orientation,
                 im = imager::grayscale(im)) %>%
       do.call("rbind", .)
   }
-  
+
   kpf_a <- get_kpf(angles_a, hkp_a, img_a)
   kpf_b <- get_kpf(angles_b, hkp_b, img_b)
-  
+
   match_points <- knn_points(kpf_a, kpf_b, hkp_a$centers, hkp_b$centers, show_plot = T)
-  
+
   ransac_points <- ransac(match_points$points_a, match_points$points_b)
-  
+
   map_fcn <- map_affine_gen(ransac_points$homography)
-  
+
   imager::imlist(
     imager::imwarp(img_a, map_fcn, direction = "backward", boundary = "neumann"),
     img_b
