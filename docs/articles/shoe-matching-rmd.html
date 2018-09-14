@@ -171,7 +171,7 @@ Shoeprint images
 <div id="step-1-keypoint-detection" class="section level2">
 <h2 class="hasAnchor">
 <a href="#step-1-keypoint-detection" class="anchor"></a>Step 1: Keypoint Detection</h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">hkp &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map">map</a></span>(imgs, harris_keypoints, <span class="dt">sigma =</span> <span class="dv">5</span>)</a>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">hkp &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map">map</a></span>(imgs, harris_keypoints, <span class="dt">sigma =</span> <span class="dv">6</span>)</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb5-3" data-line-number="3">plots &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map">map</a></span>(hkp, <span class="cf">function</span>(x) ggplot2<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/qplot">qplot</a></span>(x<span class="op">$</span>centers<span class="op">$</span>mx, <span class="op">-</span>x<span class="op">$</span>centers<span class="op">$</span>my, <span class="dt">colour =</span> <span class="kw">I</span>(<span class="st">"red"</span>)))</a>
 <a class="sourceLine" id="cb5-4" data-line-number="4"></a>
@@ -182,31 +182,31 @@ Shoeprint images
 <h2 class="hasAnchor">
 <a href="#step-2-image-orientation" class="anchor"></a>Step 2: Image Orientation</h2>
 <p>Calculating the dominant orientations for the whole image produces:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">angles &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map">map</a></span>(imgs, oriented_gradients, <span class="dt">sigma =</span> <span class="dv">3</span>, <span class="dt">show_plot =</span> F)</a>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">angles &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map">map</a></span>(imgs, oriented_gradients, <span class="dt">sigma =</span> <span class="dv">2</span>, <span class="dt">show_plot =</span> F)</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">angles</a>
 <a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co"># [[1]]</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co"># [1]  0 45</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co"># [1] 45  0</span></a>
 <a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co"># </span></a>
 <a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co"># [[2]]</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co"># [1]  0 45</span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co"># [1] 45  0</span></a>
 <a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co"># </span></a>
 <a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co"># [[3]]</span></a>
-<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co"># [1]  0 45</span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co"># [1] 45  0</span></a>
 <a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co"># </span></a>
 <a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co"># [[4]]</span></a>
-<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co"># [1]  0 45</span></a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co"># [1] 45  0</span></a>
 <a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co"># </span></a>
 <a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co"># [[5]]</span></a>
-<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co"># [1]  0 45</span></a>
+<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co"># [1] 45  0</span></a>
 <a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co"># </span></a>
 <a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co"># [[6]]</span></a>
-<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co"># [1]  0 45</span></a>
+<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co"># [1] 45  0</span></a>
 <a class="sourceLine" id="cb6-20" data-line-number="20"><span class="co"># </span></a>
 <a class="sourceLine" id="cb6-21" data-line-number="21"><span class="co"># [[7]]</span></a>
-<a class="sourceLine" id="cb6-22" data-line-number="22"><span class="co"># [1]  0 45</span></a>
+<a class="sourceLine" id="cb6-22" data-line-number="22"><span class="co"># [1] 45  0</span></a>
 <a class="sourceLine" id="cb6-23" data-line-number="23"><span class="co"># </span></a>
 <a class="sourceLine" id="cb6-24" data-line-number="24"><span class="co"># [[8]]</span></a>
-<a class="sourceLine" id="cb6-25" data-line-number="25"><span class="co"># [1]  0 45</span></a></code></pre></div>
+<a class="sourceLine" id="cb6-25" data-line-number="25"><span class="co"># [1] 45  0</span></a></code></pre></div>
 </div>
 <div id="step-3-feature-detection" class="section level2">
 <h2 class="hasAnchor">
@@ -249,14 +249,14 @@ Shoeprint images
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">hkp_centers &lt;-<span class="st"> </span><span class="kw">lapply</span>(hkp, <span class="cf">function</span>(x) x<span class="op">$</span>centers)</a>
 <a class="sourceLine" id="cb8-2" data-line-number="2">match_points &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map2">map2</a></span>(</a>
 <a class="sourceLine" id="cb8-3" data-line-number="3">  kpf[<span class="dv">2</span><span class="op">:</span><span class="dv">8</span>], hkp_centers[<span class="dv">2</span><span class="op">:</span><span class="dv">8</span>], </a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">  <span class="op">~</span><span class="kw"><a href="../reference/knn_points.html">knn_points</a></span>(.x, kpf[[<span class="dv">1</span>]], .y, hkp_centers[[<span class="dv">1</span>]], <span class="dt">ratio =</span> <span class="fl">.85</span>, <span class="dt">show_plot =</span> T))</a></code></pre></div>
+<a class="sourceLine" id="cb8-4" data-line-number="4">  <span class="op">~</span><span class="kw"><a href="../reference/knn_points.html">knn_points</a></span>(.x, kpf[[<span class="dv">1</span>]], .y, hkp_centers[[<span class="dv">1</span>]], <span class="dt">ratio =</span> <span class="fl">.80</span>, <span class="dt">show_plot =</span> T))</a></code></pre></div>
 <p><img src="shoe-matching-rmd_files/figure-html/keypoint-knn-1.png" width="30%"><img src="shoe-matching-rmd_files/figure-html/keypoint-knn-2.png" width="30%"><img src="shoe-matching-rmd_files/figure-html/keypoint-knn-3.png" width="30%"><img src="shoe-matching-rmd_files/figure-html/keypoint-knn-4.png" width="30%"><img src="shoe-matching-rmd_files/figure-html/keypoint-knn-5.png" width="30%"><img src="shoe-matching-rmd_files/figure-html/keypoint-knn-6.png" width="30%"><img src="shoe-matching-rmd_files/figure-html/keypoint-knn-7.png" width="30%"></p>
 </div>
 <div id="step-5-ransac" class="section level2">
 <h2 class="hasAnchor">
 <a href="#step-5-ransac" class="anchor"></a>Step 5: RANSAC</h2>
 <p>RANSAC is then used to find points that have similar homography.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">ransac_points &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map">map</a></span>(match_points, <span class="op">~</span><span class="kw"><a href="../reference/ransac.html">ransac</a></span>(.<span class="op">$</span>points_a, .<span class="op">$</span>points_b))</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">ransac_points &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map">map</a></span>(match_points, <span class="op">~</span><span class="kw"><a href="../reference/ransac.html">ransac</a></span>(.<span class="op">$</span>points_a, .<span class="op">$</span>points_b, <span class="dt">N =</span> <span class="dv">5000</span>))</a></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">7</span>))</a>
 <a class="sourceLine" id="cb10-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb10-3" data-line-number="3"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">7</span>) {</a>
