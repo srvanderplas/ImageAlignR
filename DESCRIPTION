@@ -17,10 +17,11 @@ Suggests:
     testthat,
     visualTest,
     ShoeData,
-    furrr
+    furrr,
+    devtools
 VignetteBuilder: knitr
 Depends: 
-    R (>= 3.1)
+    R (>= 3.4)
 Imports:
     conicfit,
     imager,
