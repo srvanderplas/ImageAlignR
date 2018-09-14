@@ -89,7 +89,7 @@ oriented_gradients <- function(im, sigma = 0, show_plot = T) {
   ita <- atan(iy / ix) * 180 / pi
   iga <- table(sample(round(ita * 2) / 2, pmin(n, 200000)))
 
-  if (show_plot) plot(iga)
+  if (show_plot) graphics::plot(iga)
 
   ma1 <- max(iga)[1]
   m1 <- which(iga == ma1)
