@@ -18,7 +18,8 @@ Suggests:
     visualTest,
     ShoeData,
     furrr,
-    devtools
+    devtools,
+    gridExtra
 VignetteBuilder: knitr
 Depends: 
     R (>= 3.4)
