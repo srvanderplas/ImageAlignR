@@ -32,3 +32,7 @@ test_that("oriented_gradients works as expected", {
   expect_equivalent(oriented_gradients(img3, show_plot = F), c(0, 45))
 })
 
+do <- descriptor_orientation(img3, theta = 0, v = c(50, 50))
+test_that("descriptor_orientation works as expected", {
+  expect_equivalent(length(do), 242)
+})
