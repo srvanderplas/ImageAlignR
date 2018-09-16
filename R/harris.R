@@ -9,9 +9,13 @@
 #' @param sigma sigma for gaussian blur function
 #' @param eps threshold (defaults to 1e-10)
 #' @return corner function value
-#' @importFrom imager imgradient isoblur
+#' @importFrom imager imgradient isoblur is.cimg
+#' @importFrom assertthat assert_that
 #' @export
 harris_corners <- function(im, sigma = 2, eps = 1e-10) {
+  assertthat::assert_that(imager::is.cimg(im))
+  assertthat::assert_that(sigma > 0, eps > 0)
+
   ix <- imager::imgradient(im, "x")
   iy <- imager::imgradient(im, "y")
   ix2 <- imager::isoblur(ix * ix, sigma, gaussian = T)
@@ -39,8 +43,8 @@ region_centers <- function(im, bord = 30) {
       my = round(mean(y))
     ) %>%
     dplyr::filter(
-      mx > bord, mx < (imager::width(im) - bord),
-      my > bord, my < (imager::height(im) - bord)
+      mx > bord, mx <= (imager::width(im) - bord),
+      my > bord, my <= (imager::height(im) - bord)
     )
 }
 
@@ -96,9 +100,14 @@ oriented_gradients <- function(im, sigma = 0, show_plot = T) {
   theta_1 <- (as.numeric(names(m1)))
   iga[max((m1 - 20), 0):min((m1 + 20), length(iga))] <- 0
   # plot(iga)
-  ma2 <- max(iga)[1]
-  m2 <- which(iga == ma2)
-  theta_2 <- (as.numeric(names(m2)))
+  if (length(unique(iga)) == 1) {
+    theta_2 <- theta_1
+  } else {
+    ma2 <- max(iga)[1]
+    m2 <- which(iga == ma2)
+    theta_2 <- (as.numeric(names(m2)))
+  }
+
   if (theta_1 > 45) theta_1 <- theta_1 - 90
   if (theta_1 < (-45)) theta_1 <- theta_1 + 90
   if (theta_2 > 45) theta_2 <- theta_2 - 90
@@ -279,18 +288,21 @@ map_affine_gen <- function(homography) {
 #'
 #' @param img1 image 1
 #' @param img2 image 2
+#' @param scale should the smaller image be scaled?
 #' @export
 #' @importFrom imager pad imlist imresize imsplit
 #' @importFrom purrr map_dbl
-images_resize <- function(img1, img2) {
+images_resize <- function(img1, img2, scale = F) {
   img1dim <- dim(img1)
   img2dim <- dim(img2)
 
   scale_x <- img2dim[1]/img1dim[1]
   scale_y <- img2dim[2]/img1dim[2]
 
-  img1 <- imager::imresize(img1, scale = pmin(scale_x, scale_y))
-  img1dim <- dim(img1)
+  if (!scale) {
+    img1 <- imager::imresize(img1, scale = pmin(scale_x, scale_y))
+    img1dim <- dim(img1)
+  }
 
   xdim <- max(img1dim[1], img2dim[1])
   ydim <- max(img1dim[2], img2dim[2])
