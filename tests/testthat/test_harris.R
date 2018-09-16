@@ -26,6 +26,9 @@ test_that("harris_keypoints works as expected", {
 
 img2 <- img
 img2[2, 2] <- img2[4, 4] <- 0
+img3 <- load.image(system.file("extdata", "parrots.png", package = "imager"))
 test_that("oriented_gradients works as expected", {
   expect_equal(oriented_gradients(img2, show_plot = F), -45)
+  expect_equivalent(oriented_gradients(img3, show_plot = F), c(0, 45))
 })
+
