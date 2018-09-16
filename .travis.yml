@@ -17,8 +17,7 @@ r_github_packages:
   - MangoTheCat/visualTest
   - srvanderplas/ShoeData
 script:
-  - |
-    R CMD build --no-build-vignettes .
-    travis_wait 40 R CMD check --no--vignettes ImageAlignR*tar.gz
+  - R CMD build --no-build-vignettes .
+  - R CMD check --no--vignettes ImageAlignR*tar.gz
 after_success:
   - Rscript -e 'covr::codecov()'
