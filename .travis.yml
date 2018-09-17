@@ -18,6 +18,6 @@ r_github_packages:
   - srvanderplas/ShoeData
 script:
   - R CMD build --no-build-vignettes .
-  - R CMD check --no--vignettes ImageAlignR*tar.gz
+  - travis_wait 30 R CMD check --no-vignettes ImageAlignR*tar.gz
 after_success:
   - Rscript -e 'covr::codecov()'
