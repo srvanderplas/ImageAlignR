@@ -1,11 +1,14 @@
-pandoc: 2.2.1
+pandoc: 1.19.2.1
 pkgdown: 1.1.0.9000
 pkgdown_sha: aaa2d2840f679feb9badf0247480dfe2655f949e
 articles:
   ellipse-alignment: ellipse-alignment.html
+  keypoint-SURF: keypoint-SURF.html
   keypoint-alignment: keypoint-alignment.html
   shoe-matching-1: shoe-matching-1.html
   shoe-matching-2: shoe-matching-2.html
+  shoe-surf-1: shoe-surf-1.html
+  shoe-surf-2: shoe-surf-2.html
 urls:
   reference: https://srvanderplas.github.io/ImageAlignR/reference
   article: https://srvanderplas.github.io/ImageAlignR/articles

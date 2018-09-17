@@ -79,6 +79,9 @@
     <loc>https://srvanderplas.github.io/ImageAlignR/articles/ellipse-alignment.html</loc>
   </url>
   <url>
+    <loc>https://srvanderplas.github.io/ImageAlignR/articles/keypoint-SURF.html</loc>
+  </url>
+  <url>
     <loc>https://srvanderplas.github.io/ImageAlignR/articles/keypoint-alignment.html</loc>
   </url>
   <url>
@@ -86,5 +89,11 @@
   </url>
   <url>
     <loc>https://srvanderplas.github.io/ImageAlignR/articles/shoe-matching-2.html</loc>
+  </url>
+  <url>
+    <loc>https://srvanderplas.github.io/ImageAlignR/articles/shoe-surf-1.html</loc>
+  </url>
+  <url>
+    <loc>https://srvanderplas.github.io/ImageAlignR/articles/shoe-surf-2.html</loc>
   </url>
 </urlset>

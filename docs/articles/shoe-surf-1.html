@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shoe Matching - Nike • ImageAlignR</title>
+<title>Shoe Matching (SURF) - Nike • ImageAlignR</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css">
 <link href="../docsearch.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Shoe Matching - Nike">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Shoe Matching (SURF) - Nike">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -103,13 +103,13 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Shoe Matching - Nike</h1>
+      <h1>Shoe Matching (SURF) - Nike</h1>
                         <h4 class="author">Susan VanderPlas</h4>
             
             <h4 class="date">2018-09-17</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/srvanderplas/ImageAlignR/blob/master/vignettes/shoe-matching-1.Rmd"><code>vignettes/shoe-matching-1.Rmd</code></a></small>
-      <div class="hidden name"><code>shoe-matching-1.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/srvanderplas/ImageAlignR/blob/master/vignettes/shoe-surf-1.Rmd"><code>vignettes/shoe-surf-1.Rmd</code></a></small>
+      <div class="hidden name"><code>shoe-surf-1.Rmd</code></div>
 
     </div>
 
@@ -133,14 +133,10 @@ clean_shoe_img &lt;-<span class="st"> </span><span class="cf">function</span>(im
 
 imgs_orig &lt;-<span class="st"> </span><span class="kw">lapply</span>(imlinks[<span class="dv">9</span><span class="op">:</span><span class="dv">16</span>], load.image) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.imlist</span>()
 
-imgs &lt;-<span class="st"> </span><span class="kw">lapply</span>(imgs_orig, clean_shoe_img) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.imlist</span>()
-imgs[[<span class="dv">1</span>]] &lt;-<span class="st"> </span>imgs[[<span class="dv">1</span>]] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">crop.bbox</span>(., <span class="kw">Yc</span>(.) <span class="op">&lt;</span><span class="st"> </span><span class="dv">3800</span>)
-imgs[[<span class="dv">2</span>]] &lt;-<span class="st"> </span>imgs[[<span class="dv">2</span>]] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">crop.bbox</span>(., <span class="kw">Yc</span>(.) <span class="op">&lt;</span><span class="st"> </span><span class="dv">3800</span>)
-imgs[[<span class="dv">1</span>]] &lt;-<span class="st"> </span>imgs[[<span class="dv">1</span>]] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">crop.bbox</span>(., <span class="kw">Xc</span>(.) <span class="op">&gt;</span><span class="st"> </span><span class="dv">200</span>)
-imgs[[<span class="dv">2</span>]] &lt;-<span class="st"> </span>imgs[[<span class="dv">2</span>]] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">crop.bbox</span>(., <span class="kw">Xc</span>(.) <span class="op">&gt;</span><span class="st"> </span><span class="dv">200</span>)</code></pre></div>
+imgs &lt;-<span class="st"> </span><span class="kw">lapply</span>(imgs_orig, clean_shoe_img) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.imlist</span>()</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(imgs)</code></pre></div>
 <div class="figure">
-<img src="shoe-matching-1_files/figure-html/unnamed-chunk-1-1.png" alt="Shoeprint images" width="480"><p class="caption">
+<img src="shoe-surf-1_files/figure-html/unnamed-chunk-1-1.png" alt="Shoeprint images" width="480"><p class="caption">
 Shoeprint images
 </p>
 </div>
@@ -157,84 +153,47 @@ imgs &lt;-<span class="st"> </span><span class="kw">lapply</span>(imgs, <span cl
 <span class="kw">plot</span>(imgs[[<span class="dv">3</span>]] <span class="op">+</span><span class="st"> </span>imgs[[<span class="dv">4</span>]], <span class="dt">main =</span> <span class="st">"Check In 1</span><span class="ch">\n</span><span class="st">Images 3 and 4"</span>, <span class="dt">axes =</span> F)
 <span class="kw">plot</span>(imgs[[<span class="dv">5</span>]] <span class="op">+</span><span class="st"> </span>imgs[[<span class="dv">6</span>]], <span class="dt">main =</span> <span class="st">"Check In 2</span><span class="ch">\n</span><span class="st">Images 5 and 6"</span>, <span class="dt">axes =</span> F)
 <span class="kw">plot</span>(imgs[[<span class="dv">7</span>]] <span class="op">+</span><span class="st"> </span>imgs[[<span class="dv">8</span>]], <span class="dt">main =</span> <span class="st">"Check In 3</span><span class="ch">\n</span><span class="st">Images 7 and 8"</span>, <span class="dt">axes =</span> F)</code></pre></div>
-<p><img src="shoe-matching-1_files/figure-html/img-overlay-1.png" width="960"></p>
+<p><img src="shoe-surf-1_files/figure-html/img-overlay-1.png" width="960"></p>
 <p>We’ll align images within timepoint - this removes the variability due to the individual collecting the data as well as the variability due to wear over time.</p>
-<div id="step-1-keypoint-detection" class="section level2">
+<div id="step-1-keypoint-detection-with-surf" class="section level2">
 <h2 class="hasAnchor">
-<a href="#step-1-keypoint-detection" class="anchor"></a>Step 1: Keypoint Detection</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hkp &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map">map</a></span>(imgs, harris_keypoints, <span class="dt">sigma =</span> <span class="dv">3</span>)
+<a href="#step-1-keypoint-detection-with-surf" class="anchor"></a>Step 1: Keypoint Detection with SURF</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="op">!</span><span class="st">"image.dlib"</span> <span class="op">%in%</span><span class="st"> </span><span class="kw">installed.packages</span>()) {
+  devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"bnosac/image/image.dlib"</span>)
+}
+<span class="kw">library</span>(image.dlib)
+<span class="co"># image_surf requires a bmp file... </span>
 
-plots &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map">map</a></span>(hkp, <span class="cf">function</span>(x) ggplot2<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/qplot">qplot</a></span>(x<span class="op">$</span>centers<span class="op">$</span>mx, <span class="op">-</span>x<span class="op">$</span>centers<span class="op">$</span>my, <span class="dt">colour =</span> <span class="kw">I</span>(<span class="st">"red"</span>)))
-
-gridExtra<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/gridExtra/topics/arrangeGrob">grid.arrange</a></span>(<span class="dt">grobs =</span> plots, <span class="dt">ncol =</span> <span class="dv">4</span>)</code></pre></div>
-<p><img src="shoe-matching-1_files/figure-html/unnamed-chunk-3-1.png" width="768"></p>
-</div>
-<div id="step-2-image-orientation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#step-2-image-orientation" class="anchor"></a>Step 2: Image Orientation</h2>
-<p>Calculating the dominant orientations for the whole image produces:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">angles &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map">map</a></span>(imgs, oriented_gradients, <span class="dt">sigma =</span> <span class="dv">2</span>, <span class="dt">show_plot =</span> F)
-angles
-<span class="co"># [[1]]</span>
-<span class="co"># [1] 45  0</span>
-<span class="co"># </span>
-<span class="co"># [[2]]</span>
-<span class="co"># [1] 45  0</span>
-<span class="co"># </span>
-<span class="co"># [[3]]</span>
-<span class="co"># [1] 45  0</span>
-<span class="co"># </span>
-<span class="co"># [[4]]</span>
-<span class="co"># [1] 45  0</span>
-<span class="co"># </span>
-<span class="co"># [[5]]</span>
-<span class="co"># [1] 45  0</span>
-<span class="co"># </span>
-<span class="co"># [[6]]</span>
-<span class="co"># [1] 45  0</span>
-<span class="co"># </span>
-<span class="co"># [[7]]</span>
-<span class="co"># [1] 45  0</span>
-<span class="co"># </span>
-<span class="co"># [[8]]</span>
-<span class="co"># [1] 45  0</span></code></pre></div>
-</div>
-<div id="step-3-feature-detection" class="section level2">
-<h2 class="hasAnchor">
-<a href="#step-3-feature-detection" class="anchor"></a>Step 3: Feature Detection</h2>
-<p>For each angle, we pull features from a 40x40 area around the keypoint. These features will be used to identify points of similarity across the two images.</p>
-<p>This step takes, by far, the longest amount of time.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">get_kpf &lt;-<span class="st"> </span><span class="cf">function</span>(angles, hkp, im) {
-  kpa &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">angle =</span> angles, <span class="dt">v =</span> <span class="kw">list</span>(hkp<span class="op">$</span>centers)) <span class="op">%&gt;%</span>
-<span class="st">    </span>tidyr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/tidyr/topics/unnest">unnest</a></span>(v) <span class="op">%&gt;%</span>
-<span class="st">    </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">rename</a></span>(<span class="dt">theta =</span> angle, <span class="dt">x =</span> mx, <span class="dt">y =</span> my) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">idx =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">n</span>()) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span>
-<span class="st">    </span>tidyr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/tidyr/topics/nest">nest</a></span>(<span class="op">-</span>theta, <span class="op">-</span>idx, <span class="dt">.key =</span> <span class="st">"v"</span>) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">select</span>(<span class="op">-</span>idx)
-  purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map2">pmap</a></span>(<span class="kw">list</span>(<span class="dt">theta =</span> kpa<span class="op">$</span>theta, <span class="dt">v =</span> kpa<span class="op">$</span>v), descriptor_orientation, <span class="dt">im =</span> im) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">do.call</span>(<span class="st">"rbind"</span>, .)
+get_surf &lt;-<span class="st"> </span><span class="cf">function</span>(im, <span class="dt">n =</span> <span class="dv">500</span>, ...) {
+  tmpbmp &lt;-<span class="st"> </span><span class="kw">tempfile</span>(<span class="dt">fileext =</span> <span class="st">".bmp"</span>)
+  <span class="kw">save.image</span>(im, tmpbmp)
+  <span class="kw"><a href="http://www.rdocumentation.org/packages/image.dlib/topics/image_surf">image_surf</a></span>(<span class="dt">file =</span> tmpbmp, <span class="dt">max_points =</span> n, ...)
 }
 
-kpf &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map2">pmap</a></span>(<span class="kw">list</span>(<span class="dt">angles =</span> angles, <span class="dt">hkp =</span> hkp, <span class="dt">im =</span> imgs), get_kpf)</code></pre></div>
+surfkps &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map">map</a></span>(imgs, get_surf, <span class="dt">n =</span> <span class="dv">1500</span>, <span class="dt">detection_threshold =</span> <span class="dv">15</span>)
+
+plots &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map">map</a></span>(surfkps, <span class="cf">function</span>(x) ggplot2<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/qplot">qplot</a></span>(x<span class="op">$</span>x, <span class="op">-</span>x<span class="op">$</span>y, <span class="dt">colour =</span> <span class="kw">I</span>(<span class="st">"red"</span>)))
+
+gridExtra<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/gridExtra/topics/arrangeGrob">grid.arrange</a></span>(<span class="dt">grobs =</span> plots, <span class="dt">ncol =</span> <span class="dv">4</span>)</code></pre></div>
+<p><img src="shoe-surf-1_files/figure-html/unnamed-chunk-3-1.png" width="768"> ## Step 2: Get Points and Features</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">skp_centers &lt;-<span class="st"> </span><span class="kw">lapply</span>(surfkps, <span class="cf">function</span>(.) <span class="kw">data_frame</span>(<span class="dt">mx =</span> .<span class="op">$</span>x, <span class="dt">my =</span> .<span class="op">$</span>y))
+skp_features &lt;-<span class="st"> </span><span class="kw">lapply</span>(surfkps, <span class="cf">function</span>(.) .<span class="op">$</span>surf)</code></pre></div>
 </div>
-<div id="step-4-match-points" class="section level2">
+<div id="step-3-match-points" class="section level2">
 <h2 class="hasAnchor">
-<a href="#step-4-match-points" class="anchor"></a>Step 4: Match points</h2>
+<a href="#step-3-match-points" class="anchor"></a>Step 3: Match points</h2>
 <p>Match points are calculated using the K nearest neighbors algorithm, combined with some thresholding by distance.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
-hkp_centers &lt;-<span class="st"> </span><span class="kw">lapply</span>(hkp, <span class="cf">function</span>(x) x<span class="op">$</span>centers)
-match_idxs &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">4</span>), <span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">6</span>), <span class="kw">c</span>(<span class="dv">7</span>, <span class="dv">8</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">match_idxs &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">4</span>), <span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">6</span>), <span class="kw">c</span>(<span class="dv">7</span>, <span class="dv">8</span>))
 
 match_points &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map">map</a></span>(match_idxs,
-  <span class="op">~</span><span class="kw"><a href="../reference/knn_points.html">knn_points</a></span>(kpf[[.[<span class="dv">1</span>]]], kpf[[.[<span class="dv">2</span>]]],
-              hkp_centers[[.[<span class="dv">1</span>]]], hkp_centers[[.[<span class="dv">2</span>]]],
+  <span class="op">~</span><span class="kw"><a href="../reference/knn_points.html">knn_points</a></span>(skp_features[[.[<span class="dv">1</span>]]], skp_features[[.[<span class="dv">2</span>]]],
+              skp_centers[[.[<span class="dv">1</span>]]], skp_centers[[.[<span class="dv">2</span>]]],
               <span class="dt">ratio =</span> .<span class="dv">85</span>, <span class="dt">show_plot =</span> T))</code></pre></div>
-<p><img src="shoe-matching-1_files/figure-html/keypoint-knn-1.png" width="30%"><img src="shoe-matching-1_files/figure-html/keypoint-knn-2.png" width="30%"><img src="shoe-matching-1_files/figure-html/keypoint-knn-3.png" width="30%"><img src="shoe-matching-1_files/figure-html/keypoint-knn-4.png" width="30%"></p>
+<p><img src="shoe-surf-1_files/figure-html/keypoint-knn-1.png" width="30%"><img src="shoe-surf-1_files/figure-html/keypoint-knn-2.png" width="30%"><img src="shoe-surf-1_files/figure-html/keypoint-knn-3.png" width="30%"><img src="shoe-surf-1_files/figure-html/keypoint-knn-4.png" width="30%"></p>
 </div>
-<div id="step-5-ransac" class="section level2">
+<div id="step-4-ransac" class="section level2">
 <h2 class="hasAnchor">
-<a href="#step-5-ransac" class="anchor"></a>Step 5: RANSAC</h2>
+<a href="#step-4-ransac" class="anchor"></a>Step 4: RANSAC</h2>
 <p>RANSAC is then used to find points that have similar homography.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ransac_points &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map">map</a></span>(match_points, <span class="op">~</span><span class="kw"><a href="../reference/ransac.html">ransac</a></span>(.<span class="op">$</span>points_a, .<span class="op">$</span>points_b, <span class="dt">N =</span> <span class="dv">5000</span>))</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">4</span>))
@@ -242,14 +201,14 @@ match_points &lt;-<span class="st"> </span>purrr<span class="op">::</span><span 
   idx1 &lt;-<span class="st"> </span>match_idxs[[i]][<span class="dv">1</span>]
   idx2 &lt;-<span class="st"> </span>match_idxs[[i]][<span class="dv">2</span>]
   <span class="kw">plot</span>(imgs[[idx1]], <span class="dt">main =</span> <span class="kw">sprintf</span>(<span class="st">"Image %d </span><span class="ch">\n</span><span class="st">+ Image %d"</span>, idx1, idx2), <span class="dt">axes =</span> F)
-  hkp[[idx1]]<span class="op">$</span>centers <span class="op">%$%</span><span class="st"> </span><span class="kw">points</span>(mx, my, <span class="dt">col =</span> <span class="st">"orange"</span>)
+  skp_centers[[idx1]] <span class="op">%$%</span><span class="st"> </span><span class="kw">points</span>(mx, my, <span class="dt">col =</span> <span class="st">"orange"</span>)
   <span class="kw">points</span>(match_points[[i]]<span class="op">$</span>points_a[ransac_points[[i]]<span class="op">$</span>inliers, ], <span class="dt">col =</span> <span class="st">"purple"</span>, <span class="dt">pch =</span> <span class="dv">16</span>)
 }</code></pre></div>
-<p><img src="shoe-matching-1_files/figure-html/ransac-plot-1.png" width="100%"></p>
+<p><img src="shoe-surf-1_files/figure-html/ransac-plot-1.png" width="100%"></p>
 </div>
-<div id="step-6-image-warping" class="section level2">
+<div id="step-5-image-warping" class="section level2">
 <h2 class="hasAnchor">
-<a href="#step-6-image-warping" class="anchor"></a>Step 6: Image Warping</h2>
+<a href="#step-5-image-warping" class="anchor"></a>Step 5: Image Warping</h2>
 <p>The homography can be used to warp one image onto the other:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">map_fcns &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map">map</a></span>(ransac_points, <span class="cf">function</span>(.) <span class="kw"><a href="../reference/map_affine_gen.html">map_affine_gen</a></span>(.<span class="op">$</span>homography))
 
@@ -259,8 +218,7 @@ imgs_warp &lt;-<span class="st"> </span>imgs_warp <span class="op">%&gt;%</span>
 
 imgs_unwarp &lt;-<span class="st"> </span>imgs[<span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>)]</code></pre></div>
 <p>We can then overlay the two images:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
-blank_channel &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map2">map2</a></span>(imgs_warp, imgs_unwarp, <span class="op">~</span><span class="kw">as.cimg</span>(.x <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;</span><span class="st"> </span>.y <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.imlist</span>()
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">blank_channel &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map2">map2</a></span>(imgs_warp, imgs_unwarp, <span class="op">~</span><span class="kw">as.cimg</span>(.x <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;</span><span class="st"> </span>.y <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.imlist</span>()
 
 overlaid_images &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map2">pmap</a></span>(<span class="kw">list</span>(<span class="dt">r =</span> imgs_warp, <span class="dt">g =</span> blank_channel, <span class="dt">b =</span> imgs_unwarp),
                                <span class="cf">function</span>(r, g, b) <span class="kw">imappend</span>(<span class="kw">imlist</span>(r, g, b), <span class="dt">axis =</span> <span class="st">"c"</span>))
@@ -270,7 +228,7 @@ overlaid_images &lt;-<span class="st"> </span><span class="kw">as.imlist</span>(
 <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {
   <span class="kw">plot</span>(overlaid_images[[i]], <span class="dt">main =</span> <span class="kw">sprintf</span>(<span class="st">"Image %d warp</span><span class="ch">\n</span><span class="st"> + Image %d"</span>, match_idxs[[i]][<span class="dv">1</span>], match_idxs[[i]][<span class="dv">2</span>]), <span class="dt">axes =</span> F)
 }</code></pre></div>
-<p><img src="shoe-matching-1_files/figure-html/img-overlay-after-1.png" width="100%"></p>
+<p><img src="shoe-surf-1_files/figure-html/img-overlay-after-1.png" width="100%"></p>
 <p>Areas that are in the first image only are shown in red; areas in the second image only are shown in blue. Areas in both images are shown in black.</p>
 </div>
   </div>
@@ -280,12 +238,10 @@ overlaid_images &lt;-<span class="st"> </span><span class="kw">as.imlist</span>(
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#step-1-keypoint-detection">Step 1: Keypoint Detection</a></li>
-      <li><a href="#step-2-image-orientation">Step 2: Image Orientation</a></li>
-      <li><a href="#step-3-feature-detection">Step 3: Feature Detection</a></li>
-      <li><a href="#step-4-match-points">Step 4: Match points</a></li>
-      <li><a href="#step-5-ransac">Step 5: RANSAC</a></li>
-      <li><a href="#step-6-image-warping">Step 6: Image Warping</a></li>
+<li><a href="#step-1-keypoint-detection-with-surf">Step 1: Keypoint Detection with SURF</a></li>
+      <li><a href="#step-3-match-points">Step 3: Match points</a></li>
+      <li><a href="#step-4-ransac">Step 4: RANSAC</a></li>
+      <li><a href="#step-5-image-warping">Step 5: Image Warping</a></li>
       </ul>
 </div>
       </div>
