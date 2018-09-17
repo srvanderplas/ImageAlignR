@@ -53,7 +53,7 @@ clean_shoe_img <- function(im) {
   })
 }
 
-imgs <- lapply(imlinks[17:24], function(.) load.image(.) %>% clean_shoe_img()) %>% as.imlist()
+imgs <- lapply(imlinks[9:16], function(.) load.image(.) %>% clean_shoe_img()) %>% as.imlist()
 ```
 
 ```{r, width = 8, height = 7, fig.cap = "Shoeprint images"}
