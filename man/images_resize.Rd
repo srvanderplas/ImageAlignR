@@ -4,12 +4,14 @@
 \alias{images_resize}
 \title{Function to make two images the same size by padding one image}
 \usage{
-images_resize(img1, img2)
+images_resize(img1, img2, scale = F)
 }
 \arguments{
 \item{img1}{image 1}
 
 \item{img2}{image 2}
+
+\item{scale}{should the smaller image be scaled?}
 }
 \description{
 Function to make two images the same size by padding one image
