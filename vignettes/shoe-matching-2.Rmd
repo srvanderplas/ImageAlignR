@@ -42,15 +42,14 @@ clean_shoe_img <- function(im) {
     crop.bbox(im, im_bbox) %>%
       grayscale() %>%
       map_halfimg(fun = autocrop) %>%
-      crop.borders(nx = 10, ny = 5) %>%
+      crop.borders(nx = 5, ny = 5) %>%
       autocrop() %>%
       threshold() %>%
       shrink(5) %>%
       grow(5) %>%
       autocrop() %>%
-      # img_rotate_refit() %>%
-      # magrittr::extract2("img") %>%
-      grayscale()
+      grayscale() %>%
+      pad(10, axes = "xy")
   })
 }
 
@@ -78,7 +77,7 @@ plot(imgs[[1]] + imgs[[2]] + imgs[[3]] + imgs[[4]] + imgs[[5]] + imgs[[6]] + img
 
 
 ```{r, fig.width = 8, fig.height = 6}
-hkp <- purrr::map(imgs, harris_keypoints, sigma = 6)
+hkp <- purrr::map(imgs, harris_keypoints, sigma = 3)
 
 plots <- purrr::map(hkp, function(x) ggplot2::qplot(x$centers$mx, -x$centers$my, colour = I("red")))
 
@@ -89,7 +88,7 @@ gridExtra::grid.arrange(grobs = plots, ncol = 4)
 
 Calculating the dominant orientations for the whole image produces:
 ```{r}
-angles <- purrr::map(imgs, oriented_gradients, sigma = 2, show_plot = F)
+angles <- purrr::map(imgs, oriented_gradients, sigma = 3, show_plot = F)
 angles
 ```
 
@@ -121,7 +120,7 @@ Match points are calculated using the K nearest neighbors algorithm, combined wi
 hkp_centers <- lapply(hkp, function(x) x$centers)
 match_points <- purrr::map2(
   kpf[2:8], hkp_centers[2:8],  
-  ~knn_points(.x, kpf[[1]], .y, hkp_centers[[1]], ratio = .80, show_plot = T))
+  ~knn_points(.x, kpf[[1]], .y, hkp_centers[[1]], ratio = .85, show_plot = T))
 ```
 
 ## Step 5: RANSAC

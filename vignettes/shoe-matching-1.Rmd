@@ -48,9 +48,8 @@ clean_shoe_img <- function(im) {
       shrink(5) %>%
       grow(5) %>%
       autocrop() %>%
-      # img_rotate_refit() %>%
-      # magrittr::extract2("img") %>%
-      grayscale()
+      grayscale() %>%
+      pad(10, axes = "xy")
   })
 }
 

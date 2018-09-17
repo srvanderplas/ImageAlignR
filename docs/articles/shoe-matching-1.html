@@ -65,9 +65,6 @@
     <li>
       <a href="../articles/shoe-matching-2.html">Shoe Matching - Adidas</a>
     </li>
-    <li>
-      <a href="../articles/shoe-matching-rmd.html">Shoe Matching - Nike</a>
-    </li>
   </ul>
 </li>
       </ul>
@@ -129,13 +126,12 @@
 <a class="sourceLine" id="cb1-19" data-line-number="19"><span class="st">      </span><span class="kw">shrink</span>(<span class="dv">5</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1-20" data-line-number="20"><span class="st">      </span><span class="kw">grow</span>(<span class="dv">5</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1-21" data-line-number="21"><span class="st">      </span><span class="kw">autocrop</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-22" data-line-number="22"><span class="st">      </span><span class="co"># img_rotate_refit() %&gt;%</span></a>
-<a class="sourceLine" id="cb1-23" data-line-number="23"><span class="st">      </span><span class="co"># magrittr::extract2("img") %&gt;%</span></a>
-<a class="sourceLine" id="cb1-24" data-line-number="24"><span class="st">      </span><span class="kw">grayscale</span>()</a>
-<a class="sourceLine" id="cb1-25" data-line-number="25">  })</a>
-<a class="sourceLine" id="cb1-26" data-line-number="26">}</a>
-<a class="sourceLine" id="cb1-27" data-line-number="27"></a>
-<a class="sourceLine" id="cb1-28" data-line-number="28">imgs &lt;-<span class="st"> </span><span class="kw">lapply</span>(imlinks[<span class="dv">17</span><span class="op">:</span><span class="dv">24</span>], <span class="cf">function</span>(.) <span class="kw">load.image</span>(.) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">clean_shoe_img</span>()) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.imlist</span>()</a></code></pre></div>
+<a class="sourceLine" id="cb1-22" data-line-number="22"><span class="st">      </span><span class="kw">grayscale</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-23" data-line-number="23"><span class="st">      </span><span class="kw">pad</span>(<span class="dv">10</span>, <span class="dt">axes =</span> <span class="st">"xy"</span>)</a>
+<a class="sourceLine" id="cb1-24" data-line-number="24">  })</a>
+<a class="sourceLine" id="cb1-25" data-line-number="25">}</a>
+<a class="sourceLine" id="cb1-26" data-line-number="26"></a>
+<a class="sourceLine" id="cb1-27" data-line-number="27">imgs &lt;-<span class="st"> </span><span class="kw">lapply</span>(imlinks[<span class="dv">17</span><span class="op">:</span><span class="dv">24</span>], <span class="cf">function</span>(.) <span class="kw">load.image</span>(.) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">clean_shoe_img</span>()) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.imlist</span>()</a></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">plot</span>(imgs)</a></code></pre></div>
 <div class="figure">
 <img src="shoe-matching-1_files/figure-html/unnamed-chunk-1-1.png" alt="Shoeprint images" width="480"><p class="caption">
@@ -221,7 +217,7 @@ Shoeprint images
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">get_kpf &lt;-<span class="st"> </span><span class="cf">function</span>(angles, hkp, im) {</a>
 <a class="sourceLine" id="cb7-2" data-line-number="2">  kpa &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">angle =</span> angles, <span class="dt">v =</span> <span class="kw">list</span>(hkp<span class="op">$</span>centers)) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb7-3" data-line-number="3"><span class="st">    </span>tidyr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/tidyr/topics/unnest">unnest</a></span>(v) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="st">    </span>dplyr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/dplyr/topics/select">rename</a></span>(<span class="dt">theta =</span> angle, <span class="dt">x =</span> mx, <span class="dt">y =</span> my) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="st">    </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">rename</a></span>(<span class="dt">theta =</span> angle, <span class="dt">x =</span> mx, <span class="dt">y =</span> my) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb7-5" data-line-number="5"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">idx =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">n</span>()) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb7-6" data-line-number="6"><span class="st">    </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb7-7" data-line-number="7"><span class="st">    </span>tidyr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/tidyr/topics/nest">nest</a></span>(<span class="op">-</span>theta, <span class="op">-</span>idx, <span class="dt">.key =</span> <span class="st">"v"</span>) <span class="op">%&gt;%</span></a>
