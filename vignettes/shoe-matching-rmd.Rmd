@@ -64,7 +64,7 @@ plot(imgs)
 We need to resize the images so that they are the same size:
 ```{r}
 lapply(imgs, dim)
-imgs2 <- lapply(imgs, function(.) images_resize(., imgs[[1]])[[1]])
+imgs2 <- lapply(imgs, function(.) images_resize(., imgs[[1]], scale = F)[[1]])
 imgs <- as.imlist(imgs2)
 rm(imgs2)
 ```
@@ -120,7 +120,7 @@ Match points are calculated using the K nearest neighbors algorithm, combined wi
 ```{r keypoint-knn, fig.width = 4, fig.height = 4, out.width = "30%"}
 hkp_centers <- lapply(hkp, function(x) x$centers)
 match_points <- purrr::map2(
-  kpf[2:8], hkp_centers[2:8], 
+  kpf[2:8], hkp_centers[2:8],  
   ~knn_points(.x, kpf[[1]], .y, hkp_centers[[1]], ratio = .80, show_plot = T))
 ```
 
@@ -132,14 +132,15 @@ RANSAC is then used to find points that have similar homography.
 ransac_points <- purrr::map(match_points, ~ransac(.$points_a, .$points_b, N = 5000))
 ```
 
-```{r ransac-plot, fig.width = 16, fig.height = 7, out.width = "100%"}
-par(mfrow = c(2, 7))
+```{r ransac-plot, fig.width = 16, fig.height = 16, out.width = "100%"}
+par(mfrow = c(4, 4))
 
 for (i in 1:7) {
   plot(imgs[[1]], main = sprintf("Shoe 1 \n+ Shoe %d", 1 + i))
   hkp[[1]]$centers %$% points(mx, my, col = "orange")
   points(match_points[[i]]$points_b[ransac_points[[i]]$inliers, ], col = "purple", pch = 16)
 }
+plot(0,type='n',axes=FALSE,ann=FALSE)
 
 for (i in 1:7) {
   plot(imgs[[1 + i]], main = sprintf("Shoe %d \n+ Shoe 1", 1 + i))
