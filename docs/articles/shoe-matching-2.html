@@ -110,30 +110,22 @@
 <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="st">  </span><span class="kw">list.files</span>(<span class="dt">full.names =</span> T) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1-3" data-line-number="3"><span class="st">  </span><span class="kw">sort</span>()</a>
 <a class="sourceLine" id="cb1-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">clean_shoe_img &lt;-<span class="st"> </span><span class="cf">function</span>(im) {</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">  <span class="kw">suppressMessages</span>({</a>
-<a class="sourceLine" id="cb1-7" data-line-number="7">    im_bbox &lt;-<span class="st"> </span>im <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="st">      </span><span class="kw">imsplit</span>(<span class="dt">axis =</span> <span class="st">"c"</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="st">      </span>(<span class="cf">function</span>(x) <span class="kw">is.finite</span>((x[[<span class="dv">1</span>]] <span class="op">+</span><span class="st"> </span>x[[<span class="dv">2</span>]]) <span class="op">/</span><span class="st"> </span>x[[<span class="dv">3</span>]])) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="st">      </span><span class="kw">as.cimg</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="st">      </span>(<span class="cf">function</span>(x) x <span class="op">==</span><span class="st"> </span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb1-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb1-13" data-line-number="13">    <span class="kw">crop.bbox</span>(im, im_bbox) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-14" data-line-number="14"><span class="st">      </span><span class="kw">grayscale</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-15" data-line-number="15"><span class="st">      </span><span class="kw"><a href="../reference/map_halfimg.html">map_halfimg</a></span>(<span class="dt">fun =</span> autocrop) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-16" data-line-number="16"><span class="st">      </span><span class="kw">crop.borders</span>(<span class="dt">nx =</span> <span class="dv">5</span>, <span class="dt">ny =</span> <span class="dv">5</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-17" data-line-number="17"><span class="st">      </span><span class="kw">autocrop</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-18" data-line-number="18"><span class="st">      </span><span class="kw">threshold</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-19" data-line-number="19"><span class="st">      </span><span class="kw">shrink</span>(<span class="dv">5</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-20" data-line-number="20"><span class="st">      </span><span class="kw">grow</span>(<span class="dv">5</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-21" data-line-number="21"><span class="st">      </span><span class="kw">autocrop</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-22" data-line-number="22"><span class="st">      </span><span class="kw">grayscale</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-23" data-line-number="23"><span class="st">      </span><span class="kw">pad</span>(<span class="dv">10</span>, <span class="dt">axes =</span> <span class="st">"xy"</span>, <span class="dt">val =</span> <span class="kw">max</span>(.))</a>
-<a class="sourceLine" id="cb1-24" data-line-number="24">  })</a>
-<a class="sourceLine" id="cb1-25" data-line-number="25">}</a>
-<a class="sourceLine" id="cb1-26" data-line-number="26"></a>
-<a class="sourceLine" id="cb1-27" data-line-number="27">imgs &lt;-<span class="st"> </span><span class="kw">lapply</span>(imlinks[<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>], <span class="cf">function</span>(.) <span class="kw">load.image</span>(.) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">clean_shoe_img</span>()) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.imlist</span>()</a></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">plot</span>(imgs, <span class="dt">layout =</span> <span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>, <span class="dt">nrow =</span> <span class="dv">2</span>, <span class="dt">byrow =</span> T))</a></code></pre></div>
+<a class="sourceLine" id="cb1-5" data-line-number="5">clean_shoe_img &lt;-<span class="st"> </span><span class="cf">function</span>(im, <span class="dt">ylim =</span> <span class="dv">3500</span>) {</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">  img &lt;-<span class="st"> </span>im <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="st">    </span><span class="kw">crop.borders</span>(<span class="dt">nPix =</span> <span class="dv">170</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="st">    </span><span class="kw">grayscale</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="st">    </span><span class="kw">threshold</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="st">    </span><span class="kw">clean</span>(<span class="dv">5</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="st">    </span><span class="kw">autocrop</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="st">    </span><span class="kw">crop.bbox</span>(., <span class="kw">Yc</span>(.) <span class="op">&lt;</span><span class="st"> </span>ylim) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-13" data-line-number="13"><span class="st">    </span><span class="kw">autocrop</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb1-14" data-line-number="14"><span class="st">    </span><span class="kw">pad</span>(<span class="dv">20</span>, <span class="dt">axes =</span> <span class="st">"xy"</span>, <span class="dt">val =</span> <span class="kw">max</span>(.))</a>
+<a class="sourceLine" id="cb1-15" data-line-number="15">  <span class="co"># plot(img)</span></a>
+<a class="sourceLine" id="cb1-16" data-line-number="16">  img</a>
+<a class="sourceLine" id="cb1-17" data-line-number="17">}</a>
+<a class="sourceLine" id="cb1-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb1-19" data-line-number="19">imgs &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map2">map2</a></span>(imlinks[<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>], <span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">3500</span>, <span class="dv">6</span>), <span class="dv">3750</span>, <span class="dv">3500</span>), <span class="cf">function</span>(x, y) <span class="kw">load.image</span>(x) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">clean_shoe_img</span>(<span class="dt">ylim =</span> y)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.imlist</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">plot</span>(imgs)</a></code></pre></div>
 <div class="figure">
 <img src="shoe-matching-2_files/figure-html/unnamed-chunk-1-1.png" alt="Shoeprint images" width="480"><p class="caption">
 Shoeprint images
@@ -147,8 +139,13 @@ Shoeprint images
 <a class="sourceLine" id="cb3-5" data-line-number="5"></a>
 <a class="sourceLine" id="cb3-6" data-line-number="6">imgs &lt;-<span class="st"> </span><span class="kw">lapply</span>(imgs, <span class="cf">function</span>(.) <span class="kw"><a href="../reference/images_resize.html">images_resize</a></span>(., canonical_image, <span class="dt">scale =</span> F)[[<span class="dv">1</span>]]) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.imlist</span>()</a></code></pre></div>
 <p>We can then overlay the images to see how far apart they are:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">plot</span>(imgs[[<span class="dv">1</span>]] <span class="op">+</span><span class="st"> </span>imgs[[<span class="dv">2</span>]] <span class="op">+</span><span class="st"> </span>imgs[[<span class="dv">3</span>]] <span class="op">+</span><span class="st"> </span>imgs[[<span class="dv">4</span>]] <span class="op">+</span><span class="st"> </span>imgs[[<span class="dv">5</span>]] <span class="op">+</span><span class="st"> </span>imgs[[<span class="dv">6</span>]] <span class="op">+</span><span class="st"> </span>imgs[[<span class="dv">7</span>]] <span class="op">+</span><span class="st"> </span>imgs[[<span class="dv">8</span>]])</a></code></pre></div>
-<p><img src="shoe-matching-2_files/figure-html/img-overlay-1.png" width="480"></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">4</span>))</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">plot</span>(imgs[[<span class="dv">1</span>]] <span class="op">+</span><span class="st"> </span>imgs[[<span class="dv">2</span>]], <span class="dt">main =</span> <span class="st">"Initial</span><span class="ch">\n</span><span class="st">Images 1 and 2"</span>, <span class="dt">axes =</span> F)</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="kw">plot</span>(imgs[[<span class="dv">3</span>]] <span class="op">+</span><span class="st"> </span>imgs[[<span class="dv">4</span>]], <span class="dt">main =</span> <span class="st">"Check In 1</span><span class="ch">\n</span><span class="st">Images 3 and 4"</span>, <span class="dt">axes =</span> F)</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="kw">plot</span>(imgs[[<span class="dv">5</span>]] <span class="op">+</span><span class="st"> </span>imgs[[<span class="dv">6</span>]], <span class="dt">main =</span> <span class="st">"Check In 2</span><span class="ch">\n</span><span class="st">Images 5 and 6"</span>, <span class="dt">axes =</span> F)</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="kw">plot</span>(imgs[[<span class="dv">7</span>]] <span class="op">+</span><span class="st"> </span>imgs[[<span class="dv">8</span>]], <span class="dt">main =</span> <span class="st">"Check In 3</span><span class="ch">\n</span><span class="st">Images 7 and 8"</span>, <span class="dt">axes =</span> F)</a></code></pre></div>
+<p><img src="shoe-matching-2_files/figure-html/img-overlay-1.png" width="960"></p>
+<p>We’ll align images within timepoint - this removes the variability due to the individual collecting the data as well as the variability due to wear over time.</p>
 <div id="step-1-keypoint-detection" class="section level2">
 <h2 class="hasAnchor">
 <a href="#step-1-keypoint-detection" class="anchor"></a>Step 1: Keypoint Detection</h2>
@@ -163,31 +160,31 @@ Shoeprint images
 <h2 class="hasAnchor">
 <a href="#step-2-image-orientation" class="anchor"></a>Step 2: Image Orientation</h2>
 <p>Calculating the dominant orientations for the whole image produces:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">angles &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map">map</a></span>(imgs, oriented_gradients, <span class="dt">sigma =</span> <span class="dv">3</span>, <span class="dt">show_plot =</span> F)</a>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">angles &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map">map</a></span>(imgs, oriented_gradients, <span class="dt">sigma =</span> <span class="dv">2</span>, <span class="dt">show_plot =</span> F)</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">angles</a>
 <a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co"># [[1]]</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co"># [1] 0</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co"># [1] 45  0</span></a>
 <a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co"># </span></a>
 <a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co"># [[2]]</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co"># [1] 0</span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co"># [1] 45  0</span></a>
 <a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co"># </span></a>
 <a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co"># [[3]]</span></a>
-<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co"># [1]  0 45</span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co"># [1] 45  0</span></a>
 <a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co"># </span></a>
 <a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co"># [[4]]</span></a>
-<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co"># [1]  0 45</span></a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co"># [1] 45  0</span></a>
 <a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co"># </span></a>
 <a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co"># [[5]]</span></a>
-<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co"># [1]  0 45</span></a>
+<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co"># [1] 45  0</span></a>
 <a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co"># </span></a>
 <a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co"># [[6]]</span></a>
-<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co"># [1]  0 45</span></a>
+<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co"># [1] 45  0</span></a>
 <a class="sourceLine" id="cb6-20" data-line-number="20"><span class="co"># </span></a>
 <a class="sourceLine" id="cb6-21" data-line-number="21"><span class="co"># [[7]]</span></a>
-<a class="sourceLine" id="cb6-22" data-line-number="22"><span class="co"># [1]  0 45</span></a>
+<a class="sourceLine" id="cb6-22" data-line-number="22"><span class="co"># [1] 45  0</span></a>
 <a class="sourceLine" id="cb6-23" data-line-number="23"><span class="co"># </span></a>
 <a class="sourceLine" id="cb6-24" data-line-number="24"><span class="co"># [[8]]</span></a>
-<a class="sourceLine" id="cb6-25" data-line-number="25"><span class="co"># [1]  0 45</span></a></code></pre></div>
+<a class="sourceLine" id="cb6-25" data-line-number="25"><span class="co"># [1] 45  0</span></a></code></pre></div>
 </div>
 <div id="step-3-feature-detection" class="section level2">
 <h2 class="hasAnchor">
@@ -206,39 +203,35 @@ Shoeprint images
 <a class="sourceLine" id="cb7-10" data-line-number="10"><span class="st">    </span><span class="kw">do.call</span>(<span class="st">"rbind"</span>, .)</a>
 <a class="sourceLine" id="cb7-11" data-line-number="11">}</a>
 <a class="sourceLine" id="cb7-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="kw">library</span>(future)</a>
-<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="kw"><a href="http://www.rdocumentation.org/packages/future/topics/plan">plan</a></span>(multicore)</a>
-<a class="sourceLine" id="cb7-15" data-line-number="15">kpf &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map2">pmap</a></span>(<span class="kw">list</span>(<span class="dt">angles =</span> angles, <span class="dt">hkp =</span> hkp, <span class="dt">im =</span> imgs), get_kpf)</a></code></pre></div>
+<a class="sourceLine" id="cb7-13" data-line-number="13">kpf &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map2">pmap</a></span>(<span class="kw">list</span>(<span class="dt">angles =</span> angles, <span class="dt">hkp =</span> hkp, <span class="dt">im =</span> imgs), get_kpf)</a></code></pre></div>
 </div>
 <div id="step-4-match-points" class="section level2">
 <h2 class="hasAnchor">
 <a href="#step-4-match-points" class="anchor"></a>Step 4: Match points</h2>
 <p>Match points are calculated using the K nearest neighbors algorithm, combined with some thresholding by distance.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">hkp_centers &lt;-<span class="st"> </span><span class="kw">lapply</span>(hkp, <span class="cf">function</span>(x) x<span class="op">$</span>centers)</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">match_points &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map2">map2</a></span>(</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">  kpf[<span class="dv">2</span><span class="op">:</span><span class="dv">8</span>], hkp_centers[<span class="dv">2</span><span class="op">:</span><span class="dv">8</span>],  </a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">  <span class="op">~</span><span class="kw"><a href="../reference/knn_points.html">knn_points</a></span>(.x, kpf[[<span class="dv">1</span>]], .y, hkp_centers[[<span class="dv">1</span>]], <span class="dt">ratio =</span> <span class="fl">.85</span>, <span class="dt">show_plot =</span> T))</a></code></pre></div>
-<p><img src="shoe-matching-2_files/figure-html/keypoint-knn-1.png" width="30%"><img src="shoe-matching-2_files/figure-html/keypoint-knn-2.png" width="30%"><img src="shoe-matching-2_files/figure-html/keypoint-knn-3.png" width="30%"><img src="shoe-matching-2_files/figure-html/keypoint-knn-4.png" width="30%"><img src="shoe-matching-2_files/figure-html/keypoint-knn-5.png" width="30%"><img src="shoe-matching-2_files/figure-html/keypoint-knn-6.png" width="30%"><img src="shoe-matching-2_files/figure-html/keypoint-knn-7.png" width="30%"></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">hkp_centers &lt;-<span class="st"> </span><span class="kw">lapply</span>(hkp, <span class="cf">function</span>(x) x<span class="op">$</span>centers)</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">match_idxs &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">4</span>), <span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">6</span>), <span class="kw">c</span>(<span class="dv">7</span>, <span class="dv">8</span>))</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5">match_points &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map">map</a></span>(match_idxs,</a>
+<a class="sourceLine" id="cb8-6" data-line-number="6">  <span class="op">~</span><span class="kw"><a href="../reference/knn_points.html">knn_points</a></span>(kpf[[.[<span class="dv">1</span>]]], kpf[[.[<span class="dv">2</span>]]],</a>
+<a class="sourceLine" id="cb8-7" data-line-number="7">              hkp_centers[[.[<span class="dv">1</span>]]], hkp_centers[[.[<span class="dv">2</span>]]],</a>
+<a class="sourceLine" id="cb8-8" data-line-number="8">              <span class="dt">ratio =</span> <span class="fl">.85</span>, <span class="dt">show_plot =</span> T))</a></code></pre></div>
+<p><img src="shoe-matching-2_files/figure-html/keypoint-knn-1.png" width="30%"><img src="shoe-matching-2_files/figure-html/keypoint-knn-2.png" width="30%"><img src="shoe-matching-2_files/figure-html/keypoint-knn-3.png" width="30%"><img src="shoe-matching-2_files/figure-html/keypoint-knn-4.png" width="30%"></p>
 </div>
 <div id="step-5-ransac" class="section level2">
 <h2 class="hasAnchor">
 <a href="#step-5-ransac" class="anchor"></a>Step 5: RANSAC</h2>
 <p>RANSAC is then used to find points that have similar homography.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">ransac_points &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map">map</a></span>(match_points, <span class="op">~</span><span class="kw"><a href="../reference/ransac.html">ransac</a></span>(.<span class="op">$</span>points_a, .<span class="op">$</span>points_b, <span class="dt">N =</span> <span class="dv">5000</span>))</a></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">4</span>))</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">7</span>) {</a>
-<a class="sourceLine" id="cb10-4" data-line-number="4">  <span class="kw">plot</span>(imgs[[<span class="dv">1</span>]], <span class="dt">main =</span> <span class="kw">sprintf</span>(<span class="st">"Shoe 1 </span><span class="ch">\n</span><span class="st">+ Shoe %d"</span>, <span class="dv">1</span> <span class="op">+</span><span class="st"> </span>i))</a>
-<a class="sourceLine" id="cb10-5" data-line-number="5">  hkp[[<span class="dv">1</span>]]<span class="op">$</span>centers <span class="op">%$%</span><span class="st"> </span><span class="kw">points</span>(mx, my, <span class="dt">col =</span> <span class="st">"orange"</span>)</a>
-<a class="sourceLine" id="cb10-6" data-line-number="6">  <span class="kw">points</span>(match_points[[i]]<span class="op">$</span>points_b[ransac_points[[i]]<span class="op">$</span>inliers, ], <span class="dt">col =</span> <span class="st">"purple"</span>, <span class="dt">pch =</span> <span class="dv">16</span>)</a>
-<a class="sourceLine" id="cb10-7" data-line-number="7">}</a>
-<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="kw">plot</span>(<span class="dv">0</span>,<span class="dt">type=</span><span class="st">'n'</span>,<span class="dt">axes=</span><span class="ot">FALSE</span>,<span class="dt">ann=</span><span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb10-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">7</span>) {</a>
-<a class="sourceLine" id="cb10-11" data-line-number="11">  <span class="kw">plot</span>(imgs[[<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>i]], <span class="dt">main =</span> <span class="kw">sprintf</span>(<span class="st">"Shoe %d </span><span class="ch">\n</span><span class="st">+ Shoe 1"</span>, <span class="dv">1</span> <span class="op">+</span><span class="st"> </span>i))</a>
-<a class="sourceLine" id="cb10-12" data-line-number="12">  hkp[[<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>i]]<span class="op">$</span>centers <span class="op">%$%</span><span class="st"> </span><span class="kw">points</span>(mx, my, <span class="dt">col =</span> <span class="st">"orange"</span>)</a>
-<a class="sourceLine" id="cb10-13" data-line-number="13">  <span class="kw">points</span>(match_points[[i]]<span class="op">$</span>points_a[ransac_points[[i]]<span class="op">$</span>inliers, ], <span class="dt">col =</span> <span class="st">"purple"</span>, <span class="dt">pch =</span> <span class="dv">16</span>)</a>
-<a class="sourceLine" id="cb10-14" data-line-number="14">}</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">4</span>))</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(match_idxs)) {</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">  idx1 &lt;-<span class="st"> </span>match_idxs[[i]][<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb10-4" data-line-number="4">  idx2 &lt;-<span class="st"> </span>match_idxs[[i]][<span class="dv">2</span>]</a>
+<a class="sourceLine" id="cb10-5" data-line-number="5">  <span class="kw">plot</span>(imgs[[idx1]], <span class="dt">main =</span> <span class="kw">sprintf</span>(<span class="st">"Image %d </span><span class="ch">\n</span><span class="st">+ Image %d"</span>, idx1, idx2), <span class="dt">axes =</span> F)</a>
+<a class="sourceLine" id="cb10-6" data-line-number="6">  hkp[[idx1]]<span class="op">$</span>centers <span class="op">%$%</span><span class="st"> </span><span class="kw">points</span>(mx, my, <span class="dt">col =</span> <span class="st">"orange"</span>)</a>
+<a class="sourceLine" id="cb10-7" data-line-number="7">  <span class="kw">points</span>(match_points[[i]]<span class="op">$</span>points_a[ransac_points[[i]]<span class="op">$</span>inliers, ], <span class="dt">col =</span> <span class="st">"purple"</span>, <span class="dt">pch =</span> <span class="dv">16</span>)</a>
+<a class="sourceLine" id="cb10-8" data-line-number="8">}</a></code></pre></div>
 <p><img src="shoe-matching-2_files/figure-html/ransac-plot-1.png" width="100%"></p>
 </div>
 <div id="step-6-image-warping" class="section level2">
@@ -247,23 +240,23 @@ Shoeprint images
 <p>The homography can be used to warp one image onto the other:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">map_fcns &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map">map</a></span>(ransac_points, <span class="cf">function</span>(.) <span class="kw"><a href="../reference/map_affine_gen.html">map_affine_gen</a></span>(.<span class="op">$</span>homography))</a>
 <a class="sourceLine" id="cb11-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb11-3" data-line-number="3">imgs_warp &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map2">map2</a></span>(imgs[<span class="dv">2</span><span class="op">:</span><span class="dv">8</span>], map_fcns, <span class="dt">.f =</span> imwarp, <span class="dt">direction =</span> <span class="st">"backward"</span>, <span class="dt">boundary =</span> <span class="st">"neumann"</span>)</a>
-<a class="sourceLine" id="cb11-4" data-line-number="4">imgs_warp &lt;-<span class="st"> </span>imgs_warp <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.imlist</span>()</a>
-<a class="sourceLine" id="cb11-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">4</span>))</a>
-<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">7</span>) {</a>
-<a class="sourceLine" id="cb11-8" data-line-number="8">  <span class="kw">plot</span>(imgs_warp[[i]], <span class="dt">main =</span> <span class="kw">sprintf</span>(<span class="st">"Shoe %d warped to Shoe 1"</span>, i <span class="op">+</span><span class="st"> </span><span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb11-9" data-line-number="9">}</a></code></pre></div>
-<p><img src="shoe-matching-2_files/figure-html/homography-solve-1.png" width="100%"></p>
+<a class="sourceLine" id="cb11-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4">imgs_warp &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map2">map2</a></span>(imgs[<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>)], map_fcns, <span class="dt">.f =</span> imwarp, <span class="dt">direction =</span> <span class="st">"backward"</span>, <span class="dt">boundary =</span> <span class="st">"neumann"</span>)</a>
+<a class="sourceLine" id="cb11-5" data-line-number="5">imgs_warp &lt;-<span class="st"> </span>imgs_warp <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.imlist</span>()</a>
+<a class="sourceLine" id="cb11-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb11-7" data-line-number="7">imgs_unwarp &lt;-<span class="st"> </span>imgs[<span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>)]</a></code></pre></div>
 <p>We can then overlay the two images:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">blank_channel &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map">map</a></span>(imgs_warp, <span class="op">~</span><span class="kw">as.cimg</span>(. <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;</span><span class="st"> </span>imgs[[<span class="dv">1</span>]] <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>))</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2">overlaid_images &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map2">map2</a></span>(imgs_warp, blank_channel, <span class="op">~</span><span class="kw">imappend</span>(<span class="kw">imlist</span>(imgs[[<span class="dv">1</span>]], .y, .x), <span class="dt">axis =</span> <span class="st">"c"</span>))</a>
-<a class="sourceLine" id="cb12-3" data-line-number="3">overlaid_images &lt;-<span class="st"> </span><span class="kw">as.imlist</span>(overlaid_images)</a>
-<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">4</span>)) </a>
-<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">7</span>) {</a>
-<a class="sourceLine" id="cb12-6" data-line-number="6">  <span class="kw">plot</span>(overlaid_images[[i]], <span class="dt">main =</span> <span class="kw">sprintf</span>(<span class="st">"Shoe 1 + Shoe %d warp"</span>, i <span class="op">+</span><span class="st"> </span><span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb12-7" data-line-number="7">}</a>
-<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co"># plot(overlaid_images, layout = "row")</span></a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">blank_channel &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map2">map2</a></span>(imgs_warp, imgs_unwarp, <span class="op">~</span><span class="kw">as.cimg</span>(.x <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;</span><span class="st"> </span>.y <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.imlist</span>()</a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb12-4" data-line-number="4">overlaid_images &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map2">pmap</a></span>(<span class="kw">list</span>(<span class="dt">r =</span> imgs_warp, <span class="dt">g =</span> blank_channel, <span class="dt">b =</span> imgs_unwarp),</a>
+<a class="sourceLine" id="cb12-5" data-line-number="5">                               <span class="cf">function</span>(r, g, b) <span class="kw">imappend</span>(<span class="kw">imlist</span>(r, g, b), <span class="dt">axis =</span> <span class="st">"c"</span>))</a>
+<a class="sourceLine" id="cb12-6" data-line-number="6">overlaid_images &lt;-<span class="st"> </span><span class="kw">as.imlist</span>(overlaid_images)</a>
+<a class="sourceLine" id="cb12-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">4</span>))</a>
+<a class="sourceLine" id="cb12-9" data-line-number="9"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {</a>
+<a class="sourceLine" id="cb12-10" data-line-number="10">  <span class="kw">plot</span>(overlaid_images[[i]], <span class="dt">main =</span> <span class="kw">sprintf</span>(<span class="st">"Image %d warp</span><span class="ch">\n</span><span class="st"> + Image %d"</span>, match_idxs[[i]][<span class="dv">1</span>], match_idxs[[i]][<span class="dv">2</span>]), <span class="dt">axes =</span> F)</a>
+<a class="sourceLine" id="cb12-11" data-line-number="11">}</a></code></pre></div>
 <p><img src="shoe-matching-2_files/figure-html/img-overlay-after-1.png" width="100%"></p>
 <p>Areas that are in the first image only are shown in red; areas in the second image only are shown in blue. Areas in both images are shown in black.</p>
 </div>
