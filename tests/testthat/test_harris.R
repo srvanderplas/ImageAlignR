@@ -6,8 +6,8 @@ library(dplyr)
 img <- matrix(1, nrow = 5, ncol = 5) %>% as.cimg()
 img[3,3] <- 0
 
+hc <- harris_corners(img, sigma = 1)
 test_that("harris_corners works as expected", {
-  hc <- harris_corners(img, sigma = 1)
   expect_equal(sum(hc > 0), 25)
   expect_equivalent(colSums(hc < .001), c(2, 0, 0, 0, 2))
   expect_equivalent(rowSums(hc < .001), c(2, 0, 0, 0, 2))
