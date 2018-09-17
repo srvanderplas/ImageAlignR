@@ -14,13 +14,13 @@ test_that("harris_corners works as expected", {
   expect_equivalent(as.matrix(hc), t(as.matrix(hc)))
 })
 
+rc <- hc %>% imager::threshold("80%") %>% imager::label() %>% region_centers(bord = 1)
 test_that("region_centers works as expected", {
-  rc <- hc %>% imager::threshold("80%") %>% imager::label() %>% region_centers(bord = 1)
   expect_equivalent(rc, data_frame(value = 1, mx = 3, my = 3))
 })
 
+hk <- harris_keypoints(img, thr = "80%", sigma = 1, bord = 1)
 test_that("harris_keypoints works as expected", {
-  hk <- harris_keypoints(img, thr = "80%", sigma = 1, bord = 1)
   expect_equivalent(hk$centers, rc[,2:3])
 })
 
