@@ -19,7 +19,8 @@ Suggests:
     ShoeData,
     furrr,
     devtools,
-    gridExtra
+    gridExtra,
+    image.dlib
 VignetteBuilder: knitr
 Depends: 
     R (>= 3.4)
@@ -32,7 +33,7 @@ Imports:
     methods,
     FNN,
     purrr
-Remotes: github::MangoTheCat/visualTest, github::srvanderplas/ShoeData
-Additional_repositories: https://github.com/srvanderplas/ShoeData
+Remotes: github::MangoTheCat/visualTest, github::srvanderplas/ShoeData, github::bnosac/image/image.dlib
+Additional_repositories: https://srvanderplas.github.io/drat
 URL: https://github.com/srvanderplas/ImageAlignR
 BugReports: https://github.com/srvanderplas/ImageAlignR/issues
