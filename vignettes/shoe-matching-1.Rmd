@@ -49,7 +49,7 @@ clean_shoe_img <- function(im) {
       grow(5) %>%
       autocrop() %>%
       grayscale() %>%
-      pad(10, axes = "xy")
+      pad(10, axes = "xy", val = max(.))
   })
 }
 
@@ -62,10 +62,12 @@ plot(imgs)
 
 We need to resize the images so that they are the same size:
 ```{r}
-lapply(imgs, dim)
-imgs2 <- lapply(imgs, function(.) images_resize(., imgs[[1]], scale = F)[[1]])
-imgs <- as.imlist(imgs2)
-rm(imgs2)
+imgdims <- sapply(imgs, dim)
+
+canonical_image <- matrix(1, nrow = max(imgdims[1,]), ncol = max(imgdims[2,])) %>%
+  as.cimg()
+
+imgs <- lapply(imgs, function(.) images_resize(., canonical_image, scale = F)[[1]]) %>% as.imlist()
 ```
 
 We can then overlay the images to see how far apart they are:
