@@ -4,7 +4,8 @@ pkgdown_sha: ~
 articles:
   ellipse-alignment: ellipse-alignment.html
   keypoint-alignment: keypoint-alignment.html
-  shoe-matching-rmd: shoe-matching-rmd.html
+  shoe-matching-1: shoe-matching-1.html
+  shoe-matching-2: shoe-matching-2.html
 urls:
   reference: https://srvanderplas.github.io/ImageAlignR/reference
   article: https://srvanderplas.github.io/ImageAlignR/articles
