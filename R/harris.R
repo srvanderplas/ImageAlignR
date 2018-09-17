@@ -192,7 +192,8 @@ knn_points <- function(kpf_a, kpf_b, centers_a, centers_b, n = 2, ratio = .8, sh
   kpf_b_idx_vec <- 1:nrow(kpf_b)
 
   mask <- kk$nn.dist[, 1] / kk$nn.dist[, 2] < ratio
-  match <- data_frame(a = kk$nn.index[mask, 1], b = kpf_b_idx_vec[mask])
+  match <- data_frame(a = kk$nn.index[mask, 1], b = kpf_b_idx_vec[mask]) %>%
+    na.omit()
 
   avec <- if (dim(kpf_a)[1]/dim(centers_a)[1] == 2) rbind(centers_a, centers_a) else centers_a
   bvec <- if (dim(kpf_b)[1]/dim(centers_b)[1] == 2) rbind(centers_b, centers_b) else centers_b
@@ -200,11 +201,16 @@ knn_points <- function(kpf_a, kpf_b, centers_a, centers_b, n = 2, ratio = .8, sh
   p1 <- as.matrix(avec[match$a, ])
   p2 <- as.matrix(bvec[match$b, ])
 
+  p1na <- rowSums(is.na(p1)) > 0
+  p2na <- rowSums(is.na(p2)) > 0
+
+  includepts <- (!p1na & !p2na)
+
   if (show_plot) {
     graphics::plot(kk$nn.dist[, 1], kk$nn.dis[, 2], pch = ".")
     graphics::points(kk$nn.dist[mask, 1], kk$nn.dis[mask, 2], pch = "o", col = "red")
   }
-  return(list(points_a = p1, points_b = p2))
+  return(list(points_a = p1[includepts,], points_b = p2[includepts,]))
 }
 
 #' Estimate homography from points in P to points in p
