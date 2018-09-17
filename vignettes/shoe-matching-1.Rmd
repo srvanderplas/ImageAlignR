@@ -1,5 +1,5 @@
 ---
-title: "Shoe Matching"
+title: "Shoe Matching - Nike"
 author: "Susan VanderPlas"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -42,11 +42,11 @@ clean_shoe_img <- function(im) {
     crop.bbox(im, im_bbox) %>%
       grayscale() %>%
       map_halfimg(fun = autocrop) %>%
-      crop.borders(nx = 5, ny = 5) %>%
+      crop.borders(nx = 10, ny = 5) %>%
       autocrop() %>%
       threshold() %>%
-      shrink(3) %>%
-      grow(3) %>%
+      shrink(5) %>%
+      grow(5) %>%
       autocrop() %>%
       # img_rotate_refit() %>%
       # magrittr::extract2("img") %>%
