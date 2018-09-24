@@ -119,12 +119,17 @@
 <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="st">  </span><span class="kw">list.files</span>(<span class="dt">full.names =</span> T) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1-3" data-line-number="3"><span class="st">  </span><span class="kw">sort</span>()</a>
 <a class="sourceLine" id="cb1-4" data-line-number="4"></a>
+<<<<<<< HEAD
 <a class="sourceLine" id="cb1-5" data-line-number="5">clean_shoe_img &lt;-<span class="st"> </span><span class="cf">function</span>(im, <span class="dt">ylim =</span> <span class="dv">3500</span>) {</a>
+=======
+<a class="sourceLine" id="cb1-5" data-line-number="5">clean_shoe_img &lt;-<span class="st"> </span><span class="cf">function</span>(im) {</a>
+>>>>>>> 59d78765917e9ded1c154f88ebe6f4e6f2c12bed
 <a class="sourceLine" id="cb1-6" data-line-number="6">  img &lt;-<span class="st"> </span>im <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1-7" data-line-number="7"><span class="st">    </span><span class="kw">crop.borders</span>(<span class="dt">nPix =</span> <span class="dv">170</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1-8" data-line-number="8"><span class="st">    </span><span class="kw">grayscale</span>() <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1-9" data-line-number="9"><span class="st">    </span><span class="kw">threshold</span>() <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1-10" data-line-number="10"><span class="st">    </span><span class="kw">clean</span>(<span class="dv">5</span>) <span class="op">%&gt;%</span></a>
+<<<<<<< HEAD
 <a class="sourceLine" id="cb1-11" data-line-number="11"><span class="st">    </span><span class="kw">autocrop</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb1-12" data-line-number="12"><span class="st">    </span><span class="kw">crop.bbox</span>(., <span class="kw">Yc</span>(.) <span class="op">&lt;</span><span class="st"> </span>ylim) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb1-13" data-line-number="13"><span class="st">    </span><span class="kw">autocrop</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -134,6 +139,17 @@
 <a class="sourceLine" id="cb1-17" data-line-number="17">}</a>
 <a class="sourceLine" id="cb1-18" data-line-number="18"></a>
 <a class="sourceLine" id="cb1-19" data-line-number="19">imgs &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map2">map2</a></span>(imlinks[<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>], <span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">3500</span>, <span class="dv">6</span>), <span class="dv">3750</span>, <span class="dv">3500</span>), <span class="cf">function</span>(x, y) <span class="kw">load.image</span>(x) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">clean_shoe_img</span>(<span class="dt">ylim =</span> y)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.imlist</span>()</a></code></pre></div>
+=======
+<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="st">    </span><span class="kw">autocrop</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="st">    </span><span class="kw">pad</span>(<span class="dv">20</span>, <span class="dt">axes =</span> <span class="st">"xy"</span>, <span class="dt">val =</span> <span class="kw">max</span>(.))</a>
+<a class="sourceLine" id="cb1-13" data-line-number="13">  <span class="co"># plot(img)</span></a>
+<a class="sourceLine" id="cb1-14" data-line-number="14">  img</a>
+<a class="sourceLine" id="cb1-15" data-line-number="15">}</a>
+<a class="sourceLine" id="cb1-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb1-17" data-line-number="17">imgs_orig &lt;-<span class="st"> </span><span class="kw">lapply</span>(imlinks[<span class="dv">9</span><span class="op">:</span><span class="dv">16</span>], load.image) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.imlist</span>()</a>
+<a class="sourceLine" id="cb1-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb1-19" data-line-number="19">imgs &lt;-<span class="st"> </span><span class="kw">lapply</span>(imgs_orig, clean_shoe_img) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.imlist</span>()</a></code></pre></div>
+>>>>>>> 59d78765917e9ded1c154f88ebe6f4e6f2c12bed
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">plot</span>(imgs)</a></code></pre></div>
 <div class="figure">
 <img src="shoe-surf-2_files/figure-html/unnamed-chunk-1-1.png" alt="Shoeprint images" width="480"><p class="caption">
