@@ -106,7 +106,7 @@
       <h1>Keypoint Alignment</h1>
                         <h4 class="author">Susan VanderPlas</h4>
             
-            <h4 class="date">2018-09-17</h4>
+            <h4 class="date">2018-09-24</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/srvanderplas/ImageAlignR/blob/master/vignettes/keypoint-alignment.Rmd"><code>vignettes/keypoint-alignment.Rmd</code></a></small>
       <div class="hidden name"><code>keypoint-alignment.Rmd</code></div>
@@ -117,60 +117,60 @@
     
 <p>The R code underlying the functions in this vignette were borrowed with permission from Vinces Gaitan’s blog post: <a href="https://www.kaggle.com/vicensgaitan/image-registration-the-r-way/notebook" class="uri">https://www.kaggle.com/vicensgaitan/image-registration-the-r-way/notebook</a></p>
 <p>I have modified the code where necessary in order to make it more pipeline-friendly and function oriented.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">imlinks &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="dt">package =</span> <span class="st">"ShoeSampleData"</span>, <span class="st">"extdata/"</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">list.files</span>(<span class="dt">pattern =</span> <span class="st">"036285L"</span>, <span class="dt">full.names =</span> T) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">sort</span>()
-
-clean_shoe_img &lt;-<span class="st"> </span><span class="cf">function</span>(im) {
-  <span class="kw">suppressMessages</span>({
-    im_bbox &lt;-<span class="st"> </span>im <span class="op">%&gt;%</span>
-<span class="st">      </span><span class="kw">imsplit</span>(<span class="dt">axis =</span> <span class="st">"c"</span>) <span class="op">%&gt;%</span>
-<span class="st">      </span>(<span class="cf">function</span>(x) <span class="kw">is.finite</span>((x[[<span class="dv">1</span>]] <span class="op">+</span><span class="st"> </span>x[[<span class="dv">2</span>]]) <span class="op">/</span><span class="st"> </span>x[[<span class="dv">3</span>]])) <span class="op">%&gt;%</span>
-<span class="st">      </span><span class="kw">as.cimg</span>() <span class="op">%&gt;%</span>
-<span class="st">      </span>(<span class="cf">function</span>(x) x <span class="op">==</span><span class="st"> </span><span class="dv">1</span>)
-
-    <span class="kw">crop.bbox</span>(im, im_bbox) <span class="op">%&gt;%</span>
-<span class="st">      </span><span class="kw">grayscale</span>() <span class="op">%&gt;%</span>
-<span class="st">      </span><span class="kw"><a href="../reference/map_halfimg.html">map_halfimg</a></span>(<span class="dt">fun =</span> autocrop) <span class="op">%&gt;%</span>
-<span class="st">      </span><span class="kw">crop.borders</span>(<span class="dt">nx =</span> <span class="dv">5</span>, <span class="dt">ny =</span> <span class="dv">5</span>) <span class="op">%&gt;%</span>
-<span class="st">      </span><span class="kw">autocrop</span>() <span class="op">%&gt;%</span>
-<span class="st">      </span><span class="kw">threshold</span>() <span class="op">%&gt;%</span>
-<span class="st">      </span><span class="kw">shrink</span>(<span class="dv">3</span>) <span class="op">%&gt;%</span>
-<span class="st">      </span><span class="kw">grow</span>(<span class="dv">3</span>) <span class="op">%&gt;%</span>
-<span class="st">      </span><span class="kw">autocrop</span>() <span class="op">%&gt;%</span>
-<span class="st">      </span><span class="co"># img_rotate_refit() %&gt;%</span>
-<span class="st">      </span><span class="co"># magrittr::extract2("img") %&gt;%</span>
-<span class="st">      </span><span class="kw">grayscale</span>()
-  })
-}
-
-img_a &lt;-<span class="st"> </span><span class="kw">load.image</span>(imlinks[<span class="dv">1</span>]) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">clean_shoe_img</span>()
-img_b &lt;-<span class="st"> </span><span class="kw">load.image</span>(imlinks[<span class="dv">2</span>]) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">clean_shoe_img</span>()
-<span class="kw">plot</span>(<span class="kw">imlist</span>(img_a, img_b))</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">imlinks &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="dt">package =</span> <span class="st">"ShoeSampleData"</span>, <span class="st">"extdata/"</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="st">  </span><span class="kw">list.files</span>(<span class="dt">pattern =</span> <span class="st">"036285L"</span>, <span class="dt">full.names =</span> T) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="st">  </span><span class="kw">sort</span>()</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">clean_shoe_img &lt;-<span class="st"> </span><span class="cf">function</span>(im) {</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">  <span class="kw">suppressMessages</span>({</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">    im_bbox &lt;-<span class="st"> </span>im <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="st">      </span><span class="kw">imsplit</span>(<span class="dt">axis =</span> <span class="st">"c"</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="st">      </span>(<span class="cf">function</span>(x) <span class="kw">is.finite</span>((x[[<span class="dv">1</span>]] <span class="op">+</span><span class="st"> </span>x[[<span class="dv">2</span>]]) <span class="op">/</span><span class="st"> </span>x[[<span class="dv">3</span>]])) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="st">      </span><span class="kw">as.cimg</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="st">      </span>(<span class="cf">function</span>(x) x <span class="op">==</span><span class="st"> </span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb1-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb1-13" data-line-number="13">    <span class="kw">crop.bbox</span>(im, im_bbox) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-14" data-line-number="14"><span class="st">      </span><span class="kw">grayscale</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-15" data-line-number="15"><span class="st">      </span><span class="kw"><a href="../reference/map_halfimg.html">map_halfimg</a></span>(<span class="dt">fun =</span> autocrop) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-16" data-line-number="16"><span class="st">      </span><span class="kw">crop.borders</span>(<span class="dt">nx =</span> <span class="dv">5</span>, <span class="dt">ny =</span> <span class="dv">5</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-17" data-line-number="17"><span class="st">      </span><span class="kw">autocrop</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-18" data-line-number="18"><span class="st">      </span><span class="kw">threshold</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-19" data-line-number="19"><span class="st">      </span><span class="kw">shrink</span>(<span class="dv">3</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-20" data-line-number="20"><span class="st">      </span><span class="kw">grow</span>(<span class="dv">3</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-21" data-line-number="21"><span class="st">      </span><span class="kw">autocrop</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-22" data-line-number="22"><span class="st">      </span><span class="co"># img_rotate_refit() %&gt;%</span></a>
+<a class="sourceLine" id="cb1-23" data-line-number="23"><span class="st">      </span><span class="co"># magrittr::extract2("img") %&gt;%</span></a>
+<a class="sourceLine" id="cb1-24" data-line-number="24"><span class="st">      </span><span class="kw">grayscale</span>()</a>
+<a class="sourceLine" id="cb1-25" data-line-number="25">  })</a>
+<a class="sourceLine" id="cb1-26" data-line-number="26">}</a>
+<a class="sourceLine" id="cb1-27" data-line-number="27"></a>
+<a class="sourceLine" id="cb1-28" data-line-number="28">img_a &lt;-<span class="st"> </span><span class="kw">load.image</span>(imlinks[<span class="dv">1</span>]) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">clean_shoe_img</span>()</a>
+<a class="sourceLine" id="cb1-29" data-line-number="29">img_b &lt;-<span class="st"> </span><span class="kw">load.image</span>(imlinks[<span class="dv">2</span>]) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">clean_shoe_img</span>()</a>
+<a class="sourceLine" id="cb1-30" data-line-number="30"><span class="kw">plot</span>(<span class="kw">imlist</span>(img_a, img_b))</a></code></pre></div>
 <div class="figure">
 <img src="keypoint-alignment_files/figure-html/img-setup-1.png" alt="Image which will be used throughout this tutorial" width="480"><p class="caption">
 Image which will be used throughout this tutorial
 </p>
 </div>
 <p>We need to pad image a so that it is the same size as image b:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(img_a)
-<span class="co"># [1] 1179 3847    1    1</span>
-<span class="kw">dim</span>(img_b)
-<span class="co"># [1] 1196 3860    1    1</span>
-pad_size &lt;-<span class="st"> </span><span class="kw">dim</span>(img_b) <span class="op">-</span><span class="st"> </span><span class="kw">dim</span>(img_a)
-img_a &lt;-<span class="st"> </span><span class="kw">pad</span>(img_a, <span class="dt">nPix =</span> pad_size[<span class="dv">1</span>], <span class="dt">axes =</span> <span class="st">"x"</span>, <span class="dt">pos =</span> <span class="dv">1</span>, <span class="dt">val =</span> <span class="kw">max</span>(img_a)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">pad</span>(<span class="dt">nPix =</span> pad_size[<span class="dv">2</span>], <span class="dt">axes =</span> <span class="st">"y"</span>, <span class="dt">pos =</span> <span class="dv">1</span>, <span class="dt">val =</span> <span class="kw">max</span>(img_a))</code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">dim</span>(img_a)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co"># [1] 1179 3847    1    1</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">dim</span>(img_b)</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co"># [1] 1196 3860    1    1</span></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">pad_size &lt;-<span class="st"> </span><span class="kw">dim</span>(img_b) <span class="op">-</span><span class="st"> </span><span class="kw">dim</span>(img_a)</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">img_a &lt;-<span class="st"> </span><span class="kw">pad</span>(img_a, <span class="dt">nPix =</span> pad_size[<span class="dv">1</span>], <span class="dt">axes =</span> <span class="st">"x"</span>, <span class="dt">pos =</span> <span class="dv">1</span>, <span class="dt">val =</span> <span class="kw">max</span>(img_a)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="st">  </span><span class="kw">pad</span>(<span class="dt">nPix =</span> pad_size[<span class="dv">2</span>], <span class="dt">axes =</span> <span class="st">"y"</span>, <span class="dt">pos =</span> <span class="dv">1</span>, <span class="dt">val =</span> <span class="kw">max</span>(img_a))</a></code></pre></div>
 <p>We can then overlay the two images to see how far apart they are:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(img_a <span class="op">+</span><span class="st"> </span>img_b)</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">plot</span>(img_a <span class="op">+</span><span class="st"> </span>img_b)</a></code></pre></div>
 <p><img src="keypoint-alignment_files/figure-html/img-overlay-1.png" width="480"></p>
 <div id="step-1-keypoint-detection" class="section level2">
 <h2 class="hasAnchor">
 <a href="#step-1-keypoint-detection" class="anchor"></a>Step 1: Keypoint Detection</h2>
 <p>The Harris corner detection algorithm has high values (light pixels) in areas where there are well-defined corners in the image.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hkp &lt;-<span class="st"> </span>img_a <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw"><a href="../reference/harris_corners.html">harris_corners</a></span>(<span class="dt">sigma =</span> <span class="dv">6</span>)
-
-<span class="kw">plot</span>(hkp)</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">hkp &lt;-<span class="st"> </span>img_a <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="../reference/harris_corners.html">harris_corners</a></span>(<span class="dt">sigma =</span> <span class="dv">6</span>)</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="kw">plot</span>(hkp)</a></code></pre></div>
 <div class="figure">
 <img src="keypoint-alignment_files/figure-html/unnamed-chunk-2-1.png" alt="Harris corner detector values for the shoeprint image" width="480"><p class="caption">
 Harris corner detector values for the shoeprint image
@@ -178,22 +178,22 @@ Harris corner detector values for the shoeprint image
 </div>
 <p>The detector seems to be working fairly well, outlining major features of the shoe print.</p>
 <p>Thresholding the image from the previous step at 99% produces the best 1% of keypoints:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hkp_threshold &lt;-<span class="st"> </span>hkp <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">threshold</span>(<span class="st">"99%"</span>)
-hkp_threshold <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">plot</span>()</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">hkp_threshold &lt;-<span class="st"> </span>hkp <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">threshold</span>(<span class="st">"99%"</span>)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">hkp_threshold <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">plot</span>()</a></code></pre></div>
 <p><img src="keypoint-alignment_files/figure-html/unnamed-chunk-3-1.png" width="480"></p>
 <p>The regions are labeled, and region centers are computed for each separately labeled region</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keypoints &lt;-<span class="st"> </span>hkp_threshold <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">label</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/region_centers.html">region_centers</a></span>(<span class="dt">bord =</span> <span class="dv">30</span>)
-
-<span class="kw">plot</span>(img_a)
-<span class="kw">points</span>(keypoints<span class="op">$</span>mx, keypoints<span class="op">$</span>my, <span class="dt">col =</span> <span class="st">"red"</span>)</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">keypoints &lt;-<span class="st"> </span>hkp_threshold <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">label</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/region_centers.html">region_centers</a></span>(<span class="dt">bord =</span> <span class="dv">30</span>)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="kw">plot</span>(img_a)</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="kw">points</span>(keypoints<span class="op">$</span>mx, keypoints<span class="op">$</span>my, <span class="dt">col =</span> <span class="st">"red"</span>)</a></code></pre></div>
 <p><img src="keypoint-alignment_files/figure-html/unnamed-chunk-4-1.png" width="480"></p>
 <div id="streamlined-version" class="section level3">
 <h3 class="hasAnchor">
 <a href="#streamlined-version" class="anchor"></a>Streamlined version</h3>
 <p>The first two steps can be streamlined using the <code><a href="../reference/harris_keypoints.html">harris_keypoints()</a></code> function:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hkp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/harris_keypoints.html">harris_keypoints</a></span>(img_a, <span class="dt">sigma =</span> <span class="dv">6</span>)
-<span class="kw">plot</span>(img_a)
-<span class="kw">points</span>(hkp<span class="op">$</span>centers<span class="op">$</span>mx, hkp<span class="op">$</span>centers<span class="op">$</span>my, <span class="dt">col =</span> <span class="st">"red"</span>)</code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">hkp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/harris_keypoints.html">harris_keypoints</a></span>(img_a, <span class="dt">sigma =</span> <span class="dv">6</span>)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw">plot</span>(img_a)</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="kw">points</span>(hkp<span class="op">$</span>centers<span class="op">$</span>mx, hkp<span class="op">$</span>centers<span class="op">$</span>my, <span class="dt">col =</span> <span class="st">"red"</span>)</a></code></pre></div>
 <p><img src="keypoint-alignment_files/figure-html/unnamed-chunk-5-1.png" width="480"></p>
 </div>
 </div>
@@ -201,76 +201,76 @@ hkp_threshold <span class="op">%&gt;%</span><span class="st"> </span><span class
 <h2 class="hasAnchor">
 <a href="#step-2-image-orientation" class="anchor"></a>Step 2: Image Orientation</h2>
 <p>Calculating the dominant orientations for the whole image produces:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">angles &lt;-<span class="st"> </span>img_a <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/oriented_gradients.html">oriented_gradients</a></span>(<span class="dt">sigma =</span> <span class="dv">3</span>)</code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">angles &lt;-<span class="st"> </span>img_a <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/oriented_gradients.html">oriented_gradients</a></span>(<span class="dt">sigma =</span> <span class="dv">3</span>)</a></code></pre></div>
 <p><img src="keypoint-alignment_files/figure-html/unnamed-chunk-6-1.png" width="480"></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">angles
-<span class="co"># [1]  0 45</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">angles</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co"># [1]  0 45</span></a></code></pre></div>
 </div>
 <div id="step-3-feature-detection" class="section level2">
 <h2 class="hasAnchor">
 <a href="#step-3-feature-detection" class="anchor"></a>Step 3: Feature Detection</h2>
 <p>For each angle, we pull features from a 40x40 area around the keypoint. These features will be used to identify points of similarity across the two images.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hkp_a &lt;-<span class="st"> </span><span class="kw"><a href="../reference/harris_keypoints.html">harris_keypoints</a></span>(img_a, <span class="dt">sigma =</span> <span class="dv">6</span>)
-hkp_b &lt;-<span class="st"> </span><span class="kw"><a href="../reference/harris_keypoints.html">harris_keypoints</a></span>(img_b, <span class="dt">sigma =</span> <span class="dv">6</span>)
-
-angles_a &lt;-<span class="st"> </span>img_a <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/oriented_gradients.html">oriented_gradients</a></span>(<span class="dt">sigma =</span> <span class="dv">3</span>)</code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">hkp_a &lt;-<span class="st"> </span><span class="kw"><a href="../reference/harris_keypoints.html">harris_keypoints</a></span>(img_a, <span class="dt">sigma =</span> <span class="dv">6</span>)</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">hkp_b &lt;-<span class="st"> </span><span class="kw"><a href="../reference/harris_keypoints.html">harris_keypoints</a></span>(img_b, <span class="dt">sigma =</span> <span class="dv">6</span>)</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4">angles_a &lt;-<span class="st"> </span>img_a <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/oriented_gradients.html">oriented_gradients</a></span>(<span class="dt">sigma =</span> <span class="dv">3</span>)</a></code></pre></div>
 <p><img src="keypoint-alignment_files/figure-html/harris-keypoint-features-1.png" width="480"></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">angles_b &lt;-<span class="st"> </span>img_b <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/oriented_gradients.html">oriented_gradients</a></span>(<span class="dt">sigma =</span> <span class="dv">3</span>)</code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">angles_b &lt;-<span class="st"> </span>img_b <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/oriented_gradients.html">oriented_gradients</a></span>(<span class="dt">sigma =</span> <span class="dv">3</span>)</a></code></pre></div>
 <p><img src="keypoint-alignment_files/figure-html/harris-keypoint-features-2.png" width="480"></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
-get_kpf &lt;-<span class="st"> </span><span class="cf">function</span>(angles, hkp, im) {
-  kpa &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">angle =</span> angles, <span class="dt">v =</span> <span class="kw">list</span>(hkp<span class="op">$</span>centers)) <span class="op">%&gt;%</span>
-<span class="st">    </span>tidyr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/tidyr/topics/unnest">unnest</a></span>(v) <span class="op">%&gt;%</span>
-<span class="st">    </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">rename</a></span>(<span class="dt">theta =</span> angle, <span class="dt">x =</span> mx, <span class="dt">y =</span> my) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">idx =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">n</span>()) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span>
-<span class="st">    </span>tidyr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/tidyr/topics/nest">nest</a></span>(<span class="op">-</span>theta, <span class="op">-</span>idx, <span class="dt">.key =</span> <span class="st">"v"</span>) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">select</span>(<span class="op">-</span>idx)
-  purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map2">pmap</a></span>(<span class="kw">list</span>(<span class="dt">theta =</span> kpa<span class="op">$</span>theta, <span class="dt">v =</span> kpa<span class="op">$</span>v), descriptor_orientation, <span class="dt">im =</span> <span class="kw">grayscale</span>(im)) <span class="op">%&gt;%</span>
-<span class="st">    </span><span class="kw">do.call</span>(<span class="st">"rbind"</span>, .)
-}
-
-kpf_a &lt;-<span class="st"> </span><span class="kw">get_kpf</span>(angles_a, hkp_a, img_a)
-<span class="co"># Warning in grayscale(im): Image appears to already be in grayscale mode</span>
-kpf_b &lt;-<span class="st"> </span><span class="kw">get_kpf</span>(angles_b, hkp_b, img_b)
-<span class="co"># Warning in grayscale(im): Image appears to already be in grayscale mode</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">get_kpf &lt;-<span class="st"> </span><span class="cf">function</span>(angles, hkp, im) {</a>
+<a class="sourceLine" id="cb12-3" data-line-number="3">  kpa &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">angle =</span> angles, <span class="dt">v =</span> <span class="kw">list</span>(hkp<span class="op">$</span>centers)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="st">    </span>tidyr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/tidyr/topics/unnest">unnest</a></span>(v) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="st">    </span>dplyr<span class="op">::</span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">rename</a></span>(<span class="dt">theta =</span> angle, <span class="dt">x =</span> mx, <span class="dt">y =</span> my) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">idx =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">n</span>()) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="st">    </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="st">    </span>tidyr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/tidyr/topics/nest">nest</a></span>(<span class="op">-</span>theta, <span class="op">-</span>idx, <span class="dt">.key =</span> <span class="st">"v"</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb12-9" data-line-number="9"><span class="st">    </span><span class="kw">select</span>(<span class="op">-</span>idx)</a>
+<a class="sourceLine" id="cb12-10" data-line-number="10">  purrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/purrr/topics/map2">pmap</a></span>(<span class="kw">list</span>(<span class="dt">theta =</span> kpa<span class="op">$</span>theta, <span class="dt">v =</span> kpa<span class="op">$</span>v), descriptor_orientation, <span class="dt">im =</span> <span class="kw">grayscale</span>(im)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="st">    </span><span class="kw">do.call</span>(<span class="st">"rbind"</span>, .)</a>
+<a class="sourceLine" id="cb12-12" data-line-number="12">}</a>
+<a class="sourceLine" id="cb12-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb12-14" data-line-number="14">kpf_a &lt;-<span class="st"> </span><span class="kw">get_kpf</span>(angles_a, hkp_a, img_a)</a>
+<a class="sourceLine" id="cb12-15" data-line-number="15"><span class="co"># Warning in grayscale(im): Image appears to already be in grayscale mode</span></a>
+<a class="sourceLine" id="cb12-16" data-line-number="16">kpf_b &lt;-<span class="st"> </span><span class="kw">get_kpf</span>(angles_b, hkp_b, img_b)</a>
+<a class="sourceLine" id="cb12-17" data-line-number="17"><span class="co"># Warning in grayscale(im): Image appears to already be in grayscale mode</span></a></code></pre></div>
 </div>
 <div id="step-4-match-points" class="section level2">
 <h2 class="hasAnchor">
 <a href="#step-4-match-points" class="anchor"></a>Step 4: Match points</h2>
 <p>Match points are calculated using the K nearest neighbors algorithm, combined with some thresholding by distance.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">match_points &lt;-<span class="st"> </span><span class="kw"><a href="../reference/knn_points.html">knn_points</a></span>(kpf_a, kpf_b, hkp_a<span class="op">$</span>centers, hkp_b<span class="op">$</span>centers, <span class="dt">show_plot =</span> T)</code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">match_points &lt;-<span class="st"> </span><span class="kw"><a href="../reference/knn_points.html">knn_points</a></span>(kpf_a, kpf_b, hkp_a<span class="op">$</span>centers, hkp_b<span class="op">$</span>centers, <span class="dt">show_plot =</span> T)</a></code></pre></div>
 <p><img src="keypoint-alignment_files/figure-html/keypoint-knn-1.png" width="480"></p>
 </div>
 <div id="step-5-ransac" class="section level2">
 <h2 class="hasAnchor">
 <a href="#step-5-ransac" class="anchor"></a>Step 5: RANSAC</h2>
 <p>RANSAC is then used to find points that have similar homography.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ransac_points &lt;-<span class="st"> </span><span class="kw"><a href="../reference/ransac.html">ransac</a></span>(match_points<span class="op">$</span>points_a, match_points<span class="op">$</span>points_b)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))
-
-<span class="kw">plot</span>(img_a)
-hkp_a<span class="op">$</span>centers <span class="op">%$%</span><span class="st"> </span><span class="kw">points</span>(mx, my, <span class="dt">col =</span> <span class="st">"orange"</span>)
-<span class="kw">points</span>(match_points<span class="op">$</span>points_a[ransac_points<span class="op">$</span>inliers, ], <span class="dt">col =</span> <span class="st">"purple"</span>, <span class="dt">pch =</span> <span class="dv">16</span>)
-<span class="kw">plot</span>(img_b)
-hkp_b<span class="op">$</span>centers <span class="op">%$%</span><span class="st"> </span><span class="kw">points</span>(mx, my, <span class="dt">col =</span> <span class="st">"orange"</span>)
-<span class="kw">points</span>(match_points<span class="op">$</span>points_b[ransac_points<span class="op">$</span>inliers, ], <span class="dt">col =</span> <span class="st">"purple"</span>, <span class="dt">pch =</span> <span class="dv">16</span>)</code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">ransac_points &lt;-<span class="st"> </span><span class="kw"><a href="../reference/ransac.html">ransac</a></span>(match_points<span class="op">$</span>points_a, match_points<span class="op">$</span>points_b)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="kw">plot</span>(img_a)</a>
+<a class="sourceLine" id="cb15-4" data-line-number="4">hkp_a<span class="op">$</span>centers <span class="op">%$%</span><span class="st"> </span><span class="kw">points</span>(mx, my, <span class="dt">col =</span> <span class="st">"orange"</span>)</a>
+<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="kw">points</span>(match_points<span class="op">$</span>points_a[ransac_points<span class="op">$</span>inliers, ], <span class="dt">col =</span> <span class="st">"purple"</span>, <span class="dt">pch =</span> <span class="dv">16</span>)</a>
+<a class="sourceLine" id="cb15-6" data-line-number="6"><span class="kw">plot</span>(img_b)</a>
+<a class="sourceLine" id="cb15-7" data-line-number="7">hkp_b<span class="op">$</span>centers <span class="op">%$%</span><span class="st"> </span><span class="kw">points</span>(mx, my, <span class="dt">col =</span> <span class="st">"orange"</span>)</a>
+<a class="sourceLine" id="cb15-8" data-line-number="8"><span class="kw">points</span>(match_points<span class="op">$</span>points_b[ransac_points<span class="op">$</span>inliers, ], <span class="dt">col =</span> <span class="st">"purple"</span>, <span class="dt">pch =</span> <span class="dv">16</span>)</a></code></pre></div>
 <p><img src="keypoint-alignment_files/figure-html/ransac-plot-1.png" width="480"></p>
 </div>
 <div id="step-6-image-warping" class="section level2">
 <h2 class="hasAnchor">
 <a href="#step-6-image-warping" class="anchor"></a>Step 6: Image Warping</h2>
 <p>The homography can be used to warp one image onto the other:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">map_fcn &lt;-<span class="st"> </span><span class="kw"><a href="../reference/map_affine_gen.html">map_affine_gen</a></span>(ransac_points<span class="op">$</span>homography)
-
-img_a_warp &lt;-<span class="st"> </span><span class="kw">imwarp</span>(img_a, map_fcn, <span class="dt">direction =</span> <span class="st">"backward"</span>, <span class="dt">boundary =</span> <span class="st">"neumann"</span>)
-
-<span class="kw">plot</span>(img_a_warp)</code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">map_fcn &lt;-<span class="st"> </span><span class="kw"><a href="../reference/map_affine_gen.html">map_affine_gen</a></span>(ransac_points<span class="op">$</span>homography)</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb16-3" data-line-number="3">img_a_warp &lt;-<span class="st"> </span><span class="kw">imwarp</span>(img_a, map_fcn, <span class="dt">direction =</span> <span class="st">"backward"</span>, <span class="dt">boundary =</span> <span class="st">"neumann"</span>)</a>
+<a class="sourceLine" id="cb16-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="kw">plot</span>(img_a_warp)</a></code></pre></div>
 <p><img src="keypoint-alignment_files/figure-html/homography-solve-1.png" width="480"></p>
 <p>We can then overlay the two images:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">blank_channel &lt;-<span class="st"> </span><span class="kw">as.cimg</span>(img_b <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;</span><span class="st"> </span>img_a_warp <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)
-overlaid_images &lt;-<span class="st"> </span><span class="kw">imappend</span>(<span class="kw">imlist</span>(img_a_warp, blank_channel, img_b), <span class="dt">axis =</span> <span class="st">"c"</span>)
-<span class="kw">plot</span>(overlaid_images)</code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">blank_channel &lt;-<span class="st"> </span><span class="kw">as.cimg</span>(img_b <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;</span><span class="st"> </span>img_a_warp <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb17-2" data-line-number="2">overlaid_images &lt;-<span class="st"> </span><span class="kw">imappend</span>(<span class="kw">imlist</span>(img_a_warp, blank_channel, img_b), <span class="dt">axis =</span> <span class="st">"c"</span>)</a>
+<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="kw">plot</span>(overlaid_images)</a></code></pre></div>
 <p><img src="keypoint-alignment_files/figure-html/img-overlay-after-1.png" width="480"></p>
 <p>Areas that are in the first image only are shown in red; areas in the second image only are shown in blue. Areas in both images are shown in black.</p>
 </div>
