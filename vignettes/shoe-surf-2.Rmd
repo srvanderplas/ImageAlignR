@@ -31,21 +31,21 @@ imlinks <- system.file(package = "ShoeSampleData", "extdata/") %>%
   list.files(full.names = T) %>%
   sort()
 
-clean_shoe_img <- function(im) {
+clean_shoe_img <- function(im, ylim = 3500) {
   img <- im %>%
     crop.borders(nPix = 170) %>%
     grayscale() %>%
     threshold() %>%
     clean(5) %>%
-    autocrop() %>%
+    autocrop() %>% 
+    crop.bbox(., Yc(.) < ylim) %>%
+    autocrop() %>% 
     pad(20, axes = "xy", val = max(.))
   # plot(img)
   img
 }
 
-imgs_orig <- lapply(imlinks[9:16], load.image) %>% as.imlist()
-
-imgs <- lapply(imgs_orig, clean_shoe_img) %>% as.imlist()
+imgs <- purrr::map2(imlinks[1:8], c(rep(3500, 6), 3750, 3500), function(x, y) load.image(x) %>% clean_shoe_img(ylim = y)) %>% as.imlist()
 ```
 
 ```{r, width = 8, height = 7, fig.cap = "Shoeprint images"}
