@@ -5,8 +5,10 @@ date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Keypoint Alignment}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: inline
 ---
 
 ```{r setup, include = FALSE}
@@ -83,19 +85,22 @@ if (!"image.dlib" %in% installed.packages()) {
   devtools::install_github("bnosac/image/image.dlib")
 }
 library(image.dlib)
-# image_surf requires a bmp file... 
 
-get_surf <- function(im, n = 500) {
-  tmpbmp <- tempfile(fileext = ".bmp")
-  save.image(im, tmpbmp)
-  image_surf(tmpbmp, max_points = 500)
+get_surf <- function(im, ...) {
+  
+  # browser()
+  # Need to change dimensions so that dim1 = rgb, dim2 = width, dim3 = height
+  # im_x <- aperm(im, c(3, 1, 2, 4))[,,,1]
+  im_x2 <- array(NA, dim = c(1, dim(im)[1:2]))
+  im_x2[1,,] <- t(im[,,1,1])
+  image_surf(x = im_x2, ...)
 }
 
-sp_a <- get_surf(img_a)
-sp_b <- get_surf(img_b)
+sp_a <- get_surf(img_a, max_points = 1000)
+sp_b <- get_surf(img_b, max_points = 1000)
 
-centers_a <- data_frame(mx = sp_a$x, my = sp_a$y)
-centers_b <- data_frame(mx = sp_b$x, my = sp_b$y)
+centers_a <- tibble(mx = sp_a$x, my = sp_a$y)
+centers_b <- tibble(mx = sp_b$x, my = sp_b$y)
 
 kpf_a <- sp_a$surf
 kpf_b <- sp_b$surf
