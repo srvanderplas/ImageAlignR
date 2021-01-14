@@ -4,8 +4,15 @@
 \alias{knn_points}
 \title{Get KNN for feature point matches}
 \usage{
-knn_points(kpf_a, kpf_b, centers_a, centers_b, n = 2, ratio = 0.8,
-  show_plot = F)
+knn_points(
+  kpf_a,
+  kpf_b,
+  centers_a,
+  centers_b,
+  n = 2,
+  ratio = 0.8,
+  show_plot = F
+)
 }
 \arguments{
 \item{kpf_a}{matrix of features for image a}

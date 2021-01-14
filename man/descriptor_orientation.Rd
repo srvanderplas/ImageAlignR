@@ -4,8 +4,7 @@
 \alias{descriptor_orientation}
 \title{Calculate orientation of keypoint descriptors}
 \usage{
-descriptor_orientation(im, stencil_ext = NULL, stencil = NULL, theta,
-  v)
+descriptor_orientation(im, stencil_ext = NULL, stencil = NULL, theta, v)
 }
 \arguments{
 \item{im}{image}

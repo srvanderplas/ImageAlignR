@@ -4,8 +4,13 @@
 \alias{thin_contour}
 \title{Thin outer contour by removing points overlappling radially from the centroid}
 \usage{
-thin_contour(contour, img = NULL, centroid = NULL, n_angles = 1800,
-  as_cimg = TRUE)
+thin_contour(
+  contour,
+  img = NULL,
+  centroid = NULL,
+  n_angles = 1800,
+  as_cimg = TRUE
+)
 }
 \arguments{
 \item{contour}{results from outer_contour}

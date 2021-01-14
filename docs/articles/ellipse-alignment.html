@@ -6,20 +6,21 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ellipse Alignment • ImageAlignR</title>
-<!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cerulean/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
 <link href="../docsearch.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Ellipse Alignment">
-<meta property="og:description" content="">
-<meta name="twitter:card" content="summary">
-<!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
+<meta property="og:description" content="ImageAlignR">
+<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -32,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ImageAlignR</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -40,7 +41,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -80,13 +81,13 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/srvanderplas/ImageAlignR">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="https://github.com/srvanderplas/ImageAlignR/">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
       </ul>
-<form class="navbar-form navbar-right" role="search">
+<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
         <div class="form-group">
           <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
@@ -100,13 +101,14 @@
 <!--/.navbar -->
 
       
-      </header><div class="row">
+
+      </header><script src="ellipse-alignment_files/header-attrs-2.6/header-attrs.js"></script><script src="ellipse-alignment_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Ellipse Alignment</h1>
+      <h1 data-toc-skip>Ellipse Alignment</h1>
                         <h4 class="author">Susan VanderPlas</h4>
             
-            <h4 class="date">2018-09-24</h4>
+            <h4 class="date">2021-01-14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/srvanderplas/ImageAlignR/blob/master/vignettes/ellipse-alignment.Rmd"><code>vignettes/ellipse-alignment.Rmd</code></a></small>
       <div class="hidden name"><code>ellipse-alignment.Rmd</code></div>
@@ -115,67 +117,100 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(imager)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(dplyr)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">library</span>(ImageAlignR)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="cf">if</span> (<span class="op">!</span><span class="st">"ShoeSampleData"</span> <span class="op">%in%</span><span class="st"> </span><span class="kw">installed.packages</span>()) {</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">  devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"srvanderplas/ShoeData"</span>)</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">}</a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb1-8" data-line-number="8">imlinks &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="dt">package =</span> <span class="st">"ShoeSampleData"</span>, <span class="st">"extdata/"</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="st">  </span><span class="kw">list.files</span>(<span class="dt">full.names =</span> T) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>()</a>
-<a class="sourceLine" id="cb1-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb1-11" data-line-number="11">img &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/imager/topics/load.image">load.image</a></span>(imlinks[<span class="dv">1</span>])</a>
-<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="kw">plot</span>(img)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(imager)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">library</span>(ImageAlignR)</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="cf">if</span> (<span class="op">!</span><span class="st">"ShoeSampleData"</span> <span class="op">%in%</span><span class="st"> </span><span class="kw">installed.packages</span>()) {</span>
+<span id="cb1-5"><a href="#cb1-5"></a>  devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">"srvanderplas/ShoeData"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6"></a>}</span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co">#   </span></span>
+<span id="cb1-8"><a href="#cb1-8"></a>   checking <span class="cf">for</span> file ‘<span class="op">/</span>tmp<span class="op">/</span>Rtmp8U7lXA<span class="op">/</span>remotes2264522c855e<span class="op">/</span>srvanderplas<span class="op">-</span>ShoeData<span class="op">-</span>6be7536<span class="op">/</span>DESCRIPTION’ ...</span>
+<span id="cb1-9"><a href="#cb1-9"></a>  </span>
+<span id="cb1-10"><a href="#cb1-10"></a>✓  checking <span class="cf">for</span> file ‘<span class="op">/</span>tmp<span class="op">/</span>Rtmp8U7lXA<span class="op">/</span>remotes2264522c855e<span class="op">/</span>srvanderplas<span class="op">-</span>ShoeData<span class="op">-</span>6be7536<span class="op">/</span>DESCRIPTION’</span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="co"># </span></span>
+<span id="cb1-12"><a href="#cb1-12"></a>  </span>
+<span id="cb1-13"><a href="#cb1-13"></a>─  preparing ‘ShoeSampleData’<span class="op">:</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="co"># </span></span>
+<span id="cb1-15"><a href="#cb1-15"></a><span class="st">  </span></span>
+<span id="cb1-16"><a href="#cb1-16"></a><span class="st">   </span>checking DESCRIPTION meta<span class="op">-</span>information ...</span>
+<span id="cb1-17"><a href="#cb1-17"></a>  </span>
+<span id="cb1-18"><a href="#cb1-18"></a>✓  checking DESCRIPTION meta<span class="op">-</span>information</span>
+<span id="cb1-19"><a href="#cb1-19"></a><span class="co"># </span></span>
+<span id="cb1-20"><a href="#cb1-20"></a>  </span>
+<span id="cb1-21"><a href="#cb1-21"></a>─  checking <span class="cf">for</span> LF line<span class="op">-</span>endings <span class="cf">in</span> source and make files and shell scripts</span>
+<span id="cb1-22"><a href="#cb1-22"></a><span class="co"># </span></span>
+<span id="cb1-23"><a href="#cb1-23"></a>  </span>
+<span id="cb1-24"><a href="#cb1-24"></a>─  checking <span class="cf">for</span> empty or unneeded directories</span>
+<span id="cb1-25"><a href="#cb1-25"></a><span class="co"># ─  building ‘ShoeSampleData_0.1.0.tar.gz’</span></span>
+<span id="cb1-26"><a href="#cb1-26"></a><span class="co"># </span></span>
+<span id="cb1-27"><a href="#cb1-27"></a>  </span>
+<span id="cb1-28"><a href="#cb1-28"></a>   </span>
+<span id="cb1-29"><a href="#cb1-29"></a><span class="co"># </span></span>
+<span id="cb1-30"><a href="#cb1-30"></a></span>
+<span id="cb1-31"><a href="#cb1-31"></a>imlinks &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="dt">package =</span> <span class="st">"ShoeSampleData"</span>, <span class="st">"extdata/"</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1-32"><a href="#cb1-32"></a><span class="st">  </span><span class="kw">list.files</span>(<span class="dt">full.names =</span> T) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sort</span>()</span>
+<span id="cb1-33"><a href="#cb1-33"></a></span>
+<span id="cb1-34"><a href="#cb1-34"></a>img &lt;-<span class="st"> </span><span class="kw">load.image</span>(imlinks[<span class="dv">1</span>])</span>
+<span id="cb1-35"><a href="#cb1-35"></a><span class="kw">plot</span>(img)</span></code></pre></div>
 <p><img src="ellipse-alignment_files/figure-html/unnamed-chunk-1-1.png" width="384"></p>
 <p>First, we must remove the border region. Noting that most of the border region is yellow or red, we can take the ratio of the red and green color channel values to the blue color channel value (I derived this via experimentation - there may be a better way). Once we have the bounding box of the “real” portion of the image, we can switch to grayscale, clean the image up a bit, and autocrop it.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">img_bbox &lt;-<span class="st"> </span>img <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/imager/topics/imsplit">imsplit</a></span>(<span class="dt">axis =</span> <span class="st">"c"</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="st">  </span>(<span class="cf">function</span>(x) <span class="kw">is.finite</span>((x[[<span class="dv">1</span>]] <span class="op">+</span><span class="st"> </span>x[[<span class="dv">2</span>]])<span class="op">/</span>x[[<span class="dv">3</span>]])) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/imager/topics/as.cimg">as.cimg</a></span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="st">  </span>(<span class="cf">function</span>(x) x <span class="op">==</span><span class="st"> </span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb2-8" data-line-number="8">img_bw &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/imager/topics/bbox">crop.bbox</a></span>(img, img_bbox) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/imager/topics/grayscale">grayscale</a></span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="st">  </span><span class="kw"><a href="../reference/map_halfimg.html">map_halfimg</a></span>(<span class="dt">fun =</span> autocrop) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2-11" data-line-number="11"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/imager/topics/crop.borders">crop.borders</a></span>(<span class="dt">nx =</span> <span class="dv">5</span>, <span class="dt">ny =</span> <span class="dv">5</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2-12" data-line-number="12"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/imager/topics/autocrop">autocrop</a></span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2-13" data-line-number="13"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/imager/topics/threshold">threshold</a></span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2-14" data-line-number="14"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/imager/topics/grow">shrink</a></span>(<span class="dv">3</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2-15" data-line-number="15"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/imager/topics/grow">grow</a></span>(<span class="dv">3</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2-16" data-line-number="16"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/imager/topics/autocrop">autocrop</a></span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2-17" data-line-number="17"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/imager/topics/colorise">colorise</a></span>(., <span class="kw"><a href="http://www.rdocumentation.org/packages/imager/topics/imcoord">Yc</a></span>(.) <span class="op">&gt;</span><span class="st"> </span><span class="dv">3500</span>, <span class="dv">1</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb2-18" data-line-number="18"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/imager/topics/autocrop">autocrop</a></span>()</a>
-<a class="sourceLine" id="cb2-19" data-line-number="19"></a>
-<a class="sourceLine" id="cb2-20" data-line-number="20"></a>
-<a class="sourceLine" id="cb2-21" data-line-number="21"><span class="kw">plot</span>(img_bw)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="va">img_bbox</span> <span class="op">&lt;-</span> <span class="va">img</span> <span class="op">%&gt;%</span>
+  <span class="fu">imsplit</span><span class="op">(</span>axis <span class="op">=</span> <span class="st">"c"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/is.finite.html">is.finite</a></span><span class="op">(</span><span class="op">(</span><span class="va">x</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span> <span class="va">x</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">/</span><span class="va">x</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">as.cimg</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span>
+
+<span class="va">img_bw</span> <span class="op">&lt;-</span> <span class="fu">crop.bbox</span><span class="op">(</span><span class="va">img</span>, <span class="va">img_bbox</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">grayscale</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/map_halfimg.html">map_halfimg</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="va">autocrop</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">crop.borders</span><span class="op">(</span>nx <span class="op">=</span> <span class="fl">5</span>, ny <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">autocrop</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">threshold</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">shrink</span><span class="op">(</span><span class="fl">3</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">grow</span><span class="op">(</span><span class="fl">3</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">autocrop</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">colorise</span><span class="op">(</span><span class="va">.</span>, <span class="fu">Yc</span><span class="op">(</span><span class="va">.</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">3500</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">autocrop</span><span class="op">(</span><span class="op">)</span>
+
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">img_bw</span><span class="op">)</span></code></pre></div>
 <p><img src="ellipse-alignment_files/figure-html/get-bbox-and-crop-1.png" width="384"></p>
 <p>Next, we identify the contour points as described in Gwo &amp; Wei (2016).</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">contour_points &lt;-<span class="st"> </span><span class="kw"><a href="../reference/outer_contour.html">outer_contour</a></span>(img_bw)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">contour_points_df &lt;-<span class="st"> </span><span class="kw"><a href="../reference/outer_contour.html">outer_contour</a></span>(img_bw, <span class="dt">as_cimg =</span> F)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">contour_points</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/outer_contour.html">outer_contour</a></span><span class="op">(</span><span class="va">img_bw</span><span class="op">)</span>
+<span class="co"># Warning: `data_frame()` is deprecated as of tibble 1.1.0.</span>
+<span class="co"># Please use `tibble()` instead.</span>
+<span class="co"># This warning is displayed once every 8 hours.</span>
+<span class="co"># Call `lifecycle::last_warnings()` to see where this warning was generated.</span>
+<span class="va">contour_points_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/outer_contour.html">outer_contour</a></span><span class="op">(</span><span class="va">img_bw</span>, as_cimg <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></code></pre></div>
 <p><img src="ellipse-alignment_files/figure-html/unnamed-chunk-2-1.png" width="384"></p>
 <p><img src="ellipse-alignment_files/figure-html/unnamed-chunk-4-1.png" width="384"></p>
 <p>These points are then thinned by eliminating any points whose radii from the image centroid overlap, leaving only the most distant points. (The plot below shows a more sparse set of points than those actually chosen, for visualization ease.)</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">reliable_contour_points &lt;-<span class="st"> </span>contour_points <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="../reference/thin_contour.html">thin_contour</a></span>(<span class="dt">img =</span> img_bw, <span class="dt">n_angles =</span> <span class="dv">100</span>, <span class="dt">as_cimg =</span> T)</a></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">plot</span>(img_bw)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="http://www.rdocumentation.org/packages/imager/topics/highlight">highlight</a></span>(contour_points, <span class="dt">col =</span> <span class="st">"orange"</span>)</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="kw">segments</span>(reliable_contour_points_df<span class="op">$</span>x, reliable_contour_points_df<span class="op">$</span>y, </a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">         centroid<span class="op">$</span>x1, centroid<span class="op">$</span>y1, <span class="dt">col =</span> <span class="st">"darkorchid1"</span>, <span class="dt">lwd =</span> <span class="fl">.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">reliable_contour_points</span> <span class="op">&lt;-</span> <span class="va">contour_points</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/thin_contour.html">thin_contour</a></span><span class="op">(</span>img <span class="op">=</span> <span class="va">img_bw</span>, n_angles <span class="op">=</span> <span class="fl">100</span>, as_cimg <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">img_bw</span><span class="op">)</span>
+<span class="fu">highlight</span><span class="op">(</span><span class="va">contour_points</span>, col <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/segments.html">segments</a></span><span class="op">(</span><span class="va">reliable_contour_points_df</span><span class="op">$</span><span class="va">x</span>, <span class="va">reliable_contour_points_df</span><span class="op">$</span><span class="va">y</span>, 
+         <span class="va">centroid</span><span class="op">$</span><span class="va">x1</span>, <span class="va">centroid</span><span class="op">$</span><span class="va">y1</span>, col <span class="op">=</span> <span class="st">"darkorchid1"</span>, lwd <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span></code></pre></div>
 <p><img src="ellipse-alignment_files/figure-html/unnamed-chunk-6-1.png" width="384"></p>
 <p>Once the contour of the shoe has been identified, it is possible to fit an ellipse to these points, creating a major and minor axis for the shoe.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">ellipse &lt;-<span class="st"> </span>reliable_contour_points <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="../reference/contour_ellipse_fit.html">contour_ellipse_fit</a></span>()</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">ellipse</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#    CenterX  CenterY    AxisA    AxisB    Angle</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co"># 1 565.7444 1437.147 490.1929 1586.868 179.8809</span></a></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">plot</span>(img_bw)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">reliable_contour_points <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/imager/topics/highlight">highlight</a></span>(<span class="dt">col =</span> <span class="st">"darkorchid1"</span>)</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="kw">points</span>(ellipse<span class="op">$</span>CenterX, ellipse<span class="op">$</span>CenterY, <span class="dt">col =</span> <span class="st">"orange"</span>, <span class="dt">cex =</span> <span class="fl">1.5</span>, <span class="dt">pch =</span> <span class="dv">16</span>)</a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="kw"><a href="../reference/ellipse_points.html">ellipse_points</a></span>(ellipse, <span class="dt">col =</span> <span class="st">"orange"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ellipse</span> <span class="op">&lt;-</span> <span class="va">reliable_contour_points</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/contour_ellipse_fit.html">contour_ellipse_fit</a></span><span class="op">(</span><span class="op">)</span>
+
+<span class="va">ellipse</span>
+<span class="co">#    CenterX  CenterY    AxisA    AxisB    Angle</span>
+<span class="co"># 1 565.7444 1437.147 490.1929 1586.868 179.8809</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">img_bw</span><span class="op">)</span>
+<span class="va">reliable_contour_points</span> <span class="op">%&gt;%</span>
+  <span class="fu">highlight</span><span class="op">(</span>col <span class="op">=</span> <span class="st">"darkorchid1"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="va">ellipse</span><span class="op">$</span><span class="va">CenterX</span>, <span class="va">ellipse</span><span class="op">$</span><span class="va">CenterY</span>, col <span class="op">=</span> <span class="st">"orange"</span>, cex <span class="op">=</span> <span class="fl">1.5</span>, pch <span class="op">=</span> <span class="fl">16</span><span class="op">)</span>
+<span class="fu"><a href="../reference/ellipse_points.html">ellipse_points</a></span><span class="op">(</span><span class="va">ellipse</span>, col <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span></code></pre></div>
 <p><img src="ellipse-alignment_files/figure-html/unnamed-chunk-9-1.png" width="384"></p>
 <p>Using the fitted ellipse, we can take the following steps:</p>
 <ol style="list-style-type: decimal">
@@ -183,51 +218,56 @@
 <li>Re-fit the ellipse to the rotated shoe</li>
 <li>Use the minor axis of the re-fitted ellipse to split the shoe into two regions - physically, into toe and heel.</li>
 </ol>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">angle &lt;-<span class="st"> </span>ellipse<span class="op">$</span>Angle</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="cf">if</span> (angle <span class="op">&gt;</span><span class="st"> </span><span class="dv">90</span>) {</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">  angle &lt;-<span class="st"> </span>angle <span class="op">-</span><span class="st"> </span><span class="dv">180</span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">} <span class="cf">else</span> <span class="cf">if</span> (angle <span class="op">&gt;</span><span class="st"> </span><span class="dv">45</span>) {</a>
-<a class="sourceLine" id="cb8-5" data-line-number="5">  angle &lt;-<span class="st"> </span>angle <span class="op">-</span><span class="st"> </span><span class="dv">90</span></a>
-<a class="sourceLine" id="cb8-6" data-line-number="6">} <span class="cf">else</span> <span class="cf">if</span> (angle <span class="op">&gt;</span><span class="st"> </span><span class="dv">-45</span>) {</a>
-<a class="sourceLine" id="cb8-7" data-line-number="7">  angle &lt;-<span class="st"> </span>angle</a>
-<a class="sourceLine" id="cb8-8" data-line-number="8">} <span class="cf">else</span> <span class="cf">if</span> (angle <span class="op">&gt;</span><span class="st"> </span><span class="dv">-90</span>) {</a>
-<a class="sourceLine" id="cb8-9" data-line-number="9">  angle &lt;-<span class="st"> </span>angle <span class="op">+</span><span class="st"> </span><span class="dv">90</span></a>
-<a class="sourceLine" id="cb8-10" data-line-number="10">} <span class="cf">else</span> {</a>
-<a class="sourceLine" id="cb8-11" data-line-number="11">  angle &lt;-<span class="st"> </span>angle <span class="op">+</span><span class="st"> </span><span class="dv">180</span></a>
-<a class="sourceLine" id="cb8-12" data-line-number="12">}</a>
-<a class="sourceLine" id="cb8-13" data-line-number="13"></a>
-<a class="sourceLine" id="cb8-14" data-line-number="14">img_rot &lt;-<span class="st"> </span>img_bw <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-15" data-line-number="15"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/imager/topics/pad">pad</a></span>(<span class="dv">250</span>, <span class="dt">axes =</span> <span class="st">"xy"</span>, <span class="dt">val =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-16" data-line-number="16"><span class="st">  </span><span class="kw"><a href="http://www.rdocumentation.org/packages/imager/topics/rotate_xy">rotate_xy</a></span>(<span class="dt">angle =</span> <span class="op">-</span>angle, <span class="dt">cx =</span> ellipse<span class="op">$</span>CenterX <span class="op">+</span><span class="st"> </span><span class="dv">250</span>, </a>
-<a class="sourceLine" id="cb8-17" data-line-number="17">            <span class="dt">cy =</span> ellipse<span class="op">$</span>CenterY <span class="op">+</span><span class="st"> </span><span class="dv">250</span>, <span class="dt">boundary =</span> <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb8-18" data-line-number="18"></a>
-<a class="sourceLine" id="cb8-19" data-line-number="19">rot_ellipse &lt;-<span class="st"> </span>img_rot <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb8-20" data-line-number="20"><span class="st">  </span>outer_contour <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb8-21" data-line-number="21"><span class="st">  </span><span class="kw"><a href="../reference/thin_contour.html">thin_contour</a></span>(<span class="dt">img =</span> img_rot) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb8-22" data-line-number="22"><span class="st">  </span><span class="kw"><a href="../reference/contour_ellipse_fit.html">contour_ellipse_fit</a></span>()</a>
-<a class="sourceLine" id="cb8-23" data-line-number="23"></a>
-<a class="sourceLine" id="cb8-24" data-line-number="24"><span class="kw">plot</span>(img_rot)</a>
-<a class="sourceLine" id="cb8-25" data-line-number="25"><span class="kw"><a href="../reference/ellipse_points.html">ellipse_points</a></span>(rot_ellipse, <span class="dt">col =</span> <span class="st">"orange"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">angle</span> <span class="op">&lt;-</span> <span class="va">ellipse</span><span class="op">$</span><span class="va">Angle</span>
+<span class="kw">if</span> <span class="op">(</span><span class="va">angle</span> <span class="op">&gt;</span> <span class="fl">90</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">angle</span> <span class="op">&lt;-</span> <span class="va">angle</span> <span class="op">-</span> <span class="fl">180</span>
+<span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">angle</span> <span class="op">&gt;</span> <span class="fl">45</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">angle</span> <span class="op">&lt;-</span> <span class="va">angle</span> <span class="op">-</span> <span class="fl">90</span>
+<span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">angle</span> <span class="op">&gt;</span> <span class="op">-</span><span class="fl">45</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">angle</span> <span class="op">&lt;-</span> <span class="va">angle</span>
+<span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">angle</span> <span class="op">&gt;</span> <span class="op">-</span><span class="fl">90</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">angle</span> <span class="op">&lt;-</span> <span class="va">angle</span> <span class="op">+</span> <span class="fl">90</span>
+<span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
+  <span class="va">angle</span> <span class="op">&lt;-</span> <span class="va">angle</span> <span class="op">+</span> <span class="fl">180</span>
+<span class="op">}</span>
+
+<span class="va">img_rot</span> <span class="op">&lt;-</span> <span class="va">img_bw</span> <span class="op">%&gt;%</span>
+  <span class="fu">pad</span><span class="op">(</span><span class="fl">250</span>, axes <span class="op">=</span> <span class="st">"xy"</span>, val <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">rotate_xy</span><span class="op">(</span>angle <span class="op">=</span> <span class="op">-</span><span class="va">angle</span>, cx <span class="op">=</span> <span class="va">ellipse</span><span class="op">$</span><span class="va">CenterX</span> <span class="op">+</span> <span class="fl">250</span>, 
+            cy <span class="op">=</span> <span class="va">ellipse</span><span class="op">$</span><span class="va">CenterY</span> <span class="op">+</span> <span class="fl">250</span>, boundary <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
+
+<span class="va">rot_ellipse</span> <span class="op">&lt;-</span> <span class="va">img_rot</span> <span class="op">%&gt;%</span> 
+  <span class="va">outer_contour</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/thin_contour.html">thin_contour</a></span><span class="op">(</span>img <span class="op">=</span> <span class="va">img_rot</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/contour_ellipse_fit.html">contour_ellipse_fit</a></span><span class="op">(</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">img_rot</span><span class="op">)</span>
+<span class="fu"><a href="../reference/ellipse_points.html">ellipse_points</a></span><span class="op">(</span><span class="va">rot_ellipse</span>, col <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span></code></pre></div>
 <p><img src="ellipse-alignment_files/figure-html/unnamed-chunk-10-1.png" width="384"></p>
 <p>Alternately, we can use a convenience function which completes these steps in a single command:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">img_rot &lt;-<span class="st"> </span>img_bw <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="../reference/img_rotate_refit.html">img_rotate_refit</a></span>(<span class="dt">show_plot =</span> T)</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co"># Warning in imager::bucketfill(., 1, 1, color = c(1, 1, 1), sigma = 0.1):</span></a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co"># Adding colour channels to image (was grayscale)</span></a>
-<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co"># converting image to grayscale</span></a>
-<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co"># converting image to grayscale</span></a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">img_rot</span> <span class="op">&lt;-</span> <span class="va">img_bw</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/img_rotate_refit.html">img_rotate_refit</a></span><span class="op">(</span>show_plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>
+<span class="co"># Warning in imager::bucketfill(., 1, 1, color = c(1, 1, 1), sigma = 0.1): Adding</span>
+<span class="co"># colour channels to image (was grayscale)</span>
+<span class="co"># converting image to grayscale</span>
+<span class="co"># converting image to grayscale</span></code></pre></div>
 <p><img src="ellipse-alignment_files/figure-html/unnamed-chunk-11-1.png" width="384"></p>
 <p>With our new, nicely aligned ellipse, we also have a natural coordinate system, with the major axis running vertically through the centroid of the image.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">plot</span>(img_rot<span class="op">$</span>img)</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw">abline</span>(<span class="dt">v =</span> img_rot<span class="op">$</span>ellipse<span class="op">$</span>CenterX, <span class="dt">col =</span> <span class="st">"purple"</span>)</a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="kw">abline</span>(<span class="dt">h =</span> img_rot<span class="op">$</span>ellipse<span class="op">$</span>CenterY, <span class="dt">col =</span> <span class="st">"purple"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">img_rot</span><span class="op">$</span><span class="va">img</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="va">img_rot</span><span class="op">$</span><span class="va">ellipse</span><span class="op">$</span><span class="va">CenterX</span>, col <span class="op">=</span> <span class="st">"purple"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>h <span class="op">=</span> <span class="va">img_rot</span><span class="op">$</span><span class="va">ellipse</span><span class="op">$</span><span class="va">CenterY</span>, col <span class="op">=</span> <span class="st">"purple"</span><span class="op">)</span></code></pre></div>
 <p><img src="ellipse-alignment_files/figure-html/unnamed-chunk-12-1.png" width="384"></p>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+
       </div>
 
 </div>
+
 
 
       <footer><div class="copyright">
@@ -235,14 +275,14 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
 </div>
 
   
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script><script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script><script>
   docsearch({
     
     
